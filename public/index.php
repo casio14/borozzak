@@ -1,22 +1,29 @@
 <?php
 // holborozzak.hu — kezdőoldal.
-// Jelenleg: layout váz + hero (brand). A következő inkrementumban ide kerül
-// a kiemelt és közelgő események listája.
+// Jelenleg: layout váz + hero (brand, kereső). A következő inkrementumban
+// ide kerül a kiemelt és közelgő események listája.
 
 $pageTitle = 'holborozzak.hu — Magyarország borrendezvényei egy helyen';
-$pageDescription = 'Fedezd fel Magyarország legjobb borrendezvényeit: borfesztiválok, '
-    . 'bornapok és szüreti rendezvények egy helyen — közelgő, kiemelt és ingyenes programok, térképpel.';
+$pageDescription = 'Fedezd fel Magyarország legjobb bor-eseményeit: fesztiválok, kóstolók '
+    . 'és pincelátogatások Tokajtól Villányig — egy helyen, mindig naprakészen.';
 
 require __DIR__ . '/partials/header.php';
 ?>
   <section class="hero">
     <div class="hero__inner">
-      <h1>Fedezd fel Magyarország legjobb borrendezvényeit</h1>
-      <hr class="divider">
+      <p class="hero__eyebrow">Magyarország borrendezvényei</p>
+      <h1>Fedezd fel az ország legjobb bor-eseményeit</h1>
       <p class="hero__lead">
-        Borfesztiválok, bornapok és szüreti rendezvények egy helyen — közelgő,
-        kiemelt és ingyenes programok, térképpel.
+        Fesztiválok, kóstolók és pincelátogatások Tokajtól Villányig
+        — egy helyen, mindig naprakészen.
       </p>
+      <!-- A kereső a listás inkrementumban lesz élesítve (akkor szűr az eseményekre). -->
+      <form class="hero__search" role="search" method="get" action="">
+        <input id="hero-kereso" type="search" name="q"
+               placeholder="Keresés helyszín, borvidék vagy esemény szerint…"
+               aria-label="Keresés helyszín, borvidék vagy esemény szerint">
+        <button type="submit">Keresés</button>
+      </form>
     </div>
   </section>
 

@@ -3,13 +3,7 @@
  * Közös fejléc + dokumentum nyitás, beépített SEO / AI-kereső (GEO) fundamentummal.
  *
  * Beillesztés előtt opcionálisan állítható:
- *   $pageTitle        — oldal címe
- *   $pageDescription  — meta leírás
- *   $canonicalUrl     — kanonikus URL (alap: az aktuális kérésből, query nélkül)
- *   $ogType           — Open Graph típus (alap: 'website'; eseménynél 'article')
- *   $ogImage          — megosztókép abszolút URL-je (opcionális)
- *   $robots           — robots meta (alap: 'index,follow')
- *   $jsonLd           — extra Schema.org blokkok tömbje (a WebSite/Organization mellé)
+ *   $pageTitle, $pageDescription, $canonicalUrl, $ogType, $ogImage, $robots, $jsonLd
  */
 $siteName = 'holborozzak.hu';
 
@@ -90,8 +84,36 @@ $jsonLdFlags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
 <body>
   <header class="site-header">
     <div class="site-header__inner">
-      <a class="brand" href="./">hol<span class="brand__accent">borozzak</span>.hu</a>
-      <p class="brand__tagline">Magyarország borhoz köthető eseményei egy helyen</p>
+      <a class="brand" href="./" aria-label="holborozzak.hu — kezdőlap">
+        <svg class="brand__icon" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M16 7c1.8-2.6 5.2-2.8 6.6-1.8-.6 2.6-3.2 3.8-5.4 3.8" fill="#5a6b3b"/>
+          <g fill="currentColor">
+            <circle cx="16" cy="12" r="2.6"/>
+            <circle cx="12" cy="16" r="2.6"/>
+            <circle cx="20" cy="16" r="2.6"/>
+            <circle cx="16" cy="16.5" r="2.6"/>
+            <circle cx="13.5" cy="20.5" r="2.6"/>
+            <circle cx="18.5" cy="20.5" r="2.6"/>
+            <circle cx="16" cy="24.5" r="2.6"/>
+          </g>
+        </svg>
+        <span class="brand__text">hol<span class="brand__accent">borozzak</span>.hu</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Fő navigáció">
+        <span class="site-nav__links">
+          <!-- TODO: a céloldalak a következő inkrementumokban készülnek el -->
+          <a href="#">Borvidékek</a>
+          <a href="#">Naptár</a>
+          <a href="#">Térkép</a>
+        </span>
+        <a class="site-nav__search" href="#hero-kereso" aria-label="Keresés">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="21" y1="21" x2="16.5" y2="16.5"/>
+          </svg>
+        </a>
+      </nav>
     </div>
   </header>
   <main>
