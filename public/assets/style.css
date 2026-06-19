@@ -81,11 +81,13 @@ main { flex: 1 0 auto; }
 
 /* ---------- Hero (teljes szélességű, brand) ---------- */
 .hero {
-  /* Szőlőskert háttérkép sötét burgundi overlay-jel (a szöveg olvashatóságáért).
+  /* Szőlőskert háttérkép naplementés overlay-jel (meleg arany ragyogás felül,
+     meleg vörösből mély burgundiba lent — a szöveg olvashatóságáért is).
      Kép: assets/hero.jpg (1920x900). Forrás: Pexels (ingyenes licenc). */
   background-color: var(--wine-900);
   background-image:
-    linear-gradient(180deg, rgba(74, 14, 28, .50) 0%, rgba(74, 14, 28, .80) 100%),
+    radial-gradient(90% 70% at 50% 6%, rgba(240, 170, 80, .38) 0%, rgba(240, 170, 80, 0) 55%),
+    linear-gradient(180deg, rgba(150, 55, 40, .32) 0%, rgba(74, 14, 28, .82) 100%),
     url('hero.jpg');
   background-size: cover;
   background-position: center;
