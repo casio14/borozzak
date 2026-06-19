@@ -31,9 +31,10 @@ jobs:
           # biztonságosabb megoldásra váltani (a jelszó így titkosítatlan).
           protocol: ftp
           # Csak a public/ tartalma kerül ki — a docs/, db/, .github/ NEM.
-          # Ideiglenes cím: kissptrk.hu/borozzak  ->  /web/kissptrk.hu/borozzak/
+          # Az FTP-login már a kissptrk.hu document rootjába érkezik, ezért a
+          # server-dir RELATÍV: a 'borozzak/' almappa -> kissptrk.hu/borozzak/
           local-dir: ./public/
-          server-dir: /web/kissptrk.hu/borozzak/
+          server-dir: borozzak/
           # Ezeket sose töltsük fel, ha valahogy mégis a public/-ba kerülnének:
           exclude: |
             **/.git*
