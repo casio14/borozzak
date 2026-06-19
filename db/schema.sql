@@ -145,3 +145,39 @@ INSERT INTO categories (name, slug) VALUES
   ('Családi program',     'csaladi-program'),
   ('Borvidéki program',   'borvideki-program')
 ON DUPLICATE KEY UPDATE name = VALUES(name);
+
+-- ---------------------------------------------------------------------------
+-- 7. Analitika: nyers interakció-napló (kattintás + megtekintés)
+--    Soronként egy esemény, időbélyeggel. Ebből bármilyen statisztika,
+--    trend és konverzió (megtekintés -> kattintás) kiszámolható.
+--    GDPR: nyers IP-t NEM tárolunk, csak hashelt (ip_hash) — bot/abuse szűréshez.
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS event_interactions (
+  id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  event_id    INT UNSIGNED NOT NULL,
+  type        ENUM('view','click_website','click_ticket') NOT NULL,
+  created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  session_id  VARCHAR(64)  DEFAULT NULL,   -- egyedi látogató becsléséhez (cookie)
+  referrer    VARCHAR(255) DEFAULT NULL,   -- honnan érkezett
+  ip_hash     CHAR(64)     DEFAULT NULL,   -- HASH-elt IP (nem visszafejthető)
+  user_agent  VARCHAR(255) DEFAULT NULL,   -- bot-szűréshez
+  PRIMARY KEY (id),
+  KEY idx_ei_event_type_time (event_id, type, created_at),
+  KEY idx_ei_time (created_at),
+  CONSTRAINT fk_ei_event FOREIGN KEY (event_id)
+    REFERENCES events (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ---------------------------------------------------------------------------
+-- 8. Analitika: lista-megjelenések (impressziók) NAPI ÖSSZESÍTÉSBEN
+--    Az impresszió nagy volumenű, ezért nem soronként, hanem naponta összegezve
+--    tároljuk. Növelés: INSERT ... ON DUPLICATE KEY UPDATE impressions = impressions + 1
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS event_impressions_daily (
+  event_id     INT UNSIGNED NOT NULL,
+  stat_date    DATE NOT NULL,
+  impressions  INT UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (event_id, stat_date),
+  CONSTRAINT fk_eid_event FOREIGN KEY (event_id)
+    REFERENCES events (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

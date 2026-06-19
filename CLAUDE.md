@@ -90,6 +90,13 @@ Táblák:
   időbélyegek).
 - **`wine_regions`** — 22 magyar borvidék (segédtábla, FK az eventsből).
 - **`categories`** + **`event_categories`** — címkék, több-a-többhöz kapcsolat.
+- **`event_interactions`** — analitika: nyers kattintás/megtekintés napló (időbélyeggel,
+  hashelt IP-vel). Kimenő kattintások (`click_website`/`click_ticket`) + `view`.
+- **`event_impressions_daily`** — lista-megjelenések napi összesítésben (nagy volumen).
+
+**Bevételi cél:** a kattintás-statisztikákból kimutatás a szervezőknek. Migráció:
+`db/migrations/001_add_analytics.sql` (élő DB-n is futtatható). Kattintást átirányító
+(`go.php`) naplóz majd. GDPR-t és bot-szűrést szem előtt tartani.
 
 Karakterkészlet: `utf8mb4`. Ismétlődő (évente megrendezett) eseménynél évente
 új sort veszünk fel (évszám a slugban).

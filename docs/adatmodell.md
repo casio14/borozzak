@@ -161,6 +161,26 @@ Ingyenes   : status='published' AND is_free=1
 
 ---
 
+## Analitika (kattintás-statisztika, bevételhez)
+
+Cél: kimutatni, **melyik eseményre hányan kattintottak**, és időbeli statisztikákat
+készíteni (a szervezőknek bizonyítható érték → bevételi alap).
+
+- **`event_interactions`** — nyers napló, soronként egy interakció, időbélyeggel.
+  Típusok: `view` (részletoldal-megtekintés), `click_website`, `click_ticket`
+  (kimenő kattintások — ezek a legértékesebbek). Ebből bármilyen trend/konverzió
+  számolható. GDPR: csak **hashelt IP** (`ip_hash`), nyers PII nélkül.
+- **`event_impressions_daily`** — a lista-megjelenések (impressziók) **napi
+  összesítésben** (nagy volumen, ezért nem soronként). UPSERT-tel növelve.
+
+**Kattintás-számlálás technikája:** a kimenő linkek egy átirányítón mennek át
+(`go.php?e=ID&t=ticket|website`), ami naplóz, majd 302-vel továbbküld → szerveroldali,
+megbízható számolás JS nélkül.
+
+**Megfontolandó (később):** süti-tájékoztató/consent a `session_id`-hoz, bot-szűrés
+user-agent alapján, és opcionális denormalizált `view_count`/`click_count` cache az
+`events` táblán a gyors megjelenítéshez.
+
 ## Eldöntött kérdések ✅
 
 1. Beépített extra mezők: `description`, `status`, `ticket_url`, `featured_until`,
