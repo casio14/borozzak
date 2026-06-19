@@ -1,0 +1,15 @@
+# Titkok / hitelesítő adatok — SOHA nem kerülhet gitbe
+.env
+.env.local
+*.secret
+
+# Függőségek, build
+node_modules/
+dist/
+build/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

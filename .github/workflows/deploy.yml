@@ -1,0 +1,41 @@
+name: Deploy to Rackhost
+
+# A lépés (minimál): main-re pusholáskor a public/ mappát FTP-vel kitesszük
+# a Rackhost webszerverre. A szemantikus verziózás a következő lépésben jön.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:        # kézi indítás is lehetséges a GitHub felületről
+
+# Egyszerre csak egy deploy fusson (ne ütközzenek az FTP feltöltések)
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kód letöltése
+        uses: actions/checkout@v4
+
+      - name: Feltöltés FTP-n a Rackhostra
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: wh11.rackhost.hu
+          username: c105746ptrk
+          password: ${{ secrets.FTP_PASSWORD }}
+          # FTPS (titkosított) kapcsolat. Ha tanúsítvány-hiba miatt elhasalna,
+          # próbáld a 'ftps-legacy' értéket, vagy egyeztess a Rackhost supporttal.
+          protocol: ftps
+          # Csak a public/ tartalma kerül ki — a docs/, db/, .github/ NEM.
+          # Ideiglenes cím: kissptrk.hu/borozzak  ->  /web/kissptrk.hu/borozzak/
+          local-dir: ./public/
+          server-dir: /web/kissptrk.hu/borozzak/
+          # Ezeket sose töltsük fel, ha valahogy mégis a public/-ba kerülnének:
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.env
+            **/node_modules/**
