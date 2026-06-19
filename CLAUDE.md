@@ -39,10 +39,17 @@ A weboldal címe: **holborozzak.hu**
     ellenőrizni, hogy ez-e a `holborozzak.hu` document rootja.
 - **GitHub repo:** `git@github.com:casio14/borozzak.git`
 - **Deploy:** GitHub Actions (`.github/workflows/deploy.yml`) → `main`-re
-  pusholáskor a `public/` mappa tartalmát FTPS-sel felmásolja a
-  `/web/kissptrk.hu/borozzak/` könyvtárba (`SamKirkland/FTP-Deploy-Action`, csak a
-  változott fájlok). Verziózás: szemantikus (v1.0.0) — B lépésben épül rá.
-  - **Ideiglenes cím:** `kissptrk.hu/borozzak` (amíg a `holborozzak.hu` nem áll).
+  pusholáskor a `public/` mappa tartalmát felmásolja a webszerverre
+  (`SamKirkland/FTP-Deploy-Action`, csak a változott fájlok).
+  - **Protokoll: sima `ftp`** — a Rackhost FTP szervere NEM támogatja az FTPS-t
+    (`AUTH TLS` → `500`). A jelszó így titkosítatlanul utazik (lásd biztonsági TODO).
+  - **Az FTP-login a docrootba érkezik**, ezért a `server-dir` RELATÍV (`borozzak/`),
+    nem abszolút. Abszolút `/web/kissptrk.hu/...` duplikálná a könyvtárat.
+  - **Ideiglenes cím:** https://kissptrk.hu/borozzak/ (amíg a `holborozzak.hu` nem áll).
+  - Verziózás: szemantikus (v1.0.0) — B lépésben épül rá.
+  - **TODO (takarítás):** az első hibás deploy árvafájljai a szerveren a
+    `/web/kissptrk.hu/web/kissptrk.hu/borozzak/` alatt maradtak — FTP-n/fájlkezelőből törölhetők.
+  - **TODO (biztonság):** ha a Rackhost ad SFTP/SSH-t, váltani titkosított feltöltésre.
 - **Adatbázis (MySQL, Rackhost):**
   - Kiszolgáló: `mysql.rackhost.hu`
   - Adatbázis neve: `c105746holborozzak`
