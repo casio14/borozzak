@@ -73,6 +73,16 @@ A weboldal címe: **holborozzak.hu**
   (Ezek lekérdezések a dátum/jelölő mezőkre, nem külön adatok.)
 - Térképes megjelenítés (`latitude`/`longitude`).
 
+## SEO & AI-kereső (GEO) — KIEMELT CÉL
+
+Erős keresőoptimalizálás **és** AI-ajánlás-barátság (ChatGPT, Perplexity, Google AI
+Overviews) kiemelt projektcél. Minden új oldalnál tartsd be a `docs/seo-geo.md`
+checklistet: szerveroldali HTML, szemantikus markup (`<time datetime>`), oldalankénti
+egyedi title/description/canonical, slug-URL-ek, **Schema.org JSON-LD** (eseménynél
+`Event`, listán `ItemList`), Open Graph/Twitter, `sitemap.xml`, és AI-crawlereket
+engedő `robots.txt`. A `partials/header.php` már tartalmazza a meta/canonical/OG/
+JSON-LD vázat (alap `WebSite`+`Organization`); `$jsonLd`-vel bővíthető oldalanként.
+
 ## Projekt szerkezet
 
 - `public/` — **a deployolt weboldal** (csak ez kerül a webszerverre). PHP + HTML/CSS.

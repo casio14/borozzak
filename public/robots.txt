@@ -1,0 +1,33 @@
+# holborozzak.hu — robots.txt
+# Megjegyzés: a robots.txt a HOST gyökeréből szolgálódik (pl. holborozzak.hu/robots.txt).
+# Az ideiglenes almappás címen (kissptrk.hu/borozzak/) nincs hatása.
+
+User-agent: *
+Allow: /
+
+# --- AI keresők / asszisztensek kifejezetten engedélyezve (AI ajánlásokhoz) ---
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://holborozzak.hu/sitemap.xml
