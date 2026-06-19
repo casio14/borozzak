@@ -1,18 +1,27 @@
 <?php
 // holborozzak.hu — kezdőoldal.
-// Jelenleg a layout váz (fejléc/lábléc/CSS) + ideiglenes hero.
-// A következő inkrementumban ide kerül az eseménylista.
+// Jelenleg: layout váz + hero (brand). A következő inkrementumban ide kerül
+// a kiemelt és közelgő események listája.
 
-$pageTitle = 'holborozzak.hu — Magyarország borhoz köthető eseményei';
+$pageTitle = 'holborozzak.hu — Magyarország borrendezvényei egy helyen';
+$pageDescription = 'Fedezd fel Magyarország legjobb borrendezvényeit: borfesztiválok, '
+    . 'bornapok és szüreti rendezvények egy helyen — közelgő, kiemelt és ingyenes programok, térképpel.';
+
 require __DIR__ . '/partials/header.php';
 ?>
   <section class="hero">
-    <h1>Hamarosan: a magyar boros események egy helyen</h1>
-    <hr class="divider">
-    <p>
-      Borfesztiválok, bornapok és szüreti rendezvények — közelgő, kiemelt és
-      ingyenes események, térképpel. Most épül az eseménylista. 🍷
-    </p>
+    <div class="hero__inner">
+      <h1>Fedezd fel Magyarország legjobb borrendezvényeit</h1>
+      <hr class="divider">
+      <p class="hero__lead">
+        Borfesztiválok, bornapok és szüreti rendezvények egy helyen — közelgő,
+        kiemelt és ingyenes programok, térképpel.
+      </p>
+    </div>
   </section>
+
+  <div class="container">
+    <p class="section-intro">Hamarosan: a kiemelt és közelgő események listája. 🍷</p>
+  </div>
 <?php
 require __DIR__ . '/partials/footer.php';

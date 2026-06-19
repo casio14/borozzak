@@ -94,4 +94,4 @@ $jsonLdFlags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
       <p class="brand__tagline">Magyarország borhoz köthető eseményei egy helyen</p>
     </div>
   </header>
-  <main class="container">
+  <main>
