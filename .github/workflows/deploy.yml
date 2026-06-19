@@ -26,9 +26,10 @@ jobs:
           server: wh11.rackhost.hu
           username: c105746ptrk
           password: ${{ secrets.FTP_PASSWORD }}
-          # FTPS (titkosított) kapcsolat. Ha tanúsítvány-hiba miatt elhasalna,
-          # próbáld a 'ftps-legacy' értéket, vagy egyeztess a Rackhost supporttal.
-          protocol: ftps
+          # A Rackhost FTP szervere nem támogatja az FTPS-t (AUTH TLS -> 500),
+          # ezért sima FTP-t használunk. TODO: ha van SFTP/SSH hozzáférés,
+          # biztonságosabb megoldásra váltani (a jelszó így titkosítatlan).
+          protocol: ftp
           # Csak a public/ tartalma kerül ki — a docs/, db/, .github/ NEM.
           # Ideiglenes cím: kissptrk.hu/borozzak  ->  /web/kissptrk.hu/borozzak/
           local-dir: ./public/
