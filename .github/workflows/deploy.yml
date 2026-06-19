@@ -1,14 +1,23 @@
 name: Deploy to Rackhost
 
-# A lépés (minimál): main-re pusholáskor a public/ mappát FTP-vel kitesszük
-# a Rackhost webszerverre. A szemantikus verziózás a következő lépésben jön.
+# main-re pusholáskor: kiszámolja a következő szemantikus verziót, generál egy
+# version.php-t, FTP-vel deployol, majd SIKER esetén létrehoz egy vX.Y.Z git taget.
+#
+# ROLLBACK / adott verzió újradeployolása:
+#   GitHub → Actions → "Deploy to Rackhost" → "Run workflow" gomb, és a
+#   "Use workflow from" legördülőből válaszd a kívánt tag-et (pl. v1.0.3).
+#   Ilyenkor a workflow ÚJ taget nem hoz létre, csak újra kiteszi azt a verziót.
 
 on:
   push:
     branches: [main]
-  workflow_dispatch:        # kézi indítás is lehetséges a GitHub felületről
+  workflow_dispatch:
 
-# Egyszerre csak egy deploy fusson (ne ütközzenek az FTP feltöltések)
+# A git tag pusholásához írási jog kell a repóra
+permissions:
+  contents: write
+
+# Egyszerre csak egy deploy fusson
 concurrency:
   group: deploy-production
   cancel-in-progress: false
@@ -17,8 +26,47 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Kód letöltése
+      - name: Kód letöltése (teljes history + tagek)
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # kellenek a tagek a verziószámításhoz
+
+      - name: Verzió meghatározása
+        id: ver
+        run: |
+          set -euo pipefail
+          MM=$(tr -d ' \r\n' < VERSION)   # major.minor, pl. "1.0"
+
+          IS_TAG=false
+          case "${{ github.ref_name }}" in v*) IS_TAG=true ;; esac
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "$IS_TAG" = "true" ]; then
+            # Rollback: meglévő tagről futtatva — nem hozunk létre új taget
+            VERSION="${{ github.ref_name }}"
+            VERSION="${VERSION#v}"
+            CREATE_TAG=false
+            echo "Rollback futás: v$VERSION újradeployolása"
+          else
+            # Normál push main-re: a patch a meglévő tagek alapján +1
+            LAST=$(git tag -l "v${MM}.*" | sed "s#^v${MM}\.##" | sort -n | tail -1 || true)
+            if [ -z "${LAST:-}" ]; then NEXT=0; else NEXT=$((LAST + 1)); fi
+            VERSION="${MM}.${NEXT}"
+            CREATE_TAG=true
+            echo "Új verzió: v$VERSION"
+          fi
+
+          echo "version=$VERSION"       >> "$GITHUB_OUTPUT"
+          echo "create_tag=$CREATE_TAG" >> "$GITHUB_OUTPUT"
+
+      - name: version.php generálása
+        run: |
+          set -euo pipefail
+          printf '<?php\n$APP_VERSION = %s;\n$APP_BUILD_DATE = %s;\n' \
+            "'${{ steps.ver.outputs.version }}'" \
+            "'$(date -u +%Y-%m-%d)'" \
+            > public/version.php
+          echo "--- public/version.php ---"
+          cat public/version.php
 
       - name: Feltöltés FTP-n a Rackhostra
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -27,17 +75,25 @@ jobs:
           username: c105746ptrk
           password: ${{ secrets.FTP_PASSWORD }}
           # A Rackhost FTP szervere nem támogatja az FTPS-t (AUTH TLS -> 500),
-          # ezért sima FTP-t használunk. TODO: ha van SFTP/SSH hozzáférés,
-          # biztonságosabb megoldásra váltani (a jelszó így titkosítatlan).
+          # ezért sima FTP. TODO: SFTP/SSH-ra váltani, ha elérhető (titkosítás).
           protocol: ftp
-          # Csak a public/ tartalma kerül ki — a docs/, db/, .github/ NEM.
-          # Az FTP-login már a kissptrk.hu document rootjába érkezik, ezért a
-          # server-dir RELATÍV: a 'borozzak/' almappa -> kissptrk.hu/borozzak/
+          # Az FTP-login a kissptrk.hu document rootjába érkezik, ezért RELATÍV
+          # a server-dir: a 'borozzak/' almappa -> kissptrk.hu/borozzak/
           local-dir: ./public/
           server-dir: borozzak/
-          # Ezeket sose töltsük fel, ha valahogy mégis a public/-ba kerülnének:
           exclude: |
             **/.git*
             **/.git*/**
             **/.env
             **/node_modules/**
+
+      - name: Git tag létrehozása és push (csak sikeres deploy után)
+        if: steps.ver.outputs.create_tag == 'true'
+        run: |
+          set -euo pipefail
+          V="v${{ steps.ver.outputs.version }}"
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "$V" -m "Release $V"
+          git push origin "$V"
+          echo "Létrehozott tag: $V"

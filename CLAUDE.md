@@ -46,7 +46,13 @@ A weboldal címe: **holborozzak.hu**
   - **Az FTP-login a docrootba érkezik**, ezért a `server-dir` RELATÍV (`borozzak/`),
     nem abszolút. Abszolút `/web/kissptrk.hu/...` duplikálná a könyvtárat.
   - **Ideiglenes cím:** https://kissptrk.hu/borozzak/ (amíg a `holborozzak.hu` nem áll).
-  - Verziózás: szemantikus (v1.0.0) — B lépésben épül rá.
+  - **Verziózás: szemantikus, git tag-es.** A `VERSION` fájl tartja a
+    `major.minor`-t (pl. `1.0`); a patch automatikusan a meglévő tagek alapján +1.
+    Minden sikeres deploy `vX.Y.Z` git taget hoz létre, és a verzió megjelenik
+    az oldal láblécében (a CI által generált `public/version.php`-ból).
+  - **Major/minor léptetés:** kézzel írd át a `VERSION` fájlt (a patch onnantól 0-ról indul).
+  - **Rollback / adott verzió:** Actions → Run workflow → a "Use workflow from"
+    legördülőből válaszd a kívánt tag-et; ilyenkor nem készül új tag, csak újra deployol.
   - **TODO (takarítás):** az első hibás deploy árvafájljai a szerveren a
     `/web/kissptrk.hu/web/kissptrk.hu/borozzak/` alatt maradtak — FTP-n/fájlkezelőből törölhetők.
   - **TODO (biztonság):** ha a Rackhost ad SFTP/SSH-t, váltani titkosított feltöltésre.

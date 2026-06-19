@@ -1,6 +1,14 @@
 <?php
 // holborozzak.hu — ideiglenes placeholder oldal.
 // A valódi eseménylistát a következő inkrementumokban építjük rá.
+
+// Verzió: a deploy során generált version.php állítja be. Lokálisan 'dev'.
+$APP_VERSION = 'dev';
+$APP_BUILD_DATE = '';
+$versionFile = __DIR__ . '/version.php';
+if (is_file($versionFile)) {
+    include $versionFile; // beállítja: $APP_VERSION, $APP_BUILD_DATE
+}
 ?>
 <!DOCTYPE html>
 <html lang="hu">
@@ -69,7 +77,9 @@
     </p>
   </main>
   <footer>
-    🍷 holborozzak.hu
+    🍷 holborozzak.hu · <?= htmlspecialchars('v' . $APP_VERSION, ENT_QUOTES) ?><?php
+      if ($APP_BUILD_DATE) { echo ' · ' . htmlspecialchars($APP_BUILD_DATE, ENT_QUOTES); }
+    ?>
   </footer>
 </body>
 </html>
