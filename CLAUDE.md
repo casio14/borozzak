@@ -82,6 +82,8 @@ A weboldal címe: **holborozzak.hu**
     `DB_PASSWORD` secretből; lokálisan a `config.example.php`-ból másolod.
   - `health.php` — ideiglenes DB-egészség ellenőrző (élesítés előtt törölni/védeni).
   - `version.php` — generált verziófájl (CI).
+  - `assets/style.css` — közös stíluslap (boros paletta CSS-változókban).
+  - `partials/header.php`, `partials/footer.php` — közös layout váz (minden oldal ezt használja).
 - `db/` — adatbázis séma (`schema.sql`), migrációk. NEM kerül a webszerverre.
 - `docs/` — tervdokumentumok (pl. `adatmodell.md`). NEM kerül a webszerverre.
 - `.github/workflows/` — CI/CD (deploy).

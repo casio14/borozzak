@@ -1,0 +1,115 @@
+/* holborozzak.hu — közös stíluslap (boros színvilág) */
+
+:root {
+  /* Borhoz köthető paletta */
+  --wine-900: #4a0e1c;   /* mély burgundi */
+  --wine-700: #722f37;   /* bor vörös */
+  --wine-500: #8c3b46;   /* világosabb bor */
+  --gold:     #c8a14b;   /* arany */
+  --gold-200: #e3cd97;   /* halvány arany */
+  --leaf:     #5a6b3b;   /* szőlőlevél zöld */
+  --cream:    #f7f2ea;   /* krém / pergamen (oldal háttér) */
+  --paper:    #fffdf9;   /* kártya háttér */
+  --ink:      #2b1d20;   /* sötét bor-barna (szöveg) */
+  --muted:    #8a7d77;   /* halvány szöveg */
+  --line:     #e7ddcf;   /* elválasztó vonal */
+
+  --maxw: 1080px;
+  --radius: 14px;
+  --shadow: 0 6px 24px rgba(74, 14, 28, .08);
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+h1, h2, h3, .brand {
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.2;
+}
+
+a { color: var(--wine-700); }
+
+/* ---------- Fejléc ---------- */
+.site-header {
+  background: linear-gradient(135deg, var(--wine-700) 0%, var(--wine-900) 100%);
+  color: var(--cream);
+  border-bottom: 3px solid var(--gold);
+}
+.site-header__inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 1.4rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+.brand {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: .01em;
+  color: var(--cream);
+  text-decoration: none;
+}
+.brand__accent { color: var(--gold); }
+.brand__tagline {
+  margin: 0;
+  font-size: .98rem;
+  color: var(--gold-200);
+}
+
+/* ---------- Fő tartalom ---------- */
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 2rem 1.25rem;
+  flex: 1 0 auto;
+}
+
+/* ---------- Hero (ideiglenes) ---------- */
+.hero {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+.hero h1 {
+  margin: 0 0 .5rem;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+}
+.hero .divider {
+  width: 80px; height: 3px; border: none;
+  background: var(--gold);
+  margin: 1.25rem auto;
+  border-radius: 2px;
+}
+.hero p { max-width: 36rem; margin: 0 auto; color: #5c4a44; }
+
+/* ---------- Lábléc ---------- */
+.site-footer {
+  flex-shrink: 0;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--muted);
+}
+.site-footer p {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 1rem 1.25rem;
+  font-size: .85rem;
+  text-align: center;
+}
