@@ -23,12 +23,30 @@ try {
     error_log('index.php DB hiba: ' . $e->getMessage());
 }
 
-// Aktív nézet (tab) és a szerinti szűrés
+// Aktív nézet (tab) + fazetta-szűrők (borvidék, kategória)
 $view = normalizeView($_GET['nezet'] ?? null);
-$displayEvents = filterEvents($events, $view);
+$regionFilter = trim((string) ($_GET['borvidek'] ?? ''));
+$catFilter    = trim((string) ($_GET['kategoria'] ?? ''));
 
-// Kiemelt blokk csak az alap (Közelgő) nézeten jelenik meg
-$showFeatured = ($view === 'kozelgo');
+// Szűrő legördülők opciói a közelgő eseményekből (csak releváns értékek)
+$regionOptions = [];
+$catOptions = [];
+foreach ($events as $e) {
+    if (!empty($e['region_slug'])) {
+        $regionOptions[$e['region_slug']] = $e['region_name'];
+    }
+    foreach ($e['categories'] as $c) {
+        $catOptions[$c['slug']] = $c['name'];
+    }
+}
+asort($regionOptions);
+asort($catOptions);
+
+$displayEvents = applyFacets(filterEvents($events, $view), $regionFilter, $catFilter);
+$hasFacets = ($regionFilter !== '' || $catFilter !== '');
+
+// Kiemelt blokk csak a tiszta alap nézeten (nincs aktív szűrő)
+$showFeatured = ($view === 'kozelgo' && !$hasFacets);
 $featured = $showFeatured
     ? array_values(array_filter($events, static fn($e) => (int) $e['is_featured'] === 1))
     : [];
@@ -114,11 +132,37 @@ require __DIR__ . '/partials/header.php';
     <p class="section-intro">Hamarosan kerülnek fel az események. 🍷</p>
 <?php else: ?>
 
-    <nav class="tabs" aria-label="Esemény szűrők">
+    <nav class="tabs" aria-label="Esemény nézetek">
       <?php foreach (EVENT_VIEWS as $key => $label): ?>
-        <a href="?nezet=<?= h($key) ?>"<?= $view === $key ? ' aria-current="page"' : '' ?>><?= h($label) ?></a>
+        <a href="<?= h(listUrl($key, $regionFilter, $catFilter)) ?>"<?= $view === $key ? ' aria-current="page"' : '' ?>><?= h($label) ?></a>
       <?php endforeach; ?>
     </nav>
+
+    <form class="facets" method="get" action="" aria-label="Szűrők">
+      <?php if ($view !== 'kozelgo'): ?><input type="hidden" name="nezet" value="<?= h($view) ?>"><?php endif; ?>
+      <label class="facets__field">
+        <span>Borvidék</span>
+        <select name="borvidek" onchange="this.form.submit()">
+          <option value="">Mind</option>
+          <?php foreach ($regionOptions as $slug => $name): ?>
+            <option value="<?= h($slug) ?>"<?= $regionFilter === $slug ? ' selected' : '' ?>><?= h($name) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </label>
+      <label class="facets__field">
+        <span>Kategória</span>
+        <select name="kategoria" onchange="this.form.submit()">
+          <option value="">Mind</option>
+          <?php foreach ($catOptions as $slug => $name): ?>
+            <option value="<?= h($slug) ?>"<?= $catFilter === $slug ? ' selected' : '' ?>><?= h($name) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </label>
+      <noscript><button type="submit" class="facets__btn">Szűrés</button></noscript>
+      <?php if ($hasFacets): ?>
+        <a class="facets__clear" href="<?= h(listUrl($view, '', '')) ?>">Szűrők törlése</a>
+      <?php endif; ?>
+    </form>
 
   <?php if ($featured): ?>
     <section class="events-section">
@@ -138,7 +182,7 @@ require __DIR__ . '/partials/header.php';
               <h3 class="event-card__title"><a href="#"><?= h($e['title']) ?></a></h3>
               <p class="event-card__meta">📍 <?= h(trim(($e['venue_name'] ? $e['venue_name'] . ', ' : '') . $e['city'])) ?></p>
               <div class="event-card__tags">
-                <?php foreach ($e['categories'] as $cat): ?><span class="tag"><?= h($cat) ?></span><?php endforeach; ?>
+                <?php foreach ($e['categories'] as $cat): ?><span class="tag"><?= h($cat['name']) ?></span><?php endforeach; ?>
                 <?php if ((int) $e['is_free'] === 1): ?><span class="tag tag--free">Ingyenes</span><?php endif; ?>
               </div>
             </div>
@@ -151,7 +195,7 @@ require __DIR__ . '/partials/header.php';
     <section class="events-section">
       <div class="events-section__head"><h2><?= h($listHeading) ?></h2></div>
       <?php if (!$byMonth): ?>
-        <p class="section-intro">Nincs a szűrőnek megfelelő esemény. <a href="?nezet=kozelgo">Összes közelgő →</a></p>
+        <p class="section-intro">Nincs a szűrőnek megfelelő esemény. <a href="<?= h(listUrl('kozelgo', '', '')) ?>">Összes közelgő →</a></p>
       <?php else: ?>
       <div class="events-list">
         <?php foreach ($byMonth as $key => $monthEvents): ?>
@@ -173,7 +217,7 @@ require __DIR__ . '/partials/header.php';
                 </span>
                 <span class="event-row__sub">
                   <?= h(formatDateRange($e['start_datetime'], $e['end_datetime'])) ?>
-                  <?php if (!empty($e['categories'])): ?> · <?= h(implode(', ', $e['categories'])) ?><?php endif; ?>
+                  <?php if (!empty($e['categories'])): ?> · <?= h(implode(', ', categoryNames($e))) ?><?php endif; ?>
                 </span>
               </span>
               <span class="event-row__right">

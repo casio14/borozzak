@@ -74,8 +74,8 @@ function filterEvents(array $events, string $view): array
 /** Az összes közelgő/most zajló, közzétett esemény, címkékkel és borvidékkel. */
 function fetchUpcomingEvents(PDO $pdo): array
 {
-    $sql = "SELECT e.*, r.name AS region_name,
-                   GROUP_CONCAT(c.name ORDER BY c.name SEPARATOR '||') AS cat_names
+    $sql = "SELECT e.*, r.name AS region_name, r.slug AS region_slug,
+                   GROUP_CONCAT(DISTINCT CONCAT(c.slug, '\\t', c.name) ORDER BY c.name SEPARATOR '||') AS cat_pairs
             FROM events e
             LEFT JOIN wine_regions r ON r.id = e.region_id
             LEFT JOIN event_categories ec ON ec.event_id = e.id
@@ -86,9 +86,51 @@ function fetchUpcomingEvents(PDO $pdo): array
             ORDER BY e.start_datetime ASC";
     $rows = $pdo->query($sql)->fetchAll();
     foreach ($rows as &$r) {
-        $r['categories'] = !empty($r['cat_names']) ? explode('||', $r['cat_names']) : [];
+        $r['categories'] = [];
+        if (!empty($r['cat_pairs'])) {
+            foreach (explode('||', $r['cat_pairs']) as $pair) {
+                $parts = explode("\t", $pair);
+                if (count($parts) === 2) {
+                    $r['categories'][] = ['slug' => $parts[0], 'name' => $parts[1]];
+                }
+            }
+        }
     }
+    unset($r);
     return $rows;
+}
+
+/** Borvidék + kategória (fazetta) szűrés a slug alapján. */
+function applyFacets(array $events, string $regionSlug, string $catSlug): array
+{
+    return array_values(array_filter($events, static function ($e) use ($regionSlug, $catSlug) {
+        if ($regionSlug !== '' && ($e['region_slug'] ?? '') !== $regionSlug) {
+            return false;
+        }
+        if ($catSlug !== '') {
+            $slugs = array_map(static fn($c) => $c['slug'], $e['categories']);
+            if (!in_array($catSlug, $slugs, true)) {
+                return false;
+            }
+        }
+        return true;
+    }));
+}
+
+/** Esemény kategória-nevei (megjelenítéshez). */
+function categoryNames(array $e): array
+{
+    return array_map(static fn($c) => $c['name'], $e['categories']);
+}
+
+/** Lista-URL építése a nézet + fazetták megőrzésével. */
+function listUrl(string $view, string $region, string $cat): string
+{
+    $p = [];
+    if ($view !== 'kozelgo') { $p['nezet'] = $view; }
+    if ($region !== '')      { $p['borvidek'] = $region; }
+    if ($cat !== '')         { $p['kategoria'] = $cat; }
+    return $p ? ('?' . http_build_query($p)) : './';
 }
 
 /** Státusz-pirula a dátumokból: Most zajlik / Utolsó napok / Hamarosan, vagy null. */
