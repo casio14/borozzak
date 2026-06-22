@@ -467,10 +467,46 @@ main { flex: 1 0 auto; }
   background: var(--paper);
   color: var(--muted);
 }
-.site-footer p {
+.site-footer__inner {
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 1rem 1.25rem;
-  font-size: .85rem;
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .65rem;
   text-align: center;
+}
+.site-footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+}
+.site-footer__legal a {
+  color: var(--wine-700);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: .9rem;
+}
+.site-footer__legal a:hover { color: var(--gold); }
+.site-footer__copy { margin: 0; font-size: .85rem; }
+
+/* ---------- Jogi oldalak ---------- */
+.legal { max-width: 760px; margin: 0 auto; }
+.legal h1 { color: var(--wine-900); margin-bottom: .5rem; }
+.legal h2 {
+  color: var(--wine-700);
+  margin-top: 1.8rem;
+  font-size: 1.2rem;
+}
+.legal p, .legal li { color: #4a3b36; }
+.legal address { font-style: normal; line-height: 1.9; }
+.legal .legal-note {
+  background: #fff6e6;
+  border: 1px solid var(--gold-200);
+  border-radius: 10px;
+  padding: .8rem 1rem;
+  font-size: .92rem;
+  color: #6b5630;
 }
