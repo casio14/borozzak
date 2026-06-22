@@ -61,26 +61,6 @@ require __DIR__ . '/partials/header.php';
 
   <div id="map" class="event-map" role="region" aria-label="Borrendezvények térképe"></div>
 
-  <div class="container">
-    <section class="events-section">
-      <div class="events-section__head"><h2>Az események a térképen</h2></div>
-      <?php if (!$events): ?>
-        <p class="section-intro">Hamarosan kerülnek fel az események. 🍷</p>
-      <?php else: ?>
-        <ul class="map-list">
-          <?php foreach ($events as $e): ?>
-            <li>
-              <strong><?= h($e['title']) ?></strong> —
-              <?= h(formatDateRange($e['start_datetime'], $e['end_datetime'])) ?>
-              <?php if (!empty($e['city'])): ?> · <?= h($e['city']) ?><?php endif; ?>
-              <?php if (!empty($e['region_name'])): ?> (<?= h($e['region_name']) ?> borvidék)<?php endif; ?>
-            </li>
-          <?php endforeach; ?>
-        </ul>
-      <?php endif; ?>
-    </section>
-  </div>
-
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
@@ -107,7 +87,7 @@ require __DIR__ . '/partials/header.php';
     }
     var dotIcon = L.divIcon({ className: 'grape-dot', html: '', iconSize: [18, 18], iconAnchor: [9, 9], popupAnchor: [0, -10] });
 
-    var map = L.map('map', { scrollWheelZoom: false }).setView([47.16, 19.50], 7);
+    var map = L.map('map', { scrollWheelZoom: true }).setView([47.16, 19.50], 7);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       maxZoom: 19, subdomains: 'abcd',
       attribution: '&copy; OpenStreetMap, &copy; CARTO'
