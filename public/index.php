@@ -1,11 +1,83 @@
 <?php
-// holborozzak.hu — kezdőoldal.
-// Jelenleg: layout váz + hero (brand, kereső). A következő inkrementumban
-// ide kerül a kiemelt és közelgő események listája.
+declare(strict_types=1);
+
+// holborozzak.hu — kezdőoldal: kiemelt események + hónapokra bontott lista (DB-ből).
+
+require __DIR__ . '/db.php';
+require __DIR__ . '/lib/events.php';
 
 $pageTitle = 'holborozzak.hu — Magyarország borrendezvényei egy helyen';
 $pageDescription = 'Fedezd fel Magyarország legjobb bor-eseményeit: fesztiválok, kóstolók '
     . 'és pincelátogatások Tokajtól Villányig — egy helyen, mindig naprakészen.';
+
+// Abszolút bázis URL a JSON-LD / képek számára
+$base = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http')
+    . '://' . ($_SERVER['HTTP_HOST'] ?? 'holborozzak.hu');
+$dir = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? '/'), '/'); // pl. /borozzak
+
+// Adatok betöltése (hiba esetén üres lista, log)
+$events = [];
+try {
+    $events = fetchUpcomingEvents(db());
+} catch (Throwable $e) {
+    error_log('index.php DB hiba: ' . $e->getMessage());
+}
+
+$featured = array_values(array_filter($events, static fn($e) => (int) $e['is_featured'] === 1));
+
+// Az összes közelgő esemény hónapokra bontva (a teljes lista)
+$byMonth = [];
+foreach ($events as $e) {
+    $byMonth[monthKey($e['start_datetime'])][] = $e;
+}
+ksort($byMonth);
+
+// --- Strukturált adat: ItemList az eseményekről (SEO / AI-kereső) ---
+$itemList = [];
+$pos = 1;
+foreach ($events as $e) {
+    $img = $e['image_url'] ?? '';
+    $imgAbs = $img ? ($base . $dir . '/' . ltrim($img, '/')) : null;
+    $event = [
+        '@type'     => 'Event',
+        'name'      => $e['title'],
+        'startDate' => isoDate($e['start_datetime']),
+        'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+        'location'  => [
+            '@type'   => 'Place',
+            'name'    => $e['venue_name'] ?: ($e['city'] ?? ''),
+            'address' => [
+                '@type'           => 'PostalAddress',
+                'streetAddress'   => $e['address'] ?? '',
+                'addressLocality' => $e['city'] ?? '',
+                'addressCountry'  => 'HU',
+            ],
+        ],
+    ];
+    if (!empty($e['end_datetime']))  { $event['endDate'] = isoDate($e['end_datetime']); }
+    if ($imgAbs)                     { $event['image'] = $imgAbs; }
+    if (!empty($e['short_description'])) { $event['description'] = $e['short_description']; }
+    if (!empty($e['latitude']) && !empty($e['longitude'])) {
+        $event['location']['geo'] = [
+            '@type'     => 'GeoCoordinates',
+            'latitude'  => (float) $e['latitude'],
+            'longitude' => (float) $e['longitude'],
+        ];
+    }
+    if ((int) $e['is_free'] === 1) {
+        $event['offers'] = ['@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'HUF',
+                            'availability' => 'https://schema.org/InStock'];
+    }
+    $itemList[] = ['@type' => 'ListItem', 'position' => $pos++, 'item' => $event];
+}
+if ($itemList) {
+    $jsonLd = [[
+        '@context'        => 'https://schema.org',
+        '@type'           => 'ItemList',
+        'name'            => 'Közelgő borrendezvények Magyarországon',
+        'itemListElement' => $itemList,
+    ]];
+}
 
 require __DIR__ . '/partials/header.php';
 ?>
@@ -17,7 +89,6 @@ require __DIR__ . '/partials/header.php';
         Fesztiválok, kóstolók és pincelátogatások Tokajtól Villányig
         — egy helyen, mindig naprakészen.
       </p>
-      <!-- A kereső a listás inkrementumban lesz élesítve (akkor szűr az eseményekre). -->
       <form class="hero__search" role="search" method="get" action="">
         <input id="hero-kereso" type="search" name="q"
                placeholder="Keresés helyszín, borvidék vagy esemény szerint…"
@@ -28,64 +99,76 @@ require __DIR__ . '/partials/header.php';
   </section>
 
   <div class="container">
-    <!-- 1. inkrementum: KÁRTYA-DIZÁJN statikus mintákkal. A valódi adatok a DB-ből
-         a következő lépésben jönnek; a kép most a hero fotó placeholderként. -->
+
+<?php if (!$events): ?>
+    <p class="section-intro">Hamarosan kerülnek fel az események. 🍷</p>
+<?php else: ?>
+
+  <?php if ($featured): ?>
     <section class="events-section">
-      <div class="events-section__head">
-        <h2>Közelgő események</h2>
-        <a class="events-section__more" href="#">Összes esemény →</a>
-      </div>
-
+      <div class="events-section__head"><h2>Kiemelt események</h2></div>
       <div class="events-grid">
-
-        <article class="event-card">
-          <a class="event-card__media" href="#">
-            <img src="assets/hero.jpg" alt="Budapesti Borfesztivál a Budai Várban" loading="lazy">
-            <span class="event-card__badge">Kiemelt</span>
-          </a>
-          <div class="event-card__body">
-            <p class="event-card__date"><time datetime="2026-09-10">2026. szept. 10–13.</time></p>
-            <h3 class="event-card__title"><a href="#">Budapesti Borfesztivál</a></h3>
-            <p class="event-card__meta">📍 Budapest, Budai Vár</p>
-            <div class="event-card__tags">
-              <span class="tag">Borfesztivál</span>
-              <span class="tag">Kóstoló</span>
+        <?php foreach ($featured as $e): $st = eventStatus($e['start_datetime'], $e['end_datetime']); ?>
+          <article class="event-card">
+            <a class="event-card__media" href="#">
+              <img src="<?= h($e['image_url'] ?: 'assets/hero.jpg') ?>" alt="<?= h($e['image_alt'] ?: $e['title']) ?>" loading="lazy">
+              <span class="event-card__badge">Kiemelt</span>
+            </a>
+            <div class="event-card__body">
+              <p class="event-card__date">
+                <time datetime="<?= h(isoDate($e['start_datetime'])) ?>"><?= h(formatDateRange($e['start_datetime'], $e['end_datetime'])) ?></time>
+                <?php if ($st): ?><span class="status <?= h($st['class']) ?>"><?= h($st['label']) ?></span><?php endif; ?>
+              </p>
+              <h3 class="event-card__title"><a href="#"><?= h($e['title']) ?></a></h3>
+              <p class="event-card__meta">📍 <?= h(trim(($e['venue_name'] ? $e['venue_name'] . ', ' : '') . $e['city'])) ?></p>
+              <div class="event-card__tags">
+                <?php foreach ($e['categories'] as $cat): ?><span class="tag"><?= h($cat) ?></span><?php endforeach; ?>
+                <?php if ((int) $e['is_free'] === 1): ?><span class="tag tag--free">Ingyenes</span><?php endif; ?>
+              </div>
             </div>
-          </div>
-        </article>
-
-        <article class="event-card">
-          <a class="event-card__media" href="#">
-            <img src="assets/hero.jpg" alt="Szent György-hegy Hajnalig borvidéki program" loading="lazy">
-          </a>
-          <div class="event-card__body">
-            <p class="event-card__date"><time datetime="2026-07-18">2026. júl. 18.</time></p>
-            <h3 class="event-card__title"><a href="#">Szent György-hegy Hajnalig</a></h3>
-            <p class="event-card__meta">📍 Badacsonyi borvidék</p>
-            <div class="event-card__tags">
-              <span class="tag">Borvidéki program</span>
-              <span class="tag tag--free">Ingyenes</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="event-card">
-          <a class="event-card__media" href="#">
-            <img src="assets/hero.jpg" alt="Egri Bikavér Ünnep a belvárosban" loading="lazy">
-          </a>
-          <div class="event-card__body">
-            <p class="event-card__date"><time datetime="2026-07-25">2026. júl. 25–27.</time></p>
-            <h3 class="event-card__title"><a href="#">Egri Bikavér Ünnep</a></h3>
-            <p class="event-card__meta">📍 Eger, Dobó tér</p>
-            <div class="event-card__tags">
-              <span class="tag">Borfesztivál</span>
-              <span class="tag">Gasztronómia</span>
-            </div>
-          </div>
-        </article>
-
+          </article>
+        <?php endforeach; ?>
       </div>
     </section>
+  <?php endif; ?>
+
+    <section class="events-section">
+      <div class="events-section__head"><h2>Közelgő események</h2></div>
+      <div class="events-list">
+        <?php foreach ($byMonth as $key => $monthEvents): ?>
+          <div class="events-list__month">
+            <span class="events-list__dot" style="background: <?= h(monthDotColor($monthEvents[0]['start_datetime'])) ?>"></span>
+            <?= h(monthLabel($monthEvents[0]['start_datetime'])) ?>
+          </div>
+          <?php foreach ($monthEvents as $e): $st = eventStatus($e['start_datetime'], $e['end_datetime']); ?>
+            <a class="event-row" href="#">
+              <span class="date-block">
+                <span class="date-block__day"><?= h(dayNumber($e['start_datetime'])) ?></span>
+                <span class="date-block__mon"><?= h(shortMonthUpper($e['start_datetime'])) ?></span>
+              </span>
+              <span class="event-row__main">
+                <span class="event-row__title">
+                  <?= h($e['title']) ?>
+                  <?php if ($st): ?><span class="status <?= h($st['class']) ?>"><?= h($st['label']) ?></span><?php endif; ?>
+                  <?php if ((int) $e['is_free'] === 1): ?><span class="status is-free">Ingyenes</span><?php endif; ?>
+                </span>
+                <span class="event-row__sub">
+                  <?= h(formatDateRange($e['start_datetime'], $e['end_datetime'])) ?>
+                  <?php if (!empty($e['categories'])): ?> · <?= h(implode(', ', $e['categories'])) ?><?php endif; ?>
+                </span>
+              </span>
+              <span class="event-row__right">
+                <span class="event-row__loc"><?= h($e['city']) ?><?= $e['region_name'] ? ' · ' . h($e['region_name']) : '' ?></span>
+                <span class="event-row__chev">→</span>
+              </span>
+            </a>
+          <?php endforeach; ?>
+        <?php endforeach; ?>
+      </div>
+    </section>
+
+<?php endif; ?>
+
   </div>
 <?php
 require __DIR__ . '/partials/footer.php';

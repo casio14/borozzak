@@ -92,11 +92,16 @@ JSON-LD vázat (alap `WebSite`+`Organization`); `$jsonLd`-vel bővíthető oldal
     `DB_PASSWORD` secretből; lokálisan a `config.example.php`-ból másolod.
   - `health.php` — ideiglenes DB-egészség ellenőrző (élesítés előtt törölni/védeni).
   - `version.php` — generált verziófájl (CI).
+  - `lib/events.php` — esemény-lekérdezések + megjelenítési segédfüggvények
+    (magyar dátumformázás, státusz-pirula, hónap-csoportosítás, `h()` escape).
+  - **Kezdőlap dizájn:** felül kiemelt kártyák (`event-card`), alatta hónapokra bontott
+    sor-lista (`event-row`) naptár-dátumkockával és státusz-pirulákkal. `ItemList`+`Event`
+    JSON-LD a SEO/AI-hoz. Cache-busting: `style.css?v=<filemtime>`.
   - `assets/style.css` — közös stíluslap (boros paletta CSS-változókban).
   - `partials/header.php`, `partials/footer.php` — közös layout váz (minden oldal ezt használja).
     - **TODO (elnapolva):** a logó még nyitott — jelenleg ideiglenes szőlőfürt-SVG van.
       Felmerült irány: „A" koncepció = térkép-tű + borospohár (a „hol borozzak?" játék).
-- `db/` — adatbázis séma (`schema.sql`), migrációk. NEM kerül a webszerverre.
+- `db/` — adatbázis séma (`schema.sql`), `seed.sql` (minta események), migrációk. NEM kerül a webszerverre.
 - `docs/` — tervdokumentumok (pl. `adatmodell.md`). NEM kerül a webszerverre.
 - `.github/workflows/` — CI/CD (deploy).
 

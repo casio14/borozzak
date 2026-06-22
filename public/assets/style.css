@@ -303,6 +303,83 @@ main { flex: 1 0 auto; }
 }
 .tag--free { background: #e6efe0; color: #3f5a2a; }
 
+/* ---------- Státusz-pirulák ---------- */
+.status {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  padding: .12rem .5rem;
+  border-radius: 999px;
+  margin-left: .4rem;
+  vertical-align: middle;
+}
+.status.is-live { background: var(--wine-700); color: #fff; }
+.status.is-soon { background: var(--gold); color: var(--wine-900); }
+.status.is-last { background: #b5562a; color: #fff; }
+.status.is-free { background: #e6efe0; color: #3f5a2a; }
+
+/* ---------- Hónapokra bontott sor-lista ---------- */
+.events-list {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.events-list__month {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .6rem 1.1rem;
+  background: #f3eee4;
+  color: #7a6f66;
+  font-weight: 700;
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.events-list__dot { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+
+.event-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .8rem 1.1rem;
+  border-top: 1px solid var(--line);
+  text-decoration: none;
+  color: inherit;
+}
+.event-row:hover { background: #faf6ef; }
+
+.date-block {
+  flex: none;
+  width: 54px;
+  text-align: center;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: .35rem 0;
+  line-height: 1.05;
+}
+.date-block__day { display: block; font-size: 1.3rem; font-weight: 700; color: var(--wine-700); }
+.date-block__mon { display: block; font-size: .68rem; font-weight: 700; letter-spacing: .04em; color: var(--muted); }
+
+.event-row__main { flex: 1; min-width: 0; }
+.event-row__title { display: block; font-size: 1.05rem; font-weight: 700; color: var(--ink); }
+.event-row__sub { display: block; margin-top: .15rem; color: var(--muted); font-size: .9rem; }
+.event-row__right { display: flex; align-items: center; gap: 1rem; white-space: nowrap; }
+.event-row__loc { color: var(--muted); font-size: .9rem; }
+.event-row__chev { color: var(--wine-700); font-size: 1.1rem; }
+
+@media (max-width: 640px) {
+  .event-row__loc { display: none; }
+}
+
 /* ---------- Lábléc ---------- */
 .site-footer {
   flex-shrink: 0;
