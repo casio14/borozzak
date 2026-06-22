@@ -133,6 +133,60 @@ function listUrl(string $view, string $region, string $cat): string
     return $p ? ('?' . http_build_query($p)) : './';
 }
 
+/**
+ * Schema.org ItemList + Event strukturált adat (SEO / AI-kereső).
+ * Visszaad egy $jsonLd-be illeszthető tömböt, vagy null-t, ha nincs esemény.
+ */
+function eventsItemListJsonLd(array $events, string $base, string $dir, string $listName = 'Közelgő borrendezvények Magyarországon'): ?array
+{
+    $items = [];
+    $pos = 1;
+    foreach ($events as $e) {
+        $img = $e['image_url'] ?? '';
+        $imgAbs = $img ? ($base . $dir . '/' . ltrim($img, '/')) : null;
+        $event = [
+            '@type'               => 'Event',
+            'name'                => $e['title'],
+            'startDate'           => isoDate($e['start_datetime']),
+            'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+            'location'            => [
+                '@type'   => 'Place',
+                'name'    => $e['venue_name'] ?: ($e['city'] ?? ''),
+                'address' => [
+                    '@type'           => 'PostalAddress',
+                    'streetAddress'   => $e['address'] ?? '',
+                    'addressLocality' => $e['city'] ?? '',
+                    'addressCountry'  => 'HU',
+                ],
+            ],
+        ];
+        if (!empty($e['end_datetime']))      { $event['endDate'] = isoDate($e['end_datetime']); }
+        if ($imgAbs)                         { $event['image'] = $imgAbs; }
+        if (!empty($e['short_description'])) { $event['description'] = $e['short_description']; }
+        if (!empty($e['latitude']) && !empty($e['longitude'])) {
+            $event['location']['geo'] = [
+                '@type'     => 'GeoCoordinates',
+                'latitude'  => (float) $e['latitude'],
+                'longitude' => (float) $e['longitude'],
+            ];
+        }
+        if ((int) $e['is_free'] === 1) {
+            $event['offers'] = ['@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'HUF',
+                                'availability' => 'https://schema.org/InStock'];
+        }
+        $items[] = ['@type' => 'ListItem', 'position' => $pos++, 'item' => $event];
+    }
+    if (!$items) {
+        return null;
+    }
+    return [[
+        '@context'        => 'https://schema.org',
+        '@type'           => 'ItemList',
+        'name'            => $listName,
+        'itemListElement' => $items,
+    ]];
+}
+
 /** Státusz-pirula a dátumokból: Most zajlik / Utolsó napok / Hamarosan, vagy null. */
 function eventStatus(string $start, ?string $end): ?array
 {

@@ -87,6 +87,7 @@ $jsVer  = @filemtime(__DIR__ . '/../assets/app.js') ?: time();
 <?= json_encode($block, $jsonLdFlags) ?>
   </script>
 <?php endforeach; ?>
+<?= $headExtra ?? '' ?>
 </head>
 <body>
   <header class="site-header">
@@ -130,7 +131,7 @@ $jsVer  = @filemtime(__DIR__ . '/../assets/app.js') ?: time();
           </svg>
           Naptár
         </a>
-        <a href="#"<?= $activeNav === 'terkep' ? ' class="is-active" aria-current="page"' : '' ?>>
+        <a href="terkep.php"<?= $activeNav === 'terkep' ? ' class="is-active" aria-current="page"' : '' ?>>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polygon points="3 6.5 9 3.5 15 6.5 21 3.5 21 17.5 15 20.5 9 17.5 3 20.5"/>
             <line x1="9" y1="3.5" x2="9" y2="17.5"/>

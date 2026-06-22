@@ -62,50 +62,9 @@ ksort($byMonth);
 $listHeading = ($view === 'kozelgo') ? 'Közelgő események' : EVENT_VIEWS[$view];
 
 // --- Strukturált adat: ItemList az eseményekről (SEO / AI-kereső) ---
-$itemList = [];
-$pos = 1;
-foreach ($events as $e) {
-    $img = $e['image_url'] ?? '';
-    $imgAbs = $img ? ($base . $dir . '/' . ltrim($img, '/')) : null;
-    $event = [
-        '@type'     => 'Event',
-        'name'      => $e['title'],
-        'startDate' => isoDate($e['start_datetime']),
-        'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
-        'location'  => [
-            '@type'   => 'Place',
-            'name'    => $e['venue_name'] ?: ($e['city'] ?? ''),
-            'address' => [
-                '@type'           => 'PostalAddress',
-                'streetAddress'   => $e['address'] ?? '',
-                'addressLocality' => $e['city'] ?? '',
-                'addressCountry'  => 'HU',
-            ],
-        ],
-    ];
-    if (!empty($e['end_datetime']))  { $event['endDate'] = isoDate($e['end_datetime']); }
-    if ($imgAbs)                     { $event['image'] = $imgAbs; }
-    if (!empty($e['short_description'])) { $event['description'] = $e['short_description']; }
-    if (!empty($e['latitude']) && !empty($e['longitude'])) {
-        $event['location']['geo'] = [
-            '@type'     => 'GeoCoordinates',
-            'latitude'  => (float) $e['latitude'],
-            'longitude' => (float) $e['longitude'],
-        ];
-    }
-    if ((int) $e['is_free'] === 1) {
-        $event['offers'] = ['@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'HUF',
-                            'availability' => 'https://schema.org/InStock'];
-    }
-    $itemList[] = ['@type' => 'ListItem', 'position' => $pos++, 'item' => $event];
-}
-if ($itemList) {
-    $jsonLd = [[
-        '@context'        => 'https://schema.org',
-        '@type'           => 'ItemList',
-        'name'            => 'Közelgő borrendezvények Magyarországon',
-        'itemListElement' => $itemList,
-    ]];
+$ld = eventsItemListJsonLd($events, $base, $dir);
+if ($ld) {
+    $jsonLd = $ld;
 }
 
 require __DIR__ . '/partials/header.php';
