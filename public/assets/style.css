@@ -598,19 +598,19 @@ main { flex: 1 0 auto; }
 }
 .leaflet-control-zoom a,
 .locate-control a {
-  width: 40px !important;
-  height: 40px !important;
-  line-height: 40px !important;
+  width: 45px !important;
+  height: 45px !important;
+  line-height: 45px !important;
   color: var(--wine-700);
   background: #fff;
-  display: grid;
-  place-items: center;
-  font-size: 1.4rem !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: 1.5rem !important;
 }
 .leaflet-control-zoom a:hover,
 .locate-control a:hover { background: #f3e7d0; color: var(--wine-900); }
 .locate-control { margin-top: 12px !important; }
-.locate-control svg { width: 20px; height: 20px; }
+.locate-control svg { width: 24px; height: 24px; display: block; }
 
 .map-popup { font-size: .92rem; line-height: 1.5; }
 .map-popup strong { color: var(--wine-900); }
