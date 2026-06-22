@@ -41,6 +41,10 @@ $defaultJsonLd = [
 ];
 $jsonLd = isset($jsonLd) ? array_merge($defaultJsonLd, $jsonLd) : $defaultJsonLd;
 $jsonLdFlags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
+
+// Cache-busting: a CSS verziója a fájl módosítási ideje → CSS-változás után
+// a böngésző automatikusan friss stíluslapot tölt (nincs több ragadós cache).
+$cssVer = @filemtime(__DIR__ . '/../assets/style.css') ?: time();
 ?>
 <!DOCTYPE html>
 <html lang="hu">
@@ -72,7 +76,7 @@ $jsonLdFlags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
   <meta name="twitter:image" content="<?= htmlspecialchars($ogImage, ENT_QUOTES) ?>">
 <?php endif; ?>
 
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/style.css?v=<?= $cssVer ?>">
 
   <!-- Strukturált adat (Schema.org JSON-LD) — SEO + AI-kereső -->
 <?php foreach ($jsonLd as $block): ?>

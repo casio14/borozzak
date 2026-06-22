@@ -1,5 +1,6 @@
 <?php
 // IDEIGLENES dizájn-előnézet (lista/kártya ötvözet). Élesítés előtt törölni. (noindex)
+$cssVer = @filemtime(__DIR__ . '/assets/style.css') ?: time();
 ?>
 <!DOCTYPE html>
 <html lang="hu">
@@ -8,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>Dizájn-előnézet — eseménylista ötvözet</title>
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/style.css?v=<?= $cssVer ?>">
   <style>
     body { background: var(--cream); }
     .pwrap { max-width: var(--maxw); margin: 0 auto; padding: 2rem 1.25rem 4rem; }
