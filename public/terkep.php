@@ -97,13 +97,15 @@ require __DIR__ . '/partials/header.php';
       + '<circle cx="8" cy="12.5" r="1.7"/><circle cx="12" cy="12.5" r="1.7"/><circle cx="16" cy="12.5" r="1.7"/>'
       + '<circle cx="10" cy="16" r="1.7"/><circle cx="14" cy="16" r="1.7"/><circle cx="12" cy="19.2" r="1.5"/></svg></span>';
 
-    function pin(count, size) {
+    // Fürt: szőlőfürt + darabszám; egyetlen esemény: egyszerű pont
+    function clusterIcon(count) {
       return L.divIcon({
         className: 'grape-pin',
         html: grape + '<span class="grape-pin__count">' + count + '</span>',
-        iconSize: [size, size], iconAnchor: [size / 2, size / 2], popupAnchor: [0, -(size / 2) + 2]
+        iconSize: [46, 46], iconAnchor: [23, 23]
       });
     }
+    var dotIcon = L.divIcon({ className: 'grape-dot', html: '', iconSize: [18, 18], iconAnchor: [9, 9], popupAnchor: [0, -10] });
 
     var map = L.map('map', { scrollWheelZoom: false }).setView([47.16, 19.50], 7);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -115,7 +117,7 @@ require __DIR__ . '/partials/header.php';
     var cluster = L.markerClusterGroup({
       showCoverageOnHover: false,
       maxClusterRadius: 50,
-      iconCreateFunction: function (c) { return pin(c.getChildCount(), 46); }
+      iconCreateFunction: function (c) { return clusterIcon(c.getChildCount()); }
     });
 
     var bounds = [];
@@ -125,11 +127,44 @@ require __DIR__ . '/partials/header.php';
         + esc(p.date) + '<br>' + esc(loc)
         + (p.free ? '<br><span class="map-popup__free">Ingyenes</span>' : '')
         + '<br><a class="map-popup__link" href="' + esc(p.url) + '">Részletek &rarr;</a></div>';
-      cluster.addLayer(L.marker([p.lat, p.lng], { icon: pin(1, 40) }).bindPopup(html));
+      cluster.addLayer(L.marker([p.lat, p.lng], { icon: dotIcon }).bindPopup(html));
       bounds.push([p.lat, p.lng]);
     });
     map.addLayer(cluster);
     if (bounds.length) { map.fitBounds(bounds, { padding: [50, 50], maxZoom: 8 }); }
+
+    // „Helyzetem” gomb a zoom alatt: a saját pozícióra közelít
+    var LocateControl = L.Control.extend({
+      options: { position: 'topleft' },
+      onAdd: function (m) {
+        var box = L.DomUtil.create('div', 'leaflet-bar locate-control');
+        var btn = L.DomUtil.create('a', '', box);
+        btn.href = '#';
+        btn.title = 'Közelíts a helyzetemre';
+        btn.setAttribute('role', 'button');
+        btn.setAttribute('aria-label', 'Helyzetem');
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">'
+          + '<circle cx="12" cy="12" r="6"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/>'
+          + '<line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>'
+          + '<circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>';
+        L.DomEvent.on(btn, 'click', function (e) {
+          L.DomEvent.preventDefault(e); L.DomEvent.stopPropagation(e);
+          m.locate({ setView: true, maxZoom: 11 });
+        });
+        return box;
+      }
+    });
+    map.addControl(new LocateControl());
+
+    map.on('locationfound', function (e) {
+      if (window._youMarker) { map.removeLayer(window._youMarker); }
+      window._youMarker = L.circleMarker(e.latlng, {
+        radius: 8, color: '#2a6fb0', fillColor: '#3a8fe0', fillOpacity: .9, weight: 2
+      }).addTo(map).bindPopup('Itt vagy');
+    });
+    map.on('locationerror', function () {
+      alert('Nem sikerült meghatározni a helyzetedet. Engedélyezd a helymeghatározást a böngészőben.');
+    });
   })();
   </script>
 <?php
