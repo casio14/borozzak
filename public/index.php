@@ -9,6 +9,7 @@ require __DIR__ . '/lib/events.php';
 $pageTitle = 'holborozzak.hu — Magyarország borrendezvényei egy helyen';
 $pageDescription = 'Fedezd fel Magyarország legjobb bor-eseményeit: fesztiválok, kóstolók '
     . 'és pincelátogatások Tokajtól Villányig — egy helyen, mindig naprakészen.';
+$activeNav = 'esemenyek';
 
 // Abszolút bázis URL a JSON-LD / képek számára
 $base = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http')
