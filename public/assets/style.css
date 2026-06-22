@@ -43,8 +43,12 @@ a { color: var(--wine-700); }
 
 /* ---------- Fejléc (világos) ---------- */
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   background: var(--cream);
   border-bottom: 1px solid var(--line);
+  box-shadow: 0 2px 8px rgba(74, 14, 28, .04);
 }
 .site-header__inner {
   width: 100%;
@@ -286,6 +290,12 @@ main { flex: 1 0 auto; }
 }
 .facets__clear:hover { color: var(--gold); }
 
+/* JS bekapcsolva: a legördülő automatikusan szűr, a Szűrés gomb felesleges */
+.js .facets__btn { display: none; }
+
+/* Részleges újratöltés alatti halványítás */
+#esemenyek-region.is-loading { opacity: .55; transition: opacity .12s ease; }
+
 /* ---------- Esemény szekció + kártyarács ---------- */
 .events-section { padding: 2.5rem 0; }
 .events-section__head {
@@ -429,9 +439,6 @@ main { flex: 1 0 auto; }
   font-size: .85rem;
   text-transform: uppercase;
   letter-spacing: .05em;
-  position: sticky;
-  top: 0;
-  z-index: 1;
 }
 .events-list__dot { width: 10px; height: 10px; border-radius: 3px; flex: none; }
 

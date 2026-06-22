@@ -46,6 +46,7 @@ $jsonLdFlags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
 // Cache-busting: a CSS verziója a fájl módosítási ideje → CSS-változás után
 // a böngésző automatikusan friss stíluslapot tölt (nincs több ragadós cache).
 $cssVer = @filemtime(__DIR__ . '/../assets/style.css') ?: time();
+$jsVer  = @filemtime(__DIR__ . '/../assets/app.js') ?: time();
 ?>
 <!DOCTYPE html>
 <html lang="hu">
@@ -78,6 +79,7 @@ $cssVer = @filemtime(__DIR__ . '/../assets/style.css') ?: time();
 <?php endif; ?>
 
   <link rel="stylesheet" href="assets/style.css?v=<?= $cssVer ?>">
+  <script src="assets/app.js?v=<?= $jsVer ?>" defer></script>
 
   <!-- Strukturált adat (Schema.org JSON-LD) — SEO + AI-kereső -->
 <?php foreach ($jsonLd as $block): ?>

@@ -133,6 +133,7 @@ require __DIR__ . '/partials/header.php';
     <p class="section-intro">Hamarosan kerülnek fel az események. 🍷</p>
 <?php else: ?>
 
+    <div id="esemenyek-region">
     <nav class="tabs" aria-label="Esemény nézetek">
       <?php foreach (EVENT_VIEWS as $key => $label): ?>
         <a href="<?= h(listUrl($key, $regionFilter, $catFilter)) ?>"<?= $view === $key ? ' aria-current="page"' : '' ?>><?= h($label) ?></a>
@@ -143,7 +144,7 @@ require __DIR__ . '/partials/header.php';
       <?php if ($view !== 'kozelgo'): ?><input type="hidden" name="nezet" value="<?= h($view) ?>"><?php endif; ?>
       <label class="facets__field">
         <span>Borvidék</span>
-        <select name="borvidek" onchange="this.form.submit()">
+        <select name="borvidek">
           <option value="">Mind</option>
           <?php foreach ($regionOptions as $slug => $name): ?>
             <option value="<?= h($slug) ?>"<?= $regionFilter === $slug ? ' selected' : '' ?>><?= h($name) ?></option>
@@ -152,14 +153,14 @@ require __DIR__ . '/partials/header.php';
       </label>
       <label class="facets__field">
         <span>Kategória</span>
-        <select name="kategoria" onchange="this.form.submit()">
+        <select name="kategoria">
           <option value="">Mind</option>
           <?php foreach ($catOptions as $slug => $name): ?>
             <option value="<?= h($slug) ?>"<?= $catFilter === $slug ? ' selected' : '' ?>><?= h($name) ?></option>
           <?php endforeach; ?>
         </select>
       </label>
-      <noscript><button type="submit" class="facets__btn">Szűrés</button></noscript>
+      <button type="submit" class="facets__btn">Szűrés</button>
       <?php if ($hasFacets): ?>
         <a class="facets__clear" href="<?= h(listUrl($view, '', '')) ?>">Szűrők törlése</a>
       <?php endif; ?>
@@ -231,6 +232,7 @@ require __DIR__ . '/partials/header.php';
       </div>
       <?php endif; ?>
     </section>
+    </div><!-- #esemenyek-region -->
 
 <?php endif; ?>
 
