@@ -105,19 +105,44 @@ $cssVer = @filemtime(__DIR__ . '/../assets/style.css') ?: time();
       </a>
 
       <nav class="site-nav" aria-label="Fő navigáció">
-        <span class="site-nav__links">
-          <!-- TODO: a céloldalak a következő inkrementumokban készülnek el -->
-          <a href="#">Borvidékek</a>
-          <a href="#">Naptár</a>
-          <a href="#">Térkép</a>
-        </span>
+        <!-- TODO: a céloldalak a következő inkrementumokban készülnek el -->
+        <a href="#">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M11 8c0-2.2 1.6-3.8 4.2-3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="9" cy="10.5" r="1.9"/><circle cx="13" cy="10.5" r="1.9"/>
+            <circle cx="7" cy="13.8" r="1.9"/><circle cx="11" cy="13.8" r="1.9"/><circle cx="15" cy="13.8" r="1.9"/>
+            <circle cx="9" cy="17.1" r="1.9"/><circle cx="13" cy="17.1" r="1.9"/>
+            <circle cx="11" cy="20.2" r="1.7"/>
+          </svg>
+          Borvidékek
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4.5" width="18" height="16" rx="2"/>
+            <line x1="3" y1="9" x2="21" y2="9"/>
+            <line x1="8" y1="2.5" x2="8" y2="6"/>
+            <line x1="16" y1="2.5" x2="16" y2="6"/>
+          </svg>
+          Naptár
+        </a>
+        <a href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="3 6.5 9 3.5 15 6.5 21 3.5 21 17.5 15 20.5 9 17.5 3 20.5"/>
+            <line x1="9" y1="3.5" x2="9" y2="17.5"/>
+            <line x1="15" y1="6.5" x2="15" y2="20.5"/>
+          </svg>
+          Térkép
+        </a>
+      </nav>
+
+      <div class="site-header__actions">
         <a class="site-nav__search" href="#hero-kereso" aria-label="Keresés">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <circle cx="11" cy="11" r="7"/>
             <line x1="21" y1="21" x2="16.5" y2="16.5"/>
           </svg>
         </a>
-      </nav>
+      </div>
     </div>
   </header>
   <main>
