@@ -14,7 +14,7 @@
   --muted:    #8a7d77;   /* halvány szöveg */
   --line:     #e7ddcf;   /* elválasztó vonal */
 
-  --maxw: 1080px;
+  --maxw: 1200px;
   --radius: 14px;
   --shadow: 0 6px 24px rgba(74, 14, 28, .08);
 }
@@ -221,7 +221,8 @@ main { flex: 1 0 auto; }
 
 .events-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  /* auto-fit: a kártyák kitöltik a sort (üres sávok összecsuknak) */
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 1.5rem;
 }
 
