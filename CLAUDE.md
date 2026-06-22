@@ -94,6 +94,8 @@ JSON-LD vázat (alap `WebSite`+`Organization`); `$jsonLd`-vel bővíthető oldal
   - `version.php` — generált verziófájl (CI).
   - `assets/style.css` — közös stíluslap (boros paletta CSS-változókban).
   - `partials/header.php`, `partials/footer.php` — közös layout váz (minden oldal ezt használja).
+    - **TODO (elnapolva):** a logó még nyitott — jelenleg ideiglenes szőlőfürt-SVG van.
+      Felmerült irány: „A" koncepció = térkép-tű + borospohár (a „hol borozzak?" játék).
 - `db/` — adatbázis séma (`schema.sql`), migrációk. NEM kerül a webszerverre.
 - `docs/` — tervdokumentumok (pl. `adatmodell.md`). NEM kerül a webszerverre.
 - `.github/workflows/` — CI/CD (deploy).
