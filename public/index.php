@@ -131,7 +131,7 @@ require __DIR__ . '/partials/header.php';
       <div class="events-grid">
         <?php foreach ($featured as $e): $st = eventStatus($e['start_datetime'], $e['end_datetime']); ?>
           <article class="event-card">
-            <a class="event-card__media" href="#">
+            <a class="event-card__media" href="<?= h(eventUrl($e)) ?>">
               <img src="<?= h($e['image_url'] ?: 'assets/hero.jpg') ?>" alt="<?= h($e['image_alt'] ?: $e['title']) ?>" loading="lazy">
               <span class="event-card__badge">Kiemelt</span>
             </a>
@@ -140,7 +140,7 @@ require __DIR__ . '/partials/header.php';
                 <time datetime="<?= h(isoDate($e['start_datetime'])) ?>"><?= h(formatDateRange($e['start_datetime'], $e['end_datetime'])) ?></time>
                 <?php if ($st): ?><span class="status <?= h($st['class']) ?>"><?= h($st['label']) ?></span><?php endif; ?>
               </p>
-              <h3 class="event-card__title"><a href="#"><?= h($e['title']) ?></a></h3>
+              <h3 class="event-card__title"><a href="<?= h(eventUrl($e)) ?>"><?= h($e['title']) ?></a></h3>
               <p class="event-card__meta">📍 <?= h(trim(($e['venue_name'] ? $e['venue_name'] . ', ' : '') . $e['city'])) ?></p>
               <div class="event-card__tags">
                 <?php foreach ($e['categories'] as $cat): ?><span class="tag"><?= h($cat['name']) ?></span><?php endforeach; ?>
@@ -165,7 +165,7 @@ require __DIR__ . '/partials/header.php';
             <?= h(monthLabel($monthEvents[0]['start_datetime'])) ?>
           </div>
           <?php foreach ($monthEvents as $e): $st = eventStatus($e['start_datetime'], $e['end_datetime']); ?>
-            <a class="event-row" href="#">
+            <a class="event-row" href="<?= h(eventUrl($e)) ?>">
               <span class="date-block">
                 <span class="date-block__day"><?= h(dayNumber($e['start_datetime'])) ?></span>
                 <span class="date-block__mon"><?= h(shortMonthUpper($e['start_datetime'])) ?></span>

@@ -92,9 +92,12 @@ JSON-LD vázat (alap `WebSite`+`Organization`); `$jsonLd`-vel bővíthető oldal
     `DB_PASSWORD` secretből; lokálisan a `config.example.php`-ból másolod.
   - `health.php` — ideiglenes DB-egészség ellenőrző (élesítés előtt törölni/védeni).
   - `version.php` — generált verziófájl (CI).
-  - `terkep.php` — **Eseménytérkép**: borrendezvények interaktív térképen
-    (Leaflet + CARTO világos csempék, borospohár jelölők). SEO: szerveroldali lista
-    + `Event`/`ItemList` JSON-LD. A Térkép menüpont ide mutat.
+  - `terkep.php` — **Eseménytérkép**: Leaflet + CARTO világos csempék, **szőlőfürt
+    jelölők darabszám-jelvénnyel**, **markercluster** (zoom-alapú összevonás/szétválás),
+    popup részletlinkkel. SEO: szerveroldali lista + `Event`/`ItemList` JSON-LD.
+  - `esemeny.php` — esemény **részletoldal** (`esemeny.php?slug=…`): teljes `Event`
+    JSON-LD, canonical, OG-kép; 404 a nem létezőre. A kártyák/sorok/térkép ide linkelnek.
+    (Szép URL `/esemeny/<slug>` később, a végleges domainen, rewrite-tal.)
   - `assets/app.js` — progresszív fejlesztés (részleges szűrés, no-jump).
   - `lib/events.php` — esemény-lekérdezések + megjelenítési segédfüggvények
     (magyar dátumformázás, státusz-pirula, hónap-csoportosítás, `h()` escape).

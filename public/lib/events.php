@@ -133,6 +133,52 @@ function listUrl(string $view, string $region, string $cat): string
     return $p ? ('?' . http_build_query($p)) : './';
 }
 
+/** Esemény részletoldalának URL-je (relatív vagy abszolút, ha base/dir adott). */
+function eventUrl(array $e, string $base = '', string $dir = ''): string
+{
+    return ($base . $dir) . ($base ? '/' : '') . 'esemeny.php?slug=' . rawurlencode($e['slug']);
+}
+
+/** Egy esemény Schema.org Event objektuma (@context nélkül; ItemList-be vagy önállóan). */
+function eventJsonLd(array $e, string $base, string $dir, ?string $url = null): array
+{
+    $img = $e['image_url'] ?? '';
+    $imgAbs = $img ? ($base . $dir . '/' . ltrim($img, '/')) : null;
+    $event = [
+        '@type'               => 'Event',
+        'name'                => $e['title'],
+        'startDate'           => isoDate($e['start_datetime']),
+        'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+        'eventStatus'         => 'https://schema.org/EventScheduled',
+        'location'            => [
+            '@type'   => 'Place',
+            'name'    => $e['venue_name'] ?: ($e['city'] ?? ''),
+            'address' => [
+                '@type'           => 'PostalAddress',
+                'streetAddress'   => $e['address'] ?? '',
+                'addressLocality' => $e['city'] ?? '',
+                'addressCountry'  => 'HU',
+            ],
+        ],
+    ];
+    if (!empty($e['end_datetime']))      { $event['endDate'] = isoDate($e['end_datetime']); }
+    if ($imgAbs)                         { $event['image'] = $imgAbs; }
+    if (!empty($e['short_description'])) { $event['description'] = $e['short_description']; }
+    if (!empty($e['latitude']) && !empty($e['longitude'])) {
+        $event['location']['geo'] = [
+            '@type'     => 'GeoCoordinates',
+            'latitude'  => (float) $e['latitude'],
+            'longitude' => (float) $e['longitude'],
+        ];
+    }
+    if ((int) $e['is_free'] === 1) {
+        $event['offers'] = ['@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'HUF',
+                            'availability' => 'https://schema.org/InStock'];
+    }
+    if ($url) { $event['url'] = $url; }
+    return $event;
+}
+
 /**
  * Schema.org ItemList + Event strukturált adat (SEO / AI-kereső).
  * Visszaad egy $jsonLd-be illeszthető tömböt, vagy null-t, ha nincs esemény.
@@ -142,39 +188,11 @@ function eventsItemListJsonLd(array $events, string $base, string $dir, string $
     $items = [];
     $pos = 1;
     foreach ($events as $e) {
-        $img = $e['image_url'] ?? '';
-        $imgAbs = $img ? ($base . $dir . '/' . ltrim($img, '/')) : null;
-        $event = [
-            '@type'               => 'Event',
-            'name'                => $e['title'],
-            'startDate'           => isoDate($e['start_datetime']),
-            'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
-            'location'            => [
-                '@type'   => 'Place',
-                'name'    => $e['venue_name'] ?: ($e['city'] ?? ''),
-                'address' => [
-                    '@type'           => 'PostalAddress',
-                    'streetAddress'   => $e['address'] ?? '',
-                    'addressLocality' => $e['city'] ?? '',
-                    'addressCountry'  => 'HU',
-                ],
-            ],
+        $items[] = [
+            '@type'    => 'ListItem',
+            'position' => $pos++,
+            'item'     => eventJsonLd($e, $base, $dir, eventUrl($e, $base, $dir)),
         ];
-        if (!empty($e['end_datetime']))      { $event['endDate'] = isoDate($e['end_datetime']); }
-        if ($imgAbs)                         { $event['image'] = $imgAbs; }
-        if (!empty($e['short_description'])) { $event['description'] = $e['short_description']; }
-        if (!empty($e['latitude']) && !empty($e['longitude'])) {
-            $event['location']['geo'] = [
-                '@type'     => 'GeoCoordinates',
-                'latitude'  => (float) $e['latitude'],
-                'longitude' => (float) $e['longitude'],
-            ];
-        }
-        if ((int) $e['is_free'] === 1) {
-            $event['offers'] = ['@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'HUF',
-                                'availability' => 'https://schema.org/InStock'];
-        }
-        $items[] = ['@type' => 'ListItem', 'position' => $pos++, 'item' => $event];
     }
     if (!$items) {
         return null;
@@ -185,6 +203,36 @@ function eventsItemListJsonLd(array $events, string $base, string $dir, string $
         'name'            => $listName,
         'itemListElement' => $items,
     ]];
+}
+
+/** Egy közzétett esemény lekérdezése slug alapján (címkékkel, borvidékkel). */
+function fetchEventBySlug(PDO $pdo, string $slug): ?array
+{
+    $sql = "SELECT e.*, r.name AS region_name, r.slug AS region_slug,
+                   GROUP_CONCAT(DISTINCT CONCAT(c.slug, '\\t', c.name) ORDER BY c.name SEPARATOR '||') AS cat_pairs
+            FROM events e
+            LEFT JOIN wine_regions r ON r.id = e.region_id
+            LEFT JOIN event_categories ec ON ec.event_id = e.id
+            LEFT JOIN categories c ON c.id = ec.category_id
+            WHERE e.slug = :slug AND e.status = 'published'
+            GROUP BY e.id
+            LIMIT 1";
+    $st = $pdo->prepare($sql);
+    $st->execute([':slug' => $slug]);
+    $r = $st->fetch();
+    if (!$r) {
+        return null;
+    }
+    $r['categories'] = [];
+    if (!empty($r['cat_pairs'])) {
+        foreach (explode('||', $r['cat_pairs']) as $pair) {
+            $parts = explode("\t", $pair);
+            if (count($parts) === 2) {
+                $r['categories'][] = ['slug' => $parts[0], 'name' => $parts[1]];
+            }
+        }
+    }
+    return $r;
 }
 
 /** Státusz-pirula a dátumokból: Most zajlik / Utolsó napok / Hamarosan, vagy null. */

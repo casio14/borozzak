@@ -34,6 +34,7 @@ foreach ($events as $e) {
             'city'  => $e['city'],
             'venue' => $e['venue_name'],
             'free'  => (int) $e['is_free'] === 1,
+            'url'   => eventUrl($e),
         ];
     }
 }
@@ -46,7 +47,8 @@ if ($ld) {
 
 // Leaflet CSS (csak ezen az oldalon)
 $headExtra = '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"'
-    . ' integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">';
+    . ' integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">'
+    . '<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">';
 
 require __DIR__ . '/partials/header.php';
 ?>
@@ -81,6 +83,7 @@ require __DIR__ . '/partials/header.php';
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script>
   (function () {
     if (typeof L === 'undefined') { return; }
@@ -88,9 +91,19 @@ require __DIR__ . '/partials/header.php';
 
     function esc(s) { var d = document.createElement('div'); d.textContent = (s == null ? '' : String(s)); return d.innerHTML; }
 
-    var glass = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
-      + '<path d="M8 4h8l-1 6a3 3 0 0 1-6 0z"/><line x1="12" y1="16" x2="12" y2="20"/><line x1="9" y1="20" x2="15" y2="20"/></svg>';
-    var wineIcon = L.divIcon({ className: 'wine-pin', html: glass, iconSize: [38, 38], iconAnchor: [19, 19], popupAnchor: [0, -17] });
+    var grape = '<span class="grape-pin__icon"><svg viewBox="0 0 24 24" fill="currentColor">'
+      + '<path d="M12 6.4c0-2 1.4-3.4 3.6-3.4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>'
+      + '<circle cx="10" cy="9" r="1.7"/><circle cx="14" cy="9" r="1.7"/>'
+      + '<circle cx="8" cy="12.5" r="1.7"/><circle cx="12" cy="12.5" r="1.7"/><circle cx="16" cy="12.5" r="1.7"/>'
+      + '<circle cx="10" cy="16" r="1.7"/><circle cx="14" cy="16" r="1.7"/><circle cx="12" cy="19.2" r="1.5"/></svg></span>';
+
+    function pin(count, size) {
+      return L.divIcon({
+        className: 'grape-pin',
+        html: grape + '<span class="grape-pin__count">' + count + '</span>',
+        iconSize: [size, size], iconAnchor: [size / 2, size / 2], popupAnchor: [0, -(size / 2) + 2]
+      });
+    }
 
     var map = L.map('map', { scrollWheelZoom: false }).setView([47.16, 19.50], 7);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -98,15 +111,24 @@ require __DIR__ . '/partials/header.php';
       attribution: '&copy; OpenStreetMap, &copy; CARTO'
     }).addTo(map);
 
+    // Zoom-alapú összevonás: kicsinyítve aggregál, ráközelítve szétválik
+    var cluster = L.markerClusterGroup({
+      showCoverageOnHover: false,
+      maxClusterRadius: 50,
+      iconCreateFunction: function (c) { return pin(c.getChildCount(), 46); }
+    });
+
     var bounds = [];
     pts.forEach(function (p) {
       var loc = (p.venue ? p.venue + ', ' : '') + (p.city || '');
       var html = '<div class="map-popup"><strong>' + esc(p.title) + '</strong><br>'
         + esc(p.date) + '<br>' + esc(loc)
-        + (p.free ? '<br><span class="map-popup__free">Ingyenes</span>' : '') + '</div>';
-      L.marker([p.lat, p.lng], { icon: wineIcon }).addTo(map).bindPopup(html);
+        + (p.free ? '<br><span class="map-popup__free">Ingyenes</span>' : '')
+        + '<br><a class="map-popup__link" href="' + esc(p.url) + '">Részletek &rarr;</a></div>';
+      cluster.addLayer(L.marker([p.lat, p.lng], { icon: pin(1, 40) }).bindPopup(html));
       bounds.push([p.lat, p.lng]);
     });
+    map.addLayer(cluster);
     if (bounds.length) { map.fitBounds(bounds, { padding: [50, 50], maxZoom: 8 }); }
   })();
   </script>
