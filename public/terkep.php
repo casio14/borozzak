@@ -56,9 +56,9 @@ $headExtra = '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/
 require __DIR__ . '/partials/header.php';
 ?>
   <div class="container">
-    <div class="map-head">
+    <div class="page-head">
       <h1>Eseménytérkép</h1>
-      <span class="map-head__count"><?= count($events) ?> esemény</span>
+      <p class="page-head__sub">Nézd meg térképen, mely borrendezvények vannak a közeledben — <?= count($events) ?> esemény.</p>
     </div>
   </div>
 
