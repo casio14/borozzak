@@ -26,6 +26,7 @@ $view = normalizeView($_GET['nezet'] ?? null);
 $regionFilters = array_values(array_filter(array_map('strval', (array) ($_GET['borvidek'] ?? [])), 'strlen'));
 $catFilters    = array_values(array_filter(array_map('strval', (array) ($_GET['kategoria'] ?? [])), 'strlen'));
 $sort          = normalizeSort($_GET['rendezes'] ?? null);
+$q             = trim((string) ($_GET['q'] ?? ''));
 
 $regionOptions = [];
 $catOptions = [];
@@ -40,16 +41,18 @@ foreach ($events as $e) {
 asort($regionOptions);
 asort($catOptions);
 
-$displayEvents = applyFacets(filterEvents($events, $view), $regionFilters, $catFilters);
+$displayEvents = applyFacets(searchEvents(filterEvents($events, $view), $q), $regionFilters, $catFilters);
 $hasFacets = (!empty($regionFilters) || !empty($catFilters));
 
-$showFeatured = ($view === 'kozelgo' && !$hasFacets);
+$showFeatured = ($view === 'kozelgo' && !$hasFacets && $q === '');
 $featured = $showFeatured
     ? array_values(array_filter($events, static fn($e) => (int) $e['is_featured'] === 1))
     : [];
 
 $groups = groupEventsForList($displayEvents, $sort);
-$listHeading = ($view === 'kozelgo') ? 'Közelgő események' : EVENT_VIEWS[$view];
+$listHeading = $q !== ''
+    ? ('Találatok: „' . $q . '”')
+    : (($view === 'kozelgo') ? 'Közelgő események' : EVENT_VIEWS[$view]);
 
 $ld = eventsItemListJsonLd($events, $base, $dir);
 if ($ld) {
@@ -71,12 +74,18 @@ require __DIR__ . '/partials/header.php';
     <div id="esemenyek-region">
     <nav class="tabs" aria-label="Esemény nézetek">
       <?php foreach (EVENT_VIEWS as $key => $label): ?>
-        <a href="<?= h(listUrl($key, $regionFilters, $catFilters, $sort)) ?>"<?= $view === $key ? ' aria-current="page"' : '' ?>><?= h($label) ?></a>
+        <a href="<?= h(listUrl($key, $regionFilters, $catFilters, $sort, $q)) ?>"<?= $view === $key ? ' aria-current="page"' : '' ?>><?= h($label) ?></a>
       <?php endforeach; ?>
     </nav>
 
-    <form class="facets" method="get" action="esemenyek.php" aria-label="Szűrők és rendezés">
+    <form class="facets" method="get" action="esemenyek.php" aria-label="Keresés, szűrők és rendezés">
       <?php if ($view !== 'kozelgo'): ?><input type="hidden" name="nezet" value="<?= h($view) ?>"><?php endif; ?>
+
+      <label class="facets__search">
+        <svg class="facets__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+        <input type="search" name="q" value="<?= h($q) ?>" placeholder="Keresés név, helyszín, borvidék szerint…" aria-label="Keresés">
+        <?php if ($q !== ''): ?><a class="facets__search-clear" href="<?= h(listUrl($view, $regionFilters, $catFilters, $sort)) ?>" aria-label="Keresés törlése">&times;</a><?php endif; ?>
+      </label>
 
       <div class="facets__filters">
         <details class="facet" data-facet>
@@ -111,7 +120,7 @@ require __DIR__ . '/partials/header.php';
 
         <button type="submit" class="facets__btn">Szűrés</button>
         <?php if ($hasFacets): ?>
-          <a class="facets__clear" href="<?= h(listUrl($view, [], [], $sort)) ?>">Szűrők törlése</a>
+          <a class="facets__clear" href="<?= h(listUrl($view, [], [], $sort, $q)) ?>">Szűrők törlése</a>
         <?php endif; ?>
       </div>
 

@@ -52,7 +52,7 @@
 
   // Tab / „Szűrők törlése” linkek; illetve kattintás a szűrőn kívül → zárás
   document.addEventListener('click', function (e) {
-    var a = e.target.closest('#' + REGION + ' .tabs a, #' + REGION + ' .facets__clear');
+    var a = e.target.closest('#' + REGION + ' .tabs a, #' + REGION + ' .facets__clear, #' + REGION + ' .facets__search-clear');
     if (a) { e.preventDefault(); load(a.getAttribute('href'), true); return; }
     if (!e.target.closest('#' + REGION + ' details[data-facet]')) { closeFacets(); }
   });

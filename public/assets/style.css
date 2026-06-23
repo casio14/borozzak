@@ -483,6 +483,33 @@ main { flex: 1 0 auto; }
 .facets__sort { margin-left: auto; display: flex; align-items: center; gap: .5rem; }
 .facets__sort-label { color: var(--muted); font-weight: 600; font-size: .9rem; white-space: nowrap; }
 
+/* Szabadszavas kereső a lista oldalon */
+.facets__search {
+  flex: 1 1 100%;
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0 .9rem;
+}
+.facets__search:focus-within { border-color: var(--wine-700); box-shadow: 0 0 0 3px rgba(114, 47, 55, .12); }
+.facets__search-icon { width: 18px; height: 18px; color: var(--muted); flex: none; }
+.facets__search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: .7rem 0;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  outline: none;
+}
+.facets__search-clear { color: var(--muted); font-size: 1.3rem; line-height: 1; text-decoration: none; padding: 0 .2rem; }
+.facets__search-clear:hover { color: var(--wine-700); }
+
 /* Multiselect szűrő legördülő (details + checkbox) */
 .facet { position: relative; }
 .facet__toggle {

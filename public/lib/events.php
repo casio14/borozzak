@@ -171,6 +171,33 @@ function categoryNames(array $e): array
     return array_map(static fn($c) => $c['name'], $e['categories']);
 }
 
+/** Kisbetűsít + magyar ékezetek eltávolítása (ékezet-érzéketlen kereséshez). */
+function foldText(string $s): string
+{
+    $s = mb_strtolower($s, 'UTF-8');
+    return strtr($s, [
+        'á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ö' => 'o',
+        'ő' => 'o', 'ú' => 'u', 'ü' => 'u', 'ű' => 'u',
+    ]);
+}
+
+/** Szabadszavas keresés: név / helyszín / város / borvidék / kategória. */
+function searchEvents(array $events, string $q): array
+{
+    $q = trim($q);
+    if ($q === '') {
+        return $events;
+    }
+    $needle = foldText($q);
+    return array_values(array_filter($events, static function ($e) use ($needle) {
+        $hay = $e['title'] . ' ' . ($e['venue_name'] ?? '') . ' ' . ($e['city'] ?? '') . ' ' . ($e['region_name'] ?? '');
+        foreach ($e['categories'] as $c) {
+            $hay .= ' ' . $c['name'];
+        }
+        return strpos(foldText($hay), $needle) !== false;
+    }));
+}
+
 /** Kategória → [háttérszín, szövegszín] (naptári chipekhez, jelmagyarázathoz). */
 const CAT_COLORS = [
     'borfesztival'       => ['#722f37', '#ffffff'], // burgundi
@@ -196,13 +223,14 @@ function categoryColor(array $e): array
 }
 
 /** Lista-URL építése a nézet + fazetták megőrzésével. */
-function listUrl(string $view, array $regions = [], array $cats = [], string $sort = 'datum'): string
+function listUrl(string $view, array $regions = [], array $cats = [], string $sort = 'datum', string $q = ''): string
 {
     $p = [];
     if ($view !== 'kozelgo') { $p['nezet'] = $view; }
     if ($regions)            { $p['borvidek'] = array_values($regions); }
     if ($cats)               { $p['kategoria'] = array_values($cats); }
     if ($sort !== 'datum')   { $p['rendezes'] = $sort; }
+    if ($q !== '')           { $p['q'] = $q; }
     return 'esemenyek.php' . ($p ? ('?' . http_build_query($p)) : '');
 }
 
