@@ -129,6 +129,7 @@ main { flex: 1 0 auto; }
   margin: 0 auto;
   padding: 2rem 1.25rem;
 }
+.container--wide { max-width: 1480px; }
 
 /* ---------- Hero (teljes szélességű, brand) ---------- */
 .hero {
@@ -293,27 +294,32 @@ main { flex: 1 0 auto; }
 .cal-nav__today:hover { color: var(--gold); }
 
 .cal { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
-.cal__dow { display: grid; grid-template-columns: repeat(7, 1fr); background: #f3eee4; }
+.cal__dow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: linear-gradient(135deg, var(--wine-700), var(--wine-900));
+}
 .cal__dow span {
-  padding: .6rem .3rem;
+  padding: .7rem .3rem;
   text-align: center;
   font-weight: 700;
-  font-size: .78rem;
+  font-size: .8rem;
   text-transform: uppercase;
-  letter-spacing: .03em;
-  color: #7a6f66;
+  letter-spacing: .04em;
+  color: var(--gold-200);
 }
 .cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); }
 .cal__cell {
-  min-height: 112px;
+  min-height: 150px;
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
-  padding: .35rem;
+  padding: .4rem;
   display: flex;
   flex-direction: column;
-  gap: .22rem;
+  gap: .25rem;
 }
 .cal__cell:nth-child(7n + 1) { border-left: none; }
+.cal__cell--weekend { background: #f7f1e6; }
 .cal__cell--blank { background: #faf7f1; }
 .cal__day { font-size: .85rem; font-weight: 700; color: var(--ink); }
 .cal__cell--today .cal__day {

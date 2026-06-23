@@ -55,7 +55,7 @@ if ($ld) {
 
 require __DIR__ . '/partials/header.php';
 ?>
-  <div class="container">
+  <div class="container container--wide">
     <div class="cal-head">
       <h1>Eseménynaptár</h1>
       <div class="cal-nav">
@@ -76,9 +76,11 @@ require __DIR__ . '/partials/header.php';
         }
         for ($d = 1; $d <= $daysInMonth; $d++):
             $isToday = ($year === (int) $now->format('Y') && $month === (int) $now->format('n') && $d === (int) $now->format('j'));
+            $col = ($leading + ($d - 1)) % 7;          // 0=hétfő .. 6=vasárnap
+            $isWeekend = ($col >= 5);
             $dayEvents = $daysEvents[$d];
         ?>
-          <div class="cal__cell<?= $isToday ? ' cal__cell--today' : '' ?>">
+          <div class="cal__cell<?= $isWeekend ? ' cal__cell--weekend' : '' ?><?= $isToday ? ' cal__cell--today' : '' ?>">
             <span class="cal__day"><?= $d ?></span>
             <?php foreach (array_slice($dayEvents, 0, 3) as $e): ?>
               <a class="cal__event<?= (int) $e['is_free'] === 1 ? ' cal__event--free' : '' ?>"
