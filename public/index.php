@@ -68,20 +68,15 @@ require __DIR__ . '/partials/header.php';
     </div>
   </section>
 
-  <div class="container">
+  <section class="stats-band">
+    <div class="stats-band__inner">
+      <div class="stat"><span class="stat__num"><?= $statEvents ?></span><span class="stat__label">Közelgő esemény</span></div>
+      <div class="stat"><span class="stat__num"><?= $statRegions ?></span><span class="stat__label">Borvidék</span></div>
+      <div class="stat"><span class="stat__num"><?= $statCities ?></span><span class="stat__label">Település</span></div>
+    </div>
+  </section>
 
-    <!-- Intro + statisztika -->
-    <section class="intro">
-      <p class="intro__text">
-        A <strong>holborozzak.hu</strong> Magyarország borrendezvényeit gyűjti egy helyre —
-        borfesztiválok, bornapok, kóstolók és szüreti programok Tokajtól Villányig.
-      </p>
-      <div class="stats">
-        <div class="stat"><span class="stat__num"><?= $statEvents ?></span><span class="stat__label">közelgő esemény</span></div>
-        <div class="stat"><span class="stat__num"><?= $statRegions ?></span><span class="stat__label">borvidék</span></div>
-        <div class="stat"><span class="stat__num"><?= $statCities ?></span><span class="stat__label">település</span></div>
-      </div>
-    </section>
+  <div class="container">
 
     <?php if ($featured): ?>
     <section class="events-section">
