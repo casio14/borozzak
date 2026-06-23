@@ -113,6 +113,38 @@ function fetchUpcomingEvents(PDO $pdo): array
     return $rows;
 }
 
+/** Egy időszakkal átfedő, közzétett események (naptárhoz; múltbeli is). */
+function fetchEventsBetween(PDO $pdo, string $from, string $to): array
+{
+    $sql = "SELECT e.*, r.name AS region_name, r.slug AS region_slug,
+                   GROUP_CONCAT(DISTINCT CONCAT(c.slug, '\\t', c.name) ORDER BY c.name SEPARATOR '||') AS cat_pairs
+            FROM events e
+            LEFT JOIN wine_regions r ON r.id = e.region_id
+            LEFT JOIN event_categories ec ON ec.event_id = e.id
+            LEFT JOIN categories c ON c.id = ec.category_id
+            WHERE e.status = 'published'
+              AND e.start_datetime <= :to
+              AND COALESCE(e.end_datetime, e.start_datetime) >= :from
+            GROUP BY e.id
+            ORDER BY e.start_datetime ASC";
+    $st = $pdo->prepare($sql);
+    $st->execute([':from' => $from, ':to' => $to]);
+    $rows = $st->fetchAll();
+    foreach ($rows as &$r) {
+        $r['categories'] = [];
+        if (!empty($r['cat_pairs'])) {
+            foreach (explode('||', $r['cat_pairs']) as $pair) {
+                $parts = explode("\t", $pair);
+                if (count($parts) === 2) {
+                    $r['categories'][] = ['slug' => $parts[0], 'name' => $parts[1]];
+                }
+            }
+        }
+    }
+    unset($r);
+    return $rows;
+}
+
 /** Borvidék + kategória (fazetta) szűrés — több érték is megadható (OR a fazettán belül). */
 function applyFacets(array $events, array $regionSlugs, array $catSlugs): array
 {

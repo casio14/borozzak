@@ -122,7 +122,7 @@ $jsVer  = @filemtime(__DIR__ . '/../assets/app.js') ?: time();
           </svg>
           Események
         </a>
-        <a href="#"<?= $activeNav === 'naptar' ? ' class="is-active" aria-current="page"' : '' ?>>
+        <a href="naptar.php"<?= $activeNav === 'naptar' ? ' class="is-active" aria-current="page"' : '' ?>>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <rect x="3" y="4.5" width="18" height="16" rx="2"/>
             <line x1="3" y1="9" x2="21" y2="9"/>

@@ -96,9 +96,9 @@ require __DIR__ . '/partials/header.php';
           <h3 class="browse-tile__title">Térkép</h3>
           <p class="browse-tile__desc">Nézd meg, milyen rendezvények vannak a közeledben.</p>
         </a>
-        <a class="browse-tile browse-tile--soon" href="#">
+        <a class="browse-tile" href="naptar.php">
           <span class="browse-tile__icon">📅</span>
-          <h3 class="browse-tile__title">Naptár <span class="browse-tile__soon">Hamarosan</span></h3>
+          <h3 class="browse-tile__title">Naptár</h3>
           <p class="browse-tile__desc">Böngészés dátum szerint, naptáros nézetben.</p>
         </a>
       </div>

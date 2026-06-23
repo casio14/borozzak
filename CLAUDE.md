@@ -95,6 +95,8 @@ JSON-LD vázat (alap `WebSite`+`Organization`); `$jsonLd`-vel bővíthető oldal
   - `terkep.php` — **Eseménytérkép**: Leaflet + CARTO világos csempék, **szőlőfürt
     jelölők darabszám-jelvénnyel**, **markercluster** (zoom-alapú összevonás/szétválás),
     popup részletlinkkel. SEO: szerveroldali lista + `Event`/`ItemList` JSON-LD.
+  - `naptar.php` — **Eseménynaptár**: havi naptárrács (hét-első nézet), eseményekkel a
+    napjukon, hónaplépegetéssel (`?ev=&ho=`). A Naptár menüpont ide mutat.
   - `esemeny.php` — esemény **részletoldal** (`esemeny.php?slug=…`): teljes `Event`
     JSON-LD, canonical, OG-kép; 404 a nem létezőre. A kártyák/sorok/térkép ide linkelnek.
     (Szép URL `/esemeny/<slug>` később, a végleges domainen, rewrite-tal.)
