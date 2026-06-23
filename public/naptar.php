@@ -166,12 +166,16 @@ require __DIR__ . '/partials/header.php';
         ?>
           <div class="cal__cell<?= $isWeekend ? ' cal__cell--weekend' : '' ?><?= $isToday ? ' cal__cell--today' : '' ?>">
             <span class="cal__day"><?= $d ?></span>
-            <?php foreach (array_slice($dayEvents, 0, 3) as $e): [$bg, $fg] = categoryColor($e); ?>
-              <a class="cal__event" style="background: <?= h($bg) ?>; color: <?= h($fg) ?>"
-                 href="<?= h(eventUrl($e)) ?>" title="<?= h($e['title']) ?>"><?= h($e['title']) ?></a>
-            <?php endforeach; ?>
-            <?php if (count($dayEvents) > 3): ?>
-              <span class="cal__more">+<?= count($dayEvents) - 3 ?> további</span>
+            <?php if ($dayEvents): ?>
+            <div class="cal__events">
+              <?php foreach ($dayEvents as $e): [$bg, $fg] = categoryColor($e); ?>
+                <a class="cal__event" style="background: <?= h($bg) ?>; color: <?= h($fg) ?>"
+                   href="<?= h(eventUrl($e)) ?>" title="<?= h($e['title']) ?>"><?= h($e['title']) ?></a>
+              <?php endforeach; ?>
+              <?php if (count($dayEvents) > 3): ?>
+                <span class="cal__more">+<?= count($dayEvents) - 3 ?> további</span>
+              <?php endif; ?>
+            </div>
             <?php endif; ?>
           </div>
         <?php endfor; ?>

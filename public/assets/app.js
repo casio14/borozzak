@@ -86,6 +86,76 @@
     load(buildQuery(form), true);
   });
 
+  // ----- Naptár: napra koppintva felugró napi eseménylista -----
+  var sheet = null;
+
+  function closeSheet() {
+    if (sheet) { sheet.hidden = true; document.body.classList.remove('day-sheet-open'); }
+  }
+
+  function ensureSheet() {
+    if (sheet) { return sheet; }
+    sheet = document.createElement('div');
+    sheet.className = 'day-sheet';
+    sheet.hidden = true;
+    sheet.innerHTML =
+      '<div class="day-sheet__backdrop"></div>' +
+      '<div class="day-sheet__panel" role="dialog" aria-modal="true">' +
+        '<div class="day-sheet__head"><span class="day-sheet__title"></span>' +
+        '<button type="button" class="day-sheet__close" aria-label="Bezárás">&times;</button></div>' +
+        '<div class="day-sheet__list"></div>' +
+      '</div>';
+    document.body.appendChild(sheet);
+    sheet.querySelector('.day-sheet__backdrop').addEventListener('click', closeSheet);
+    sheet.querySelector('.day-sheet__close').addEventListener('click', closeSheet);
+    return sheet;
+  }
+
+  function openDaySheet(cell, events) {
+    ensureSheet();
+    var dayEl = cell.querySelector('.cal__day');
+    var monthEl = document.querySelector('.cal-toolbar__month');
+    var day = dayEl ? dayEl.textContent.trim() : '';
+    var month = monthEl ? monthEl.textContent.trim() : '';
+    sheet.querySelector('.day-sheet__title').textContent = (month + ' ' + day + '.').trim();
+
+    var list = sheet.querySelector('.day-sheet__list');
+    list.innerHTML = '';
+    Array.prototype.forEach.call(events, function (a) {
+      var row = document.createElement('a');
+      row.className = 'day-sheet__item';
+      row.href = a.getAttribute('href');
+      var dot = document.createElement('span');
+      dot.className = 'day-sheet__dot';
+      dot.style.background = a.style.backgroundColor || a.style.background;
+      var txt = document.createElement('span');
+      txt.textContent = a.getAttribute('title') || a.textContent.trim();
+      row.appendChild(dot);
+      row.appendChild(txt);
+      list.appendChild(row);
+    });
+
+    sheet.hidden = false;
+    document.body.classList.add('day-sheet-open');
+  }
+
+  document.addEventListener('click', function (e) {
+    var cell = e.target.closest('.cal__grid .cal__cell');
+    if (!cell) { return; }
+    var events = cell.querySelectorAll('.cal__event');
+    if (!events.length) { return; }
+    var isMobile = window.matchMedia('(max-width: 560px)').matches;
+    var moreClick = e.target.closest('.cal__more');
+    if (isMobile || moreClick) {
+      e.preventDefault();
+      openDaySheet(cell, events);
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { closeSheet(); }
+  });
+
   // Vissza/előre gomb
   window.addEventListener('popstate', function () { lastUrl = null; load(window.location.href, false); });
 })();
