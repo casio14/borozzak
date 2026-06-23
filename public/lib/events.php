@@ -30,6 +30,19 @@ function normalizeView(?string $v): string
     return isset(EVENT_VIEWS[$v]) ? $v : 'kozelgo';
 }
 
+/** Rendezési lehetőségek: kulcs => felirat. */
+const EVENT_SORTS = [
+    'datum'      => 'Legközelebbi',
+    'datum-desc' => 'Legkésőbbi',
+    'nev'        => 'Név szerint',
+];
+
+/** A rendezés-kulcs ellenőrzése (ismeretlen → alapértelmezett). */
+function normalizeSort(?string $s): string
+{
+    return isset(EVENT_SORTS[$s]) ? $s : 'datum';
+}
+
 /** A közelgő hétvége (szombat 00:00 – vasárnap 23:59). */
 function weekendRange(DateTimeImmutable $now): array
 {
@@ -124,12 +137,13 @@ function categoryNames(array $e): array
 }
 
 /** Lista-URL építése a nézet + fazetták megőrzésével. */
-function listUrl(string $view, string $region, string $cat): string
+function listUrl(string $view, string $region, string $cat, string $sort = 'datum'): string
 {
     $p = [];
     if ($view !== 'kozelgo') { $p['nezet'] = $view; }
     if ($region !== '')      { $p['borvidek'] = $region; }
     if ($cat !== '')         { $p['kategoria'] = $cat; }
+    if ($sort !== 'datum')   { $p['rendezes'] = $sort; }
     return $p ? ('?' . http_build_query($p)) : './';
 }
 
@@ -306,6 +320,46 @@ function monthDotColor(string $start): string
     $colors = ['#5a6b3b', '#c8a14b', '#b5562a', '#722f37', '#7a8450', '#9b6a2f'];
     $m = (int) (new DateTimeImmutable($start))->format('n');
     return $colors[$m % count($colors)];
+}
+
+/**
+ * Lista-csoportok a rendezés szerint.
+ * - dátum (asc/desc): hónapokra bontva (label = hónap)
+ * - név: egyetlen lapos lista (label = null, nincs hónap-fejléc)
+ * Visszaad: [['label'=>?string, 'dot'=>?string, 'events'=>array], ...]
+ */
+function groupEventsForList(array $events, string $sort): array
+{
+    if (!$events) {
+        return [];
+    }
+    if ($sort === 'nev') {
+        usort($events, static function ($a, $b) {
+            return strcmp(mb_strtolower($a['title'], 'UTF-8'), mb_strtolower($b['title'], 'UTF-8'));
+        });
+        return [['label' => null, 'dot' => null, 'events' => $events]];
+    }
+
+    $byMonth = [];
+    foreach ($events as $e) {
+        $byMonth[monthKey($e['start_datetime'])][] = $e;
+    }
+    ksort($byMonth);
+    if ($sort === 'datum-desc') {
+        $byMonth = array_reverse($byMonth, true);
+        foreach ($byMonth as $k => $evs) {
+            $byMonth[$k] = array_reverse($evs);
+        }
+    }
+    $groups = [];
+    foreach ($byMonth as $evs) {
+        $groups[] = [
+            'label'  => monthLabel($evs[0]['start_datetime']),
+            'dot'    => monthDotColor($evs[0]['start_datetime']),
+            'events' => $evs,
+        ];
+    }
+    return $groups;
 }
 
 /** A nap száma és rövid hónap a naptár-dátumkockához. */

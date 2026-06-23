@@ -28,6 +28,7 @@ try {
 $view = normalizeView($_GET['nezet'] ?? null);
 $regionFilter = trim((string) ($_GET['borvidek'] ?? ''));
 $catFilter    = trim((string) ($_GET['kategoria'] ?? ''));
+$sort         = normalizeSort($_GET['rendezes'] ?? null);
 
 // Szűrő legördülők opciói a közelgő eseményekből (csak releváns értékek)
 $regionOptions = [];
@@ -52,12 +53,8 @@ $featured = $showFeatured
     ? array_values(array_filter($events, static fn($e) => (int) $e['is_featured'] === 1))
     : [];
 
-// A megjelenített (szűrt) események hónapokra bontva
-$byMonth = [];
-foreach ($displayEvents as $e) {
-    $byMonth[monthKey($e['start_datetime'])][] = $e;
-}
-ksort($byMonth);
+// A megjelenített események csoportjai (rendezés szerint)
+$groups = groupEventsForList($displayEvents, $sort);
 
 $listHeading = ($view === 'kozelgo') ? 'Közelgő események' : EVENT_VIEWS[$view];
 
@@ -95,7 +92,7 @@ require __DIR__ . '/partials/header.php';
     <div id="esemenyek-region">
     <nav class="tabs" aria-label="Esemény nézetek">
       <?php foreach (EVENT_VIEWS as $key => $label): ?>
-        <a href="<?= h(listUrl($key, $regionFilter, $catFilter)) ?>"<?= $view === $key ? ' aria-current="page"' : '' ?>><?= h($label) ?></a>
+        <a href="<?= h(listUrl($key, $regionFilter, $catFilter, $sort)) ?>"<?= $view === $key ? ' aria-current="page"' : '' ?>><?= h($label) ?></a>
       <?php endforeach; ?>
     </nav>
 
@@ -113,9 +110,14 @@ require __DIR__ . '/partials/header.php';
           <option value="<?= h($slug) ?>"<?= $catFilter === $slug ? ' selected' : '' ?>><?= h($name) ?></option>
         <?php endforeach; ?>
       </select>
+      <select class="facet-select facet-select--sort" name="rendezes" aria-label="Rendezés">
+        <?php foreach (EVENT_SORTS as $sortKey => $sortLabel): ?>
+          <option value="<?= h($sortKey) ?>"<?= $sort === $sortKey ? ' selected' : '' ?>><?= h($sortLabel) ?></option>
+        <?php endforeach; ?>
+      </select>
       <button type="submit" class="facets__btn">Szűrés</button>
       <?php if ($hasFacets): ?>
-        <a class="facets__clear" href="<?= h(listUrl($view, '', '')) ?>">Szűrők törlése</a>
+        <a class="facets__clear" href="<?= h(listUrl($view, '', '', $sort)) ?>">Szűrők törlése</a>
       <?php endif; ?>
     </form>
 
@@ -149,16 +151,18 @@ require __DIR__ . '/partials/header.php';
 
     <section class="events-section">
       <div class="events-section__head"><h2><?= h($listHeading) ?></h2></div>
-      <?php if (!$byMonth): ?>
+      <?php if (!$groups): ?>
         <p class="section-intro">Nincs a szűrőnek megfelelő esemény. <a href="<?= h(listUrl('kozelgo', '', '')) ?>">Összes közelgő →</a></p>
       <?php else: ?>
       <div class="events-list">
-        <?php foreach ($byMonth as $key => $monthEvents): ?>
+        <?php foreach ($groups as $group): ?>
+          <?php if ($group['label'] !== null): ?>
           <div class="events-list__month">
-            <span class="events-list__dot" style="background: <?= h(monthDotColor($monthEvents[0]['start_datetime'])) ?>"></span>
-            <?= h(monthLabel($monthEvents[0]['start_datetime'])) ?>
+            <span class="events-list__dot" style="background: <?= h($group['dot']) ?>"></span>
+            <?= h($group['label']) ?>
           </div>
-          <?php foreach ($monthEvents as $e): $st = eventStatus($e['start_datetime'], $e['end_datetime']); ?>
+          <?php endif; ?>
+          <?php foreach ($group['events'] as $e): $st = eventStatus($e['start_datetime'], $e['end_datetime']); ?>
             <a class="event-row" href="<?= h(eventUrl($e)) ?>">
               <span class="date-block">
                 <span class="date-block__day"><?= h(dayNumber($e['start_datetime'])) ?></span>
