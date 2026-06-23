@@ -129,7 +129,7 @@ main { flex: 1 0 auto; }
   margin: 0 auto;
   padding: 2rem 1.25rem;
 }
-.container--wide { max-width: 1480px; }
+.container--wide { max-width: 1600px; }
 
 /* ---------- Hero (teljes szélességű, brand) ---------- */
 .hero {
@@ -257,6 +257,38 @@ main { flex: 1 0 auto; }
 }
 .browse-tile--soon { opacity: .9; }
 
+/* ---------- Naptár mini-hero + jelmagyarázat ---------- */
+.cal-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1.75rem 0 1.25rem;
+  padding: 1.5rem 1.75rem;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--wine-700), var(--wine-900));
+  color: var(--cream);
+  box-shadow: var(--shadow);
+}
+.cal-hero h1 { margin: 0; color: var(--cream); font-size: clamp(1.6rem, 4vw, 2.2rem); }
+.cal-hero__sub { margin: .3rem 0 0; color: var(--gold-200); font-weight: 600; }
+.cal-hero .cal-nav__today { color: var(--cream); }
+.cal-hero .cal-nav__today:hover { color: var(--gold); }
+
+.cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem 1.25rem;
+  margin: 0 0 1rem;
+  font-size: .85rem;
+  color: var(--muted);
+}
+.cal-legend__item { display: inline-flex; align-items: center; gap: .4rem; }
+.cal-legend__dot { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+
+.facet__empty { margin: .3rem .4rem; color: var(--muted); font-size: .85rem; }
+
 /* ---------- Eseménynaptár ---------- */
 .cal-head {
   display: flex;
@@ -310,17 +342,18 @@ main { flex: 1 0 auto; }
 }
 .cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); }
 .cal__cell {
-  min-height: 150px;
+  min-height: 170px;
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
-  padding: .4rem;
+  padding: .45rem;
   display: flex;
   flex-direction: column;
-  gap: .25rem;
+  gap: .28rem;
 }
 .cal__cell:nth-child(7n + 1) { border-left: none; }
 .cal__cell--weekend { background: #f7f1e6; }
 .cal__cell--blank { background: #faf7f1; }
+.cal__cell--today { background: #fbeecb; }
 .cal__day { font-size: .85rem; font-weight: 700; color: var(--ink); }
 .cal__cell--today .cal__day {
   display: inline-grid;
@@ -501,8 +534,9 @@ main { flex: 1 0 auto; }
 }
 .facets__clear:hover { color: var(--wine-700); }
 
-/* JS bekapcsolva: a legördülő automatikusan szűr, a Szűrés gomb felesleges */
-.js .facets__btn { display: none; }
+/* JS bekapcsolva a lista oldalon: a legördülő automatikusan szűr, a gomb felesleges.
+   (A naptáron a gomb látszik, mert ott teljes újratöltéssel szűrünk.) */
+.js #esemenyek-region .facets__btn { display: none; }
 
 /* Részleges újratöltés alatti halványítás */
 #esemenyek-region.is-loading { opacity: .55; transition: opacity .12s ease; }

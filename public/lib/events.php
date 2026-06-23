@@ -171,6 +171,30 @@ function categoryNames(array $e): array
     return array_map(static fn($c) => $c['name'], $e['categories']);
 }
 
+/** Kategória → [háttérszín, szövegszín] (naptári chipekhez, jelmagyarázathoz). */
+const CAT_COLORS = [
+    'borfesztival'       => ['#722f37', '#ffffff'], // burgundi
+    'kostolo'            => ['#c8a14b', '#3a230f'], // arany
+    'szureti-rendezveny' => ['#5a6b3b', '#ffffff'], // zöld
+    'borvideki-program'  => ['#7a8450', '#ffffff'], // olíva
+    'gasztronomia'       => ['#b5562a', '#ffffff'], // terrakotta
+    'koncert'            => ['#8a4b6b', '#ffffff'], // szilva
+    'csaladi-program'    => ['#9b6a2f', '#ffffff'], // borostyán
+];
+function categoryColorBySlug(string $slug): array
+{
+    return CAT_COLORS[$slug] ?? ['#722f37', '#ffffff'];
+}
+function categoryColor(array $e): array
+{
+    foreach ($e['categories'] as $c) {
+        if (isset(CAT_COLORS[$c['slug']])) {
+            return CAT_COLORS[$c['slug']];
+        }
+    }
+    return ['#722f37', '#ffffff'];
+}
+
 /** Lista-URL építése a nézet + fazetták megőrzésével. */
 function listUrl(string $view, array $regions = [], array $cats = [], string $sort = 'datum'): string
 {
