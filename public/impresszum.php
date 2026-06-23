@@ -10,14 +10,10 @@ require __DIR__ . '/partials/header.php';
 
       <h2>Szolgáltató adatai</h2>
       <address>
-        <strong>Név:</strong> Kiss Patrik<br>
-        <strong>E-mail:</strong> kiss.patrik1995@gmail.com<br>
-        <strong>Weboldal:</strong> holborozzak.hu
+        <strong>Szolgáltató neve:</strong> HolBorozzak<br>
+        <strong>Weboldal:</strong> holborozzak.hu<br>
+        <strong>Kapcsolat:</strong> info@holborozzak.hu
       </address>
-
-      <h2>A weboldal célja</h2>
-      <p>A holborozzak.hu Magyarország borhoz köthető eseményeit (borfesztiválok,
-        bornapok, kóstolók, szüreti rendezvények) gyűjti össze és listázza tájékoztató jelleggel.</p>
 
       <h2>Szerzői jog és adatforrás</h2>
       <p>A weboldalon megjelenő tartalmak szerzői jogi védelem alatt állnak.</p>
