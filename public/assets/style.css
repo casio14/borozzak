@@ -878,34 +878,52 @@ main { flex: 1 0 auto; }
 /* ---------- Lábléc ---------- */
 .site-footer {
   flex-shrink: 0;
-  border-top: 1px solid var(--line);
-  background: var(--paper);
-  color: var(--muted);
+  background: var(--wine-900);
+  color: #e3d6c8;
 }
 .site-footer__inner {
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 1.5rem 1.25rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: .65rem;
-  text-align: center;
+  padding: 3rem 1.25rem 1.5rem;
 }
-.site-footer__legal {
+.site-footer__top {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
+  gap: 2rem;
+}
+.site-footer__logo { font-family: Georgia, "Times New Roman", serif; font-weight: 700; font-size: 1.3rem; color: var(--cream); }
+.site-footer__logo b { color: var(--gold); }
+.site-footer__brand p { margin: .7rem 0 0; max-width: 34ch; color: #c9b6a8; font-size: .92rem; line-height: 1.6; }
+.site-footer__col { display: flex; flex-direction: column; gap: .55rem; }
+.site-footer__col h3 {
+  margin: 0 0 .35rem;
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--gold);
+}
+.site-footer__col a { color: #e3d6c8; text-decoration: none; font-size: .92rem; }
+.site-footer__col a:hover { color: #fff; }
+.site-footer__bottom {
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.25rem;
+  gap: .5rem;
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, .12);
+  font-size: .85rem;
+  color: #b9a799;
 }
-.site-footer__legal a {
-  color: var(--wine-700);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: .9rem;
+
+@media (max-width: 860px) {
+  .site-footer__top { grid-template-columns: 1fr 1fr; }
+  .site-footer__brand { grid-column: 1 / -1; }
 }
-.site-footer__legal a:hover { color: var(--gold); }
-.site-footer__copy { margin: 0; font-size: .85rem; }
+@media (max-width: 520px) {
+  .site-footer__top { grid-template-columns: 1fr; }
+}
 
 /* ---------- Jogi oldalak ---------- */
 .legal { max-width: 760px; margin: 0 auto; }
