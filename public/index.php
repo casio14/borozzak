@@ -25,9 +25,8 @@ try {
 $featured = array_values(array_filter($events, static fn($e) => (int) $e['is_featured'] === 1));
 $preview  = array_slice($events, 0, 6);
 
-// Statisztika + borvidék-bontás
+// Borvidék-bontás (a „Böngéssz borvidék szerint" szekcióhoz)
 $regionCounts = [];
-$cities = [];
 foreach ($events as $e) {
     if (!empty($e['region_slug'])) {
         if (!isset($regionCounts[$e['region_slug']])) {
@@ -35,12 +34,8 @@ foreach ($events as $e) {
         }
         $regionCounts[$e['region_slug']]['count']++;
     }
-    if (!empty($e['city'])) { $cities[$e['city']] = true; }
 }
 uasort($regionCounts, static fn($a, $b) => $b['count'] <=> $a['count']);
-$statEvents  = count($events);
-$statRegions = count($regionCounts);
-$statCities  = count($cities);
 
 $hirlevel = $_GET['hirlevel'] ?? '';
 
@@ -65,14 +60,6 @@ require __DIR__ . '/partials/header.php';
                aria-label="Keresés helyszín, borvidék vagy esemény szerint">
         <button type="submit">Keresés</button>
       </form>
-    </div>
-  </section>
-
-  <section class="stats-band">
-    <div class="stats-band__inner">
-      <div class="stat"><span class="stat__num"><?= $statEvents ?></span><span class="stat__label">Közelgő esemény</span></div>
-      <div class="stat"><span class="stat__num"><?= $statRegions ?></span><span class="stat__label">Borvidék</span></div>
-      <div class="stat"><span class="stat__num"><?= $statCities ?></span><span class="stat__label">Település</span></div>
     </div>
   </section>
 

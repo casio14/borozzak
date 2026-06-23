@@ -257,33 +257,6 @@ main { flex: 1 0 auto; }
 }
 .browse-tile--soon { opacity: .9; }
 
-/* ---------- Statisztika sáv (sötét, nagy számokkal) ---------- */
-.stats-band { background: var(--wine-900); color: var(--cream); }
-.stats-band__inner {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 1rem 1.25rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: baseline;
-  gap: .5rem 2.5rem;
-  text-align: center;
-}
-.stat { display: inline-flex; align-items: baseline; gap: .5rem; }
-.stat__num {
-  font-weight: 800;
-  font-size: 1.5rem;
-  line-height: 1;
-  color: #fff;
-}
-.stat__label {
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  font-size: .72rem;
-  font-weight: 700;
-  color: var(--gold-200);
-}
 
 /* ---------- Borvidék chipek ---------- */
 .region-chips { display: flex; flex-wrap: wrap; gap: .6rem; }
