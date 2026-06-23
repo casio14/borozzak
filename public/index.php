@@ -101,24 +101,18 @@ require __DIR__ . '/partials/header.php';
 
     <form class="facets" method="get" action="" aria-label="Szűrők">
       <?php if ($view !== 'kozelgo'): ?><input type="hidden" name="nezet" value="<?= h($view) ?>"><?php endif; ?>
-      <label class="facets__field">
-        <span>Borvidék</span>
-        <select name="borvidek">
-          <option value="">Mind</option>
-          <?php foreach ($regionOptions as $slug => $name): ?>
-            <option value="<?= h($slug) ?>"<?= $regionFilter === $slug ? ' selected' : '' ?>><?= h($name) ?></option>
-          <?php endforeach; ?>
-        </select>
-      </label>
-      <label class="facets__field">
-        <span>Kategória</span>
-        <select name="kategoria">
-          <option value="">Mind</option>
-          <?php foreach ($catOptions as $slug => $name): ?>
-            <option value="<?= h($slug) ?>"<?= $catFilter === $slug ? ' selected' : '' ?>><?= h($name) ?></option>
-          <?php endforeach; ?>
-        </select>
-      </label>
+      <select class="facet-select" name="borvidek" aria-label="Borvidék">
+        <option value="">Összes borvidék</option>
+        <?php foreach ($regionOptions as $slug => $name): ?>
+          <option value="<?= h($slug) ?>"<?= $regionFilter === $slug ? ' selected' : '' ?>><?= h($name) ?></option>
+        <?php endforeach; ?>
+      </select>
+      <select class="facet-select" name="kategoria" aria-label="Kategória">
+        <option value="">Összes kategória</option>
+        <?php foreach ($catOptions as $slug => $name): ?>
+          <option value="<?= h($slug) ?>"<?= $catFilter === $slug ? ' selected' : '' ?>><?= h($name) ?></option>
+        <?php endforeach; ?>
+      </select>
       <button type="submit" class="facets__btn">Szűrés</button>
       <?php if ($hasFacets): ?>
         <a class="facets__clear" href="<?= h(listUrl($view, '', '')) ?>">Szűrők törlése</a>

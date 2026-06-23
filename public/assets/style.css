@@ -244,51 +244,48 @@ main { flex: 1 0 auto; }
 .facets {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 1rem;
+  align-items: center;
+  gap: .6rem;
   margin: 0 0 1.75rem;
 }
-.facets__field {
-  display: flex;
-  flex-direction: column;
-  gap: .3rem;
-  font-size: .8rem;
-  font-weight: 700;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: .04em;
-}
-.facets__field select {
+.facet-select {
+  appearance: none;
+  -webkit-appearance: none;
   font: inherit;
-  text-transform: none;
-  letter-spacing: 0;
   font-size: .95rem;
-  font-weight: 500;
-  color: var(--ink);
-  background: var(--paper);
+  font-weight: 600;
+  color: var(--wine-700);
+  background-color: var(--paper);
   border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: .5rem .8rem;
-  min-width: 190px;
+  border-radius: 999px;
+  padding: .55rem 2.3rem .55rem 1.1rem;
   cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23722f37' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .85rem center;
 }
-.facets__field select:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+.facet-select:hover { border-color: var(--gold); }
+.facet-select:focus {
+  outline: none;
+  border-color: var(--wine-700);
+  box-shadow: 0 0 0 3px rgba(114, 47, 55, .12);
+}
 .facets__btn {
   border: none;
   background: var(--wine-700);
   color: var(--cream);
   font-weight: 700;
-  padding: .6rem 1.2rem;
-  border-radius: 10px;
+  padding: .55rem 1.2rem;
+  border-radius: 999px;
   cursor: pointer;
 }
 .facets__clear {
-  align-self: center;
-  color: var(--wine-700);
+  color: var(--muted);
   font-weight: 600;
+  font-size: .9rem;
   text-decoration: none;
 }
-.facets__clear:hover { color: var(--gold); }
+.facets__clear:hover { color: var(--wine-700); }
 
 /* JS bekapcsolva: a legördülő automatikusan szűr, a Szűrés gomb felesleges */
 .js .facets__btn { display: none; }
