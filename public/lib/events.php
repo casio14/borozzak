@@ -147,7 +147,7 @@ function listUrl(string $view, array $regions = [], array $cats = [], string $so
     if ($regions)            { $p['borvidek'] = array_values($regions); }
     if ($cats)               { $p['kategoria'] = array_values($cats); }
     if ($sort !== 'datum')   { $p['rendezes'] = $sort; }
-    return $p ? ('?' . http_build_query($p)) : './';
+    return 'esemenyek.php' . ($p ? ('?' . http_build_query($p)) : '');
 }
 
 /** Esemény részletoldalának URL-je (relatív vagy abszolút, ha base/dir adott). */

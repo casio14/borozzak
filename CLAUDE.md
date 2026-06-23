@@ -101,9 +101,13 @@ JSON-LD vázat (alap `WebSite`+`Organization`); `$jsonLd`-vel bővíthető oldal
   - `assets/app.js` — progresszív fejlesztés (részleges szűrés, no-jump).
   - `lib/events.php` — esemény-lekérdezések + megjelenítési segédfüggvények
     (magyar dátumformázás, státusz-pirula, hónap-csoportosítás, `h()` escape).
-  - **Kezdőlap dizájn:** felül kiemelt kártyák (`event-card`), alatta hónapokra bontott
-    sor-lista (`event-row`) naptár-dátumkockával és státusz-pirulákkal. `ItemList`+`Event`
-    JSON-LD a SEO/AI-hoz. Cache-busting: `style.css?v=<filemtime>`.
+  - **`index.php` = nyitóoldal (landing):** hero + kiemelt kártyák + „Böngéssz másképp"
+    csempék (Összes esemény / Térkép / Naptár) + közelgő események előnézet.
+  - **`esemenyek.php` = teljes lista:** tabok + multiselect szűrők (borvidék/kategória) +
+    rendezés + hónapokra bontott sor-lista. Az „Események" menü ide mutat. Itt él az
+    AJAX-os `#esemenyek-region` (részleges szűrés, `app.js`). `listUrl()` ide mutat.
+  - Közös: kártya (`event-card`) / sor (`event-row`) naptár-dátumkockával, státusz-pirulákkal,
+    `ItemList`+`Event` JSON-LD (SEO/AI). Cache-busting: `style.css?v=<filemtime>`.
   - `assets/style.css` — közös stíluslap (boros paletta CSS-változókban).
   - `partials/header.php`, `partials/footer.php` — közös layout váz (minden oldal ezt használja).
     - **TODO (elnapolva):** a logó még nyitott — jelenleg ideiglenes szőlőfürt-SVG van.

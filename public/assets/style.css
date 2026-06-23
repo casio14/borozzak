@@ -215,6 +215,47 @@ main { flex: 1 0 auto; }
   font-size: 1.05rem;
 }
 
+/* ---------- Lista-oldal fejléc ---------- */
+.page-head { padding: 1.75rem 0 .5rem; }
+.page-head h1 { margin: 0 0 .25rem; color: var(--wine-900); font-size: clamp(1.6rem, 4vw, 2.2rem); }
+.page-head__sub { margin: 0; color: var(--muted); }
+
+/* ---------- Böngésző-csempék (nyitóoldal) ---------- */
+.browse-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+.browse-tile {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.browse-tile:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(74, 14, 28, .14); }
+.browse-tile__icon { font-size: 1.9rem; }
+.browse-tile__title { margin: .6rem 0 .3rem; color: var(--wine-900); font-family: Georgia, "Times New Roman", serif; font-size: 1.2rem; }
+.browse-tile__desc { margin: 0; color: var(--muted); font-size: .92rem; }
+.browse-tile__soon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: .3rem;
+  background: var(--gold);
+  color: var(--wine-900);
+  font-size: .62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  padding: .15rem .4rem;
+  border-radius: 999px;
+}
+.browse-tile--soon { opacity: .9; }
+
 /* ---------- Szűrő tabok (aláhúzós) ---------- */
 .tabs {
   display: flex;

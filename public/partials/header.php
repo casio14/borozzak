@@ -113,7 +113,7 @@ $jsVer  = @filemtime(__DIR__ . '/../assets/app.js') ?: time();
 
       <nav class="site-nav" aria-label="Fő navigáció">
         <!-- TODO: a Naptár és Térkép céloldal a következő inkrementumokban készül el -->
-        <a href="./"<?= $activeNav === 'esemenyek' ? ' class="is-active" aria-current="page"' : '' ?>>
+        <a href="esemenyek.php"<?= $activeNav === 'esemenyek' ? ' class="is-active" aria-current="page"' : '' ?>>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
             <circle cx="3.6" cy="6" r="1.3" fill="currentColor" stroke="none"/>
