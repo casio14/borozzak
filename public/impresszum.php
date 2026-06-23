@@ -20,6 +20,7 @@ require __DIR__ . '/partials/header.php';
         bornapok, kóstolók, szüreti rendezvények) gyűjti össze és listázza tájékoztató jelleggel.</p>
 
       <h2>Szerzői jog és adatforrás</h2>
+      <p>A weboldalon megjelenő tartalmak szerzői jogi védelem alatt állnak.</p>
       <p>A weboldalon megjelenő rendezvény- és eseményadatok nyilvánosan elérhető
         információk alapján kerülnek összegyűjtésre és megjelenítésre. Az egyes
         események jogai a szervezőket illetik.</p>
