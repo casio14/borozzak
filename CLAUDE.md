@@ -103,8 +103,11 @@ JSON-LD vázat (alap `WebSite`+`Organization`); `$jsonLd`-vel bővíthető oldal
   - `assets/app.js` — progresszív fejlesztés (részleges szűrés, no-jump).
   - `lib/events.php` — esemény-lekérdezések + megjelenítési segédfüggvények
     (magyar dátumformázás, státusz-pirula, hónap-csoportosítás, `h()` escape).
-  - **`index.php` = nyitóoldal (landing):** hero + kiemelt kártyák + „Böngéssz másképp"
-    csempék (Összes esemény / Térkép / Naptár) + közelgő események előnézet.
+  - **`index.php` = nyitóoldal (landing):** hero+kereső → intro+statisztika → Kiemelt →
+    Közelgő előnézet → „Böngéssz másképp" csempék → Borvidék-chipek → Szervezőknek CTA
+    → Hírlevél. Kereső a `lib/events.php` `searchEvents()`-tel (ékezet-érzéketlen).
+  - **`newsletter.php`** — hírlevél feliratkozás (POST→PRG); a `subscribers` táblát
+    futásidőben is létrehozza. `esemeny beküldés` CTA most mailto (később űrlap).
   - **`esemenyek.php` = teljes lista:** tabok + multiselect szűrők (borvidék/kategória) +
     rendezés + hónapokra bontott sor-lista. Az „Események" menü ide mutat. Itt él az
     AJAX-os `#esemenyek-region` (részleges szűrés, `app.js`). `listUrl()` ide mutat.

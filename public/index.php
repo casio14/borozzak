@@ -1,8 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// holborozzak.hu — nyitóoldal (landing): hero + kiemelt események + böngésző-csempék
-// + közelgő események előnézet. A teljes lista: esemenyek.php.
+// holborozzak.hu — nyitóoldal (landing).
 
 require __DIR__ . '/db.php';
 require __DIR__ . '/lib/events.php';
@@ -24,7 +23,26 @@ try {
 }
 
 $featured = array_values(array_filter($events, static fn($e) => (int) $e['is_featured'] === 1));
-$preview  = array_slice($events, 0, 6); // közelgő előnézet
+$preview  = array_slice($events, 0, 6);
+
+// Statisztika + borvidék-bontás
+$regionCounts = [];
+$cities = [];
+foreach ($events as $e) {
+    if (!empty($e['region_slug'])) {
+        if (!isset($regionCounts[$e['region_slug']])) {
+            $regionCounts[$e['region_slug']] = ['name' => $e['region_name'], 'count' => 0];
+        }
+        $regionCounts[$e['region_slug']]['count']++;
+    }
+    if (!empty($e['city'])) { $cities[$e['city']] = true; }
+}
+uasort($regionCounts, static fn($a, $b) => $b['count'] <=> $a['count']);
+$statEvents  = count($events);
+$statRegions = count($regionCounts);
+$statCities  = count($cities);
+
+$hirlevel = $_GET['hirlevel'] ?? '';
 
 $ld = eventsItemListJsonLd($events, $base, $dir);
 if ($ld) {
@@ -51,6 +69,19 @@ require __DIR__ . '/partials/header.php';
   </section>
 
   <div class="container">
+
+    <!-- Intro + statisztika -->
+    <section class="intro">
+      <p class="intro__text">
+        A <strong>holborozzak.hu</strong> Magyarország borrendezvényeit gyűjti egy helyre —
+        borfesztiválok, bornapok, kóstolók és szüreti programok Tokajtól Villányig.
+      </p>
+      <div class="stats">
+        <div class="stat"><span class="stat__num"><?= $statEvents ?></span><span class="stat__label">közelgő esemény</span></div>
+        <div class="stat"><span class="stat__num"><?= $statRegions ?></span><span class="stat__label">borvidék</span></div>
+        <div class="stat"><span class="stat__num"><?= $statCities ?></span><span class="stat__label">település</span></div>
+      </div>
+    </section>
 
     <?php if ($featured): ?>
     <section class="events-section">
@@ -82,27 +113,6 @@ require __DIR__ . '/partials/header.php';
       </div>
     </section>
     <?php endif; ?>
-
-    <section class="events-section">
-      <div class="events-section__head"><h2>Böngéssz másképp</h2></div>
-      <div class="browse-grid">
-        <a class="browse-tile" href="esemenyek.php">
-          <span class="browse-tile__icon">🍇</span>
-          <h3 class="browse-tile__title">Összes esemény</h3>
-          <p class="browse-tile__desc">A teljes lista — szűrés borvidék, kategória és időpont szerint.</p>
-        </a>
-        <a class="browse-tile" href="terkep.php">
-          <span class="browse-tile__icon">🗺️</span>
-          <h3 class="browse-tile__title">Térkép</h3>
-          <p class="browse-tile__desc">Nézd meg, milyen rendezvények vannak a közeledben.</p>
-        </a>
-        <a class="browse-tile" href="naptar.php">
-          <span class="browse-tile__icon">📅</span>
-          <h3 class="browse-tile__title">Naptár</h3>
-          <p class="browse-tile__desc">Böngészés dátum szerint, naptáros nézetben.</p>
-        </a>
-      </div>
-    </section>
 
     <?php if ($preview): ?>
     <section class="events-section">
@@ -137,6 +147,67 @@ require __DIR__ . '/partials/header.php';
       </div>
     </section>
     <?php endif; ?>
+
+    <section class="events-section">
+      <div class="events-section__head"><h2>Böngéssz másképp</h2></div>
+      <div class="browse-grid">
+        <a class="browse-tile" href="esemenyek.php">
+          <span class="browse-tile__icon">🍇</span>
+          <h3 class="browse-tile__title">Összes esemény</h3>
+          <p class="browse-tile__desc">A teljes lista — szűrés borvidék, kategória és időpont szerint.</p>
+        </a>
+        <a class="browse-tile" href="terkep.php">
+          <span class="browse-tile__icon">🗺️</span>
+          <h3 class="browse-tile__title">Térkép</h3>
+          <p class="browse-tile__desc">Nézd meg, milyen rendezvények vannak a közeledben.</p>
+        </a>
+        <a class="browse-tile" href="naptar.php">
+          <span class="browse-tile__icon">📅</span>
+          <h3 class="browse-tile__title">Naptár</h3>
+          <p class="browse-tile__desc">Böngészés dátum szerint, naptáros nézetben.</p>
+        </a>
+      </div>
+    </section>
+
+    <?php if ($regionCounts): ?>
+    <section class="events-section">
+      <div class="events-section__head"><h2>Böngéssz borvidék szerint</h2></div>
+      <div class="region-chips">
+        <?php foreach ($regionCounts as $slug => $r): ?>
+          <a class="region-chip" href="<?= h(listUrl('kozelgo', [$slug], [])) ?>">
+            <?= h($r['name']) ?> <span class="region-chip__n"><?= $r['count'] ?></span>
+          </a>
+        <?php endforeach; ?>
+      </div>
+    </section>
+    <?php endif; ?>
+
+    <!-- Szervezőknek CTA -->
+    <section class="cta-band">
+      <div>
+        <h2>Rendezel borrendezvényt?</h2>
+        <p>Tüntesd fel ingyenesen a holborozzak.hu-n, vagy emeld ki, hogy többen lássák.</p>
+      </div>
+      <a class="btn btn--gold" href="mailto:info@holborozzak.hu?subject=Esem%C3%A9ny%20bek%C3%BCld%C3%A9se">Esemény beküldése →</a>
+    </section>
+
+    <!-- Hírlevél -->
+    <section class="news-band" id="hirlevel">
+      <div>
+        <h2>Ne maradj le egy borrendezvényről se</h2>
+        <p>Iratkozz fel, és időben értesítünk a közelgő eseményekről.</p>
+        <?php if ($hirlevel === 'ok'): ?>
+          <p class="news-band__msg">Köszönjük a feliratkozást! 🍷</p>
+        <?php elseif ($hirlevel === 'hiba'): ?>
+          <p class="news-band__msg news-band__msg--err">Hiba történt. Kérlek ellenőrizd az e-mail címet, és próbáld újra.</p>
+        <?php endif; ?>
+      </div>
+      <form class="news-form" method="post" action="newsletter.php">
+        <input type="email" name="email" required placeholder="email@cim.hu" aria-label="E-mail cím">
+        <button type="submit" class="btn btn--gold">Feliratkozom</button>
+        <span class="news-band__note">A feliratkozással elfogadod az <a href="adatvedelem.php">adatkezelési tájékoztatót</a>.</span>
+      </form>
+    </section>
 
   </div>
 <?php

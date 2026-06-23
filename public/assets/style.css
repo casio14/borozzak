@@ -257,6 +257,71 @@ main { flex: 1 0 auto; }
 }
 .browse-tile--soon { opacity: .9; }
 
+/* ---------- Intro + statisztika ---------- */
+.intro { text-align: center; padding: 1.5rem 0 .5rem; }
+.intro__text { max-width: 720px; margin: 0 auto; color: #5c4a44; font-size: 1.08rem; line-height: 1.6; }
+.stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 2.5rem; margin-top: 1.5rem; }
+.stat { text-align: center; }
+.stat__num { display: block; font-family: Georgia, "Times New Roman", serif; font-size: 2.2rem; font-weight: 700; color: var(--wine-700); line-height: 1; }
+.stat__label { color: var(--muted); font-size: .9rem; }
+
+/* ---------- Borvidék chipek ---------- */
+.region-chips { display: flex; flex-wrap: wrap; gap: .6rem; }
+.region-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .5rem .9rem;
+  border-radius: 999px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--wine-700);
+  text-decoration: none;
+  font-weight: 600;
+}
+.region-chip:hover { border-color: var(--gold); }
+.region-chip__n {
+  background: #f0e7d8;
+  color: var(--wine-700);
+  font-size: .72rem;
+  font-weight: 700;
+  padding: .08rem .45rem;
+  border-radius: 999px;
+}
+
+/* ---------- CTA + hírlevél sávok ---------- */
+.cta-band,
+.news-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  background: linear-gradient(135deg, var(--wine-700), var(--wine-900));
+  color: var(--cream);
+  border-radius: 16px;
+  padding: 1.75rem 2rem;
+  margin: 1.25rem 0;
+}
+.cta-band h2, .news-band h2 { margin: 0 0 .3rem; color: var(--cream); }
+.cta-band p, .news-band p { margin: 0; color: var(--gold-200); }
+.btn--gold { background: var(--gold); color: var(--wine-900); }
+.btn--gold:hover { background: #b8923f; }
+.news-form { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+.news-form input {
+  border: none;
+  border-radius: 10px;
+  padding: .75rem 1rem;
+  font: inherit;
+  font-size: 1rem;
+  min-width: 240px;
+  color: var(--ink);
+}
+.news-band__note { flex-basis: 100%; font-size: .78rem; color: var(--gold-200); }
+.news-band__note a { color: var(--cream); }
+.news-band__msg { margin-top: .5rem !important; font-weight: 700; color: var(--cream); }
+.news-band__msg--err { color: #ffd2c2; }
+
 /* ---------- Naptár mini-hero + jelmagyarázat ---------- */
 .cal-hero {
   display: flex;

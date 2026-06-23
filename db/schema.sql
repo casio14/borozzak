@@ -181,3 +181,14 @@ CREATE TABLE IF NOT EXISTS event_impressions_daily (
   CONSTRAINT fk_eid_event FOREIGN KEY (event_id)
     REFERENCES events (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ---------------------------------------------------------------------------
+-- 9. Hírlevél feliratkozók (a newsletter.php futásidőben is létrehozza)
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS subscribers (
+  id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  email      VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_subscribers_email (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
