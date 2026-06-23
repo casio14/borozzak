@@ -55,7 +55,7 @@ if (is_file($versionFile)) {
       </div>
 
       <div class="site-footer__bottom">
-        <span>© <?= date('Y') ?> HolBorozzak — Minden jog fenntartva.</span>
+        <span>© <?= date('Y') ?> Holborozzak — Minden jog fenntartva.</span>
         <span class="site-footer__meta">🍷 Készült borszeretőknek · <?= htmlspecialchars('v' . $APP_VERSION, ENT_QUOTES) ?></span>
       </div>
     </div>

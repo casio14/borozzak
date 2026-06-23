@@ -10,7 +10,7 @@ require __DIR__ . '/partials/header.php';
 
       <h2>Szolgáltató adatai</h2>
       <address>
-        <strong>Szolgáltató neve:</strong> HolBorozzak<br>
+        <strong>Szolgáltató neve:</strong> Holborozzak<br>
         <strong>Weboldal:</strong> holborozzak.hu<br>
         <strong>Kapcsolat:</strong> info@holborozzak.hu
       </address>
