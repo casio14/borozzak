@@ -262,28 +262,25 @@ main { flex: 1 0 auto; }
 .stats-band__inner {
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 2.75rem 1.25rem;
+  padding: 1rem 1.25rem;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  gap: 1.5rem;
+  justify-content: center;
+  align-items: baseline;
+  gap: .5rem 2.5rem;
   text-align: center;
 }
-.stat { flex: 1 1 0; min-width: 150px; }
+.stat { display: inline-flex; align-items: baseline; gap: .5rem; }
 .stat__num {
-  display: block;
   font-weight: 800;
-  font-size: clamp(2.6rem, 6vw, 4rem);
+  font-size: 1.5rem;
   line-height: 1;
-  letter-spacing: -.02em;
   color: #fff;
 }
 .stat__label {
-  display: block;
-  margin-top: .6rem;
   text-transform: uppercase;
-  letter-spacing: .12em;
-  font-size: .8rem;
+  letter-spacing: .1em;
+  font-size: .72rem;
   font-weight: 700;
   color: var(--gold-200);
 }
