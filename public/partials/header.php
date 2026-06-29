@@ -93,7 +93,7 @@ $jsVer  = @filemtime(__DIR__ . '/../assets/app.js') ?: time();
   <header class="site-header">
     <div class="site-header__inner">
       <a class="brand" href="./" aria-label="holborozzak.hu — kezdőlap">
-        <svg class="brand__icon" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+        <svg class="brand__icon" width="44" height="44" viewBox="0 0 32 32" aria-hidden="true">
           <path d="M16 7c1.8-2.6 5.2-2.8 6.6-1.8-.6 2.6-3.2 3.8-5.4 3.8" fill="#5a6b3b"/>
           <g fill="currentColor">
             <circle cx="16" cy="12" r="2.6"/>
