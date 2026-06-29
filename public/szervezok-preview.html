@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Előnézet — „Rendezel borrendezvényt?" szekció variációk</title>
+  <style>
+    :root {
+      --wine-900: #4a0e1c; --wine-700: #722f37; --wine-500: #8c3b46;
+      --gold: #c8a14b; --gold-200: #e3cd97; --leaf: #5a6b3b;
+      --cream: #f7f2ea; --paper: #fffdf9; --ink: #2b1d20; --muted: #8a7d77; --line: #e7ddcf;
+      --maxw: 1280px; --shadow: 0 6px 24px rgba(74, 14, 28, .08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--cream); color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6;
+    }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 1.5rem 1.25rem 5rem; }
+    .pagebar { background: var(--wine-900); color: var(--cream); padding: 1.25rem; text-align: center; }
+    .pagebar h1 { margin: 0 0 .25rem; font-size: 1.3rem; }
+    .pagebar p { margin: 0; color: var(--gold-200); font-size: .9rem; }
+    .variant { margin: 2.5rem 0; padding-top: 1.75rem; border-top: 2px dashed var(--line); }
+    .variant:first-of-type { border-top: none; }
+    .variant__label {
+      display: inline-block; background: var(--gold); color: var(--wine-900); font-weight: 800;
+      font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; padding: .25rem .6rem; border-radius: 999px; margin-bottom: .35rem;
+    }
+    .variant__note { margin: .1rem 0 1.25rem; color: var(--muted); font-size: .92rem; max-width: 66ch; }
+
+    .btn { display: inline-block; padding: .8rem 1.6rem; border-radius: 10px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; font: inherit; font-weight: 700; }
+    .btn--gold { background: var(--gold); color: var(--wine-900); }
+    .btn--gold:hover { background: #b8923f; }
+    .btn--wine { background: var(--wine-700); color: #fff; }
+    .btn--wine:hover { background: var(--wine-900); }
+    .btn--ghost-light { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.5); }
+    .btn--ghost-light:hover { border-color: #fff; background: rgba(255,255,255,.1); }
+
+    /* ---------- 0. JELENLEGI ---------- */
+    .v0-band {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem;
+      background: linear-gradient(135deg, var(--wine-700), var(--wine-900)); color: var(--cream);
+      border-radius: 16px; padding: 1.75rem 2rem;
+    }
+    .v0-band h2 { margin: 0 0 .3rem; color: var(--cream); }
+    .v0-band p { margin: 0; color: var(--gold-200); }
+
+    /* ---------- A. LÉPÉSEK (üveg-kártyák, sötét) ---------- */
+    .vA-band {
+      position: relative; overflow: hidden; border-radius: 20px; padding: 2.75rem 2rem;
+      background:
+        radial-gradient(60% 90% at 12% 8%, rgba(200,161,75,.20), transparent 60%),
+        linear-gradient(135deg, var(--wine-700), var(--wine-900));
+      color: #fff;
+    }
+    .vA-head { text-align: center; max-width: 52ch; margin: 0 auto 1.6rem; }
+    .vA-head h2 { margin: 0 0 .35rem; font-size: clamp(1.5rem, 3.5vw, 2.1rem); }
+    .vA-head p { margin: 0; color: var(--gold-200); }
+    .vA-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 0 0 1.8rem; }
+    .vA-step {
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px; padding: 1.25rem; backdrop-filter: blur(4px);
+    }
+    .vA-step__n {
+      display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem;
+      border-radius: 50%; background: var(--gold); color: var(--wine-900); font-weight: 800; margin-bottom: .6rem;
+    }
+    .vA-step h3 { margin: 0 0 .25rem; font-size: 1.05rem; }
+    .vA-step p { margin: 0; color: var(--gold-200); font-size: .9rem; }
+    .vA-actions { text-align: center; }
+
+    /* ---------- B. MODERN GRADIENS + DUPLA GOMB ---------- */
+    .vB-band {
+      position: relative; overflow: hidden; text-align: center; border-radius: 20px; padding: 3rem 1.5rem; color: #fff;
+      background:
+        radial-gradient(50% 60% at 85% 15%, rgba(200,161,75,.28), transparent 60%),
+        radial-gradient(60% 70% at 10% 90%, rgba(140,59,70,.55), transparent 60%),
+        linear-gradient(135deg, var(--wine-900), #2c0712);
+    }
+    .vB-eyebrow { text-transform: uppercase; letter-spacing: .2em; font-size: .76rem; font-weight: 800; color: var(--gold-200); margin: 0 0 .5rem; }
+    .vB-band h2 { margin: 0 0 .5rem; font-size: clamp(1.7rem, 4vw, 2.4rem); }
+    .vB-band p { margin: 0 auto 1.6rem; color: var(--gold-200); max-width: 50ch; }
+    .vB-actions { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ---------- C. FOTÓ HÁTTÉR ---------- */
+    .vC-band {
+      position: relative; overflow: hidden; isolation: isolate; text-align: center;
+      border-radius: 20px; padding: 3.25rem 1.5rem; color: #fff;
+    }
+    .vC-band__bg {
+      position: absolute; inset: 0; z-index: -2; background-image: url('assets/hero.jpg');
+      background-size: cover; background-position: center; transform: scale(1.1); filter: blur(2px) brightness(.85);
+    }
+    .vC-band__bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(160deg, rgba(74,14,28,.55), rgba(44,7,18,.88)); }
+    .vC-band h2 { margin: 0 0 .5rem; font-size: clamp(1.7rem, 4vw, 2.4rem); text-shadow: 0 2px 14px rgba(0,0,0,.5); }
+    .vC-band p { margin: 0 auto 1.6rem; color: #f3e6d6; max-width: 50ch; text-shadow: 0 1px 10px rgba(0,0,0,.45); }
+    .vC-actions { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ---------- D. VILÁGOS KÁRTYA ELŐNYÖKKEL ---------- */
+    .vD-band {
+      background: var(--paper); border: 1px solid var(--line); border-top: 3px solid var(--wine-700);
+      border-radius: 20px; padding: 2.5rem 2rem; box-shadow: var(--shadow); text-align: center;
+    }
+    .vD-band h2 { margin: 0 0 .4rem; color: var(--wine-900); font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.6rem, 3.5vw, 2.1rem); }
+    .vD-band > p { margin: 0 auto 1.8rem; color: var(--muted); max-width: 50ch; }
+    .vD-benefits { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin: 0 0 1.9rem; text-align: left; }
+    .vD-benefit { display: flex; gap: .75rem; align-items: flex-start; }
+    .vD-benefit__ic {
+      flex: none; width: 2.6rem; height: 2.6rem; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center;
+      background: #f3ead6; font-size: 1.3rem;
+    }
+    .vD-benefit h3 { margin: .1rem 0 .15rem; font-size: 1rem; color: var(--wine-900); }
+    .vD-benefit p { margin: 0; color: var(--muted); font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <div class="pagebar">
+    <h1>„Rendezel borrendezvényt?" — szekció variációk</h1>
+    <p>Ideiglenes előnézet (noindex). Töröljük, ha megvan a döntés.</p>
+  </div>
+
+  <div class="wrap">
+
+    <!-- 0. JELENLEGI -->
+    <section class="variant">
+      <span class="variant__label">0 · Jelenlegi</span>
+      <p class="variant__note">A mostani sötét vízszintes sáv: cím+szöveg balra, egyetlen „Esemény beküldése" gomb jobbra (mailto).</p>
+      <div class="v0-band">
+        <div>
+          <h2>Rendezel borrendezvényt?</h2>
+          <p>Tüntesd fel ingyenesen a holborozzak.hu-n, vagy emeld ki, hogy többen lássák.</p>
+        </div>
+        <a class="btn btn--gold" href="#">Esemény beküldése →</a>
+      </div>
+    </section>
+
+    <!-- A. LÉPÉSEK -->
+    <section class="variant">
+      <span class="variant__label">A · „Hogyan működik" lépésekkel</span>
+      <p class="variant__note">Modern, üveghatású (glassmorphism) lépés-kártyák, amik elmagyarázzák a folyamatot: beküldés → jóváhagyás → megjelenés. Csökkenti a bizonytalanságot, profibb benyomást kelt.</p>
+      <div class="vA-band">
+        <div class="vA-head">
+          <h2>Rendezel borrendezvényt?</h2>
+          <p>Tüntesd fel ingyenesen a holborozzak.hu-n, és érd el a borrajongókat.</p>
+        </div>
+        <div class="vA-steps">
+          <div class="vA-step"><span class="vA-step__n">1</span><h3>Küldd be</h3><p>Pár perc alatt megadod az esemény adatait.</p></div>
+          <div class="vA-step"><span class="vA-step__n">2</span><h3>Jóváhagyjuk</h3><p>Ellenőrizzük, és felvesszük a listába.</p></div>
+          <div class="vA-step"><span class="vA-step__n">3</span><h3>Megjelenik</h3><p>Térképen, naptárban és a keresőben is látszik.</p></div>
+        </div>
+        <div class="vA-actions"><a class="btn btn--gold" href="#">Esemény beküldése →</a></div>
+      </div>
+    </section>
+
+    <!-- B. MODERN GRADIENS + DUPLA GOMB -->
+    <section class="variant">
+      <span class="variant__label">B · Modern gradiens, dupla gomb</span>
+      <p class="variant__note">Mélyebb, többszínű gradiens finom arany/bor ragyogással — modern, élénk. Két út: ingyenes beküldés (fő) + kiemelés/hirdetés (másodlagos) — ez utóbbi a bevételi célt is támogatja.</p>
+      <div class="vB-band">
+        <p class="vB-eyebrow">Szervezőknek</p>
+        <h2>Rendezel borrendezvényt?</h2>
+        <p>Tüntesd fel ingyenesen, vagy emeld ki, hogy még többen lássák — fesztivált, kóstolót, szüreti programot egyaránt.</p>
+        <div class="vB-actions">
+          <a class="btn btn--gold" href="#">Esemény beküldése →</a>
+          <a class="btn btn--ghost-light" href="#">Kiemelés &amp; hirdetés</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- C. FOTÓ HÁTTÉR -->
+    <section class="variant">
+      <span class="variant__label">C · Fotó háttér</span>
+      <p class="variant__note">Homályosított szőlőskert-fotó háttér sötét overlay-jel — összhangban a borvidék-csempékkel és a hírlevél fotós irányával. Hangulatos, prémium. (A kép itt a meglévő hero.jpg.)</p>
+      <div class="vC-band">
+        <span class="vC-band__bg"></span>
+        <h2>Rendezel borrendezvényt?</h2>
+        <p>Tüntesd fel ingyenesen a holborozzak.hu-n, és érd el a borrajongók közösségét.</p>
+        <div class="vC-actions">
+          <a class="btn btn--gold" href="#">Esemény beküldése →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- D. VILÁGOS KÁRTYA ELŐNYÖKKEL -->
+    <section class="variant">
+      <span class="variant__label">D · Világos kártya, előnyökkel</span>
+      <p class="variant__note">Világos kártya (illik az új hírlevél-szekcióhoz) három konkrét előnnyel: ingyenes megjelenés, nagyobb elérés, és kattintás-statisztika a szervezőknek — ez utóbbi pont a tervezett bevételi modellt mutatja meg.</p>
+      <div class="vD-band">
+        <h2>Rendezel borrendezvényt?</h2>
+        <p>Tüntesd fel ingyenesen, és érd el a borrajongókat — térképen, naptárban és a keresőben.</p>
+        <div class="vD-benefits">
+          <div class="vD-benefit"><span class="vD-benefit__ic">🍇</span><div><h3>Ingyenes megjelenés</h3><p>Vedd fel az eseményed pár perc alatt, díjmentesen.</p></div></div>
+          <div class="vD-benefit"><span class="vD-benefit__ic">📣</span><div><h3>Nagyobb elérés</h3><p>Megtalálnak a borrajongók a listában, térképen, naptárban.</p></div></div>
+          <div class="vD-benefit"><span class="vD-benefit__ic">📊</span><div><h3>Kattintás-statisztika</h3><p>Lásd, hányan néztek rá és kattintottak az eseményedre.</p></div></div>
+        </div>
+        <a class="btn btn--wine" href="#">Esemény beküldése →</a>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
