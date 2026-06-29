@@ -24,6 +24,18 @@ try {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // --- Spam-védelem: honeypot + idő-csapda. Gyanús esetben CSENDES „siker":
+    //     nem mentünk, de a botnak úgy tűnik, sikerült — így nem tanul a blokkból. ---
+    $hpFilled = trim((string) ($_POST['url'] ?? '')) !== '';        // rejtett csali-mező
+    $formTs   = (int) ($_POST['form_ts'] ?? 0);                      // űrlap-megjelenítés ideje
+    $tooFast  = $formTs <= 0 || (time() - $formTs) < 3;             // <3 mp = gyanúsan gyors
+    if ($hpFilled || $tooFast) {
+        error_log('esemeny-bekuldes.php spam-gyanu (hp=' . ($hpFilled ? '1' : '0')
+            . ', tooFast=' . ($tooFast ? '1' : '0') . ')');
+        header('Location: esemeny-bekuldes.php?bekuldve=ok');
+        exit;
+    }
+
     $old = $_POST;
 
     $title      = trim((string) ($_POST['title'] ?? ''));
@@ -148,6 +160,13 @@ require __DIR__ . '/partials/header.php';
     <?php endif; ?>
 
     <form class="submit-form" method="post" action="esemeny-bekuldes.php" novalidate>
+
+      <!-- Spam-védelem: idő-csapda + honeypot (ne töltsd ki / ne nevezd át) -->
+      <input type="hidden" name="form_ts" value="<?= time() ?>">
+      <div class="hp-field" aria-hidden="true">
+        <label for="url">Ezt a mezőt hagyd üresen</label>
+        <input type="text" id="url" name="url" tabindex="-1" autocomplete="off">
+      </div>
 
       <h2 class="form-section-title">Az esemény</h2>
       <div class="form-grid">

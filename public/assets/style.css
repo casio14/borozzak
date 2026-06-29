@@ -259,6 +259,15 @@ main { flex: 1 0 auto; }
 
 
 /* ---------- Beküldő űrlap (esemeny-bekuldes.php) ---------- */
+/* Honeypot: a böngészőben nem látszik (botok viszont kitöltik). Nem display:none,
+   hogy a botok valódi mezőnek lássák; takarításnál ne nevezd át a #url mezőt. */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 .form-intro { max-width: 760px; }
 .form-intro h1 { margin: 0 0 .4rem; }
 .form-intro p { color: var(--muted); margin: 0 0 1.75rem; }
