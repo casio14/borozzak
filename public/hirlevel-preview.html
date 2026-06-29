@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Előnézet — „Ne maradj le…" hírlevél szekció variációk</title>
+  <style>
+    :root {
+      --wine-900: #4a0e1c; --wine-700: #722f37; --wine-500: #8c3b46;
+      --gold: #c8a14b; --gold-200: #e3cd97; --leaf: #5a6b3b;
+      --cream: #f7f2ea; --paper: #fffdf9; --ink: #2b1d20; --muted: #8a7d77; --line: #e7ddcf;
+      --maxw: 1280px; --shadow: 0 6px 24px rgba(74, 14, 28, .08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--cream); color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6;
+    }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 1.5rem 1.25rem 5rem; }
+    .pagebar { background: var(--wine-900); color: var(--cream); padding: 1.25rem; text-align: center; }
+    .pagebar h1 { margin: 0 0 .25rem; font-size: 1.3rem; }
+    .pagebar p { margin: 0; color: var(--gold-200); font-size: .9rem; }
+    .variant { margin: 2.5rem 0; padding-top: 1.75rem; border-top: 2px dashed var(--line); }
+    .variant:first-of-type { border-top: none; }
+    .variant__label {
+      display: inline-block; background: var(--gold); color: var(--wine-900); font-weight: 800;
+      font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; padding: .25rem .6rem; border-radius: 999px; margin-bottom: .35rem;
+    }
+    .variant__note { margin: .1rem 0 1.25rem; color: var(--muted); font-size: .92rem; max-width: 65ch; }
+
+    .btn { display: inline-block; padding: .75rem 1.5rem; border-radius: 10px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; font: inherit; font-weight: 700; }
+    .btn--gold { background: var(--gold); color: var(--wine-900); }
+    .btn--gold:hover { background: #b8923f; }
+    .btn--wine { background: var(--wine-700); color: #fff; }
+    .btn--wine:hover { background: var(--wine-900); }
+
+    /* ---------- 0. JELENLEGI ---------- */
+    .v0-band {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem;
+      background: linear-gradient(135deg, var(--wine-700), var(--wine-900)); color: var(--cream);
+      border-radius: 16px; padding: 1.75rem 2rem;
+    }
+    .v0-band h2 { margin: 0 0 .3rem; color: var(--cream); }
+    .v0-band p { margin: 0; color: var(--gold-200); }
+    .v0-form { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+    .v0-form input { border: none; border-radius: 10px; padding: .75rem 1rem; font: inherit; font-size: 1rem; min-width: 240px; color: var(--ink); }
+    .v0-note { flex-basis: 100%; font-size: .78rem; color: var(--gold-200); }
+    .v0-note a { color: var(--cream); }
+
+    /* ---------- A. KÖZPONTOSÍTOTT, ELEGÁNS ---------- */
+    .vA-band {
+      position: relative; text-align: center; border-radius: 18px; padding: 2.75rem 1.5rem;
+      background: linear-gradient(135deg, var(--wine-700), var(--wine-900)); color: var(--cream);
+      border-top: 3px solid var(--gold); overflow: hidden;
+    }
+    .vA-eyebrow { text-transform: uppercase; letter-spacing: .2em; font-size: .76rem; font-weight: 800; color: var(--gold-200); margin: 0 0 .5rem; }
+    .vA-band h2 { margin: 0 0 .4rem; color: #fff; font-size: clamp(1.5rem, 3.5vw, 2rem); }
+    .vA-band p { margin: 0 auto 1.5rem; color: var(--gold-200); max-width: 46ch; }
+    .vA-form { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; max-width: 520px; margin: 0 auto; }
+    .vA-form input { flex: 1; min-width: 220px; border: none; border-radius: 10px; padding: .85rem 1.1rem; font: inherit; font-size: 1rem; color: var(--ink); }
+    .vA-note { margin: .9rem 0 0; font-size: .78rem; color: var(--gold-200); }
+    .vA-note a { color: #fff; }
+
+    /* ---------- B. FOTÓ HÁTTÉR (összhangban a borvidék-csempékkel) ---------- */
+    .vB-band {
+      position: relative; overflow: hidden; isolation: isolate; text-align: center;
+      border-radius: 18px; padding: 3rem 1.5rem; color: #fff;
+    }
+    .vB-band__bg {
+      position: absolute; inset: 0; z-index: -2; background-image: url('assets/hero.jpg');
+      background-size: cover; background-position: center; transform: scale(1.1); filter: blur(2px) brightness(.9);
+    }
+    .vB-band__bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(74,14,28,.55), rgba(74,14,28,.85)); }
+    .vB-band h2 { margin: 0 0 .4rem; color: #fff; font-size: clamp(1.5rem, 3.5vw, 2rem); text-shadow: 0 2px 12px rgba(0,0,0,.45); }
+    .vB-band p { margin: 0 auto 1.5rem; color: #f3e6d6; max-width: 46ch; text-shadow: 0 1px 8px rgba(0,0,0,.4); }
+    .vB-form { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; max-width: 520px; margin: 0 auto; }
+    .vB-form input { flex: 1; min-width: 220px; border: none; border-radius: 10px; padding: .85rem 1.1rem; font: inherit; font-size: 1rem; color: var(--ink); }
+    .vB-note { margin: .9rem 0 0; font-size: .78rem; color: #f3e6d6; }
+    .vB-note a { color: #fff; }
+
+    /* ---------- C. VILÁGOS „PERGAMEN" KÁRTYA ---------- */
+    .vC-band {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;
+      background: var(--paper); border: 1px solid var(--line); border-left: 5px solid var(--gold);
+      border-radius: 16px; padding: 1.9rem 2rem; box-shadow: var(--shadow);
+    }
+    .vC-band__text { max-width: 40ch; }
+    .vC-icon { font-size: 1.7rem; }
+    .vC-band h2 { margin: .3rem 0 .3rem; color: var(--wine-900); font-family: Georgia, "Times New Roman", serif; }
+    .vC-band p { margin: 0; color: var(--muted); }
+    .vC-form { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+    .vC-form input { border: 1px solid var(--line); border-radius: 10px; padding: .75rem 1rem; font: inherit; font-size: 1rem; min-width: 240px; color: var(--ink); background: #fff; }
+    .vC-note { flex-basis: 100%; font-size: .78rem; color: var(--muted); }
+    .vC-note a { color: var(--wine-700); }
+
+    /* ---------- D. ELŐNY-PONTOKKAL (bizalom/konverzió) ---------- */
+    .vD-band {
+      text-align: center; border-radius: 18px; padding: 2.5rem 1.5rem;
+      background: linear-gradient(135deg, var(--wine-700), var(--wine-900)); color: var(--cream); border-top: 3px solid var(--gold);
+    }
+    .vD-band h2 { margin: 0 0 .4rem; color: #fff; font-size: clamp(1.5rem, 3.5vw, 2rem); }
+    .vD-band p { margin: 0 auto 1.4rem; color: var(--gold-200); max-width: 46ch; }
+    .vD-form { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; max-width: 520px; margin: 0 auto 1.1rem; }
+    .vD-form input { flex: 1; min-width: 220px; border: none; border-radius: 10px; padding: .85rem 1.1rem; font: inherit; font-size: 1rem; color: var(--ink); }
+    .vD-perks { display: flex; gap: .5rem 1.5rem; justify-content: center; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; font-size: .85rem; color: var(--gold-200); font-weight: 600; }
+    .vD-perks li { display: inline-flex; align-items: center; gap: .35rem; }
+  </style>
+</head>
+<body>
+  <div class="pagebar">
+    <h1>„Ne maradj le egy borrendezvényről se" — hírlevél szekció variációk</h1>
+    <p>Ideiglenes előnézet (noindex). Töröljük, ha megvan a döntés.</p>
+  </div>
+
+  <div class="wrap">
+
+    <!-- 0. JELENLEGI -->
+    <section class="variant">
+      <span class="variant__label">0 · Jelenlegi</span>
+      <p class="variant__note">A mostani vízszintes borvörös sáv: szöveg balra, űrlap jobbra. Megegyezik a fölötte lévő „Szervezőknek" CTA-sávval — ezért tűnik a kettő egyformának.</p>
+      <div class="v0-band">
+        <div>
+          <h2>Ne maradj le egy borrendezvényről se</h2>
+          <p>Iratkozz fel, és időben értesítünk a közelgő eseményekről.</p>
+        </div>
+        <form class="v0-form" onsubmit="return false">
+          <input type="email" placeholder="email@cim.hu" aria-label="E-mail cím">
+          <button type="submit" class="btn btn--gold">Feliratkozom</button>
+          <span class="v0-note">A feliratkozással elfogadod az <a href="#">adatkezelési tájékoztatót</a>.</span>
+        </form>
+      </div>
+    </section>
+
+    <!-- A. KÖZPONTOSÍTOTT -->
+    <section class="variant">
+      <span class="variant__label">A · Központosított, elegáns</span>
+      <p class="variant__note">Középre rendezett, fókuszált elrendezés „HÍRLEVÉL" felülcímkével és arany felső szegéllyel. Az űrlap egy letisztult sorban — a középre igazítás a feliratkozásra tereli a figyelmet.</p>
+      <div class="vA-band">
+        <p class="vA-eyebrow">🍷 Hírlevél</p>
+        <h2>Ne maradj le egy borrendezvényről se</h2>
+        <p>Iratkozz fel, és időben értesítünk a közelgő fesztiválokról, kóstolókról és szüreti programokról.</p>
+        <form class="vA-form" onsubmit="return false">
+          <input type="email" placeholder="email@cim.hu" aria-label="E-mail cím">
+          <button type="submit" class="btn btn--gold">Feliratkozom</button>
+        </form>
+        <p class="vA-note">A feliratkozással elfogadod az <a href="#">adatkezelési tájékoztatót</a>.</p>
+      </div>
+    </section>
+
+    <!-- B. FOTÓ HÁTTÉR -->
+    <section class="variant">
+      <span class="variant__label">B · Fotó háttér</span>
+      <p class="variant__note">Homályosított szőlőskert-fotó háttér sötét bor-overlay-jel — összhangban az új borvidék-csempékkel. Hangulatos, „prémium" érzet. (A kép itt a meglévő hero.jpg.)</p>
+      <div class="vB-band">
+        <span class="vB-band__bg"></span>
+        <h2>Ne maradj le egy borrendezvényről se</h2>
+        <p>Iratkozz fel, és időben értesítünk a közelgő fesztiválokról, kóstolókról és szüreti programokról.</p>
+        <form class="vB-form" onsubmit="return false">
+          <input type="email" placeholder="email@cim.hu" aria-label="E-mail cím">
+          <button type="submit" class="btn btn--gold">Feliratkozom</button>
+        </form>
+        <p class="vB-note">A feliratkozással elfogadod az <a href="#">adatkezelési tájékoztatót</a>.</p>
+      </div>
+    </section>
+
+    <!-- C. VILÁGOS KÁRTYA -->
+    <section class="variant">
+      <span class="variant__label">C · Világos „pergamen" kártya</span>
+      <p class="variant__note">Világos, krém kártya arany bal-csíkkal — szándékosan eltér a fölötte lévő sötét CTA-sávtól, így a kettő nem mosódik össze. Lágyabb, levegősebb a nyitóoldal alján.</p>
+      <div class="vC-band">
+        <div class="vC-band__text">
+          <span class="vC-icon">✉️</span>
+          <h2>Ne maradj le egy borrendezvényről se</h2>
+          <p>Iratkozz fel, és időben értesítünk a közelgő eseményekről.</p>
+        </div>
+        <form class="vC-form" onsubmit="return false">
+          <input type="email" placeholder="email@cim.hu" aria-label="E-mail cím">
+          <button type="submit" class="btn btn--wine">Feliratkozom</button>
+          <span class="vC-note">A feliratkozással elfogadod az <a href="#">adatkezelési tájékoztatót</a>.</span>
+        </form>
+      </div>
+    </section>
+
+    <!-- D. ELŐNY-PONTOKKAL -->
+    <section class="variant">
+      <span class="variant__label">D · Előny-pontokkal (több feliratkozó)</span>
+      <p class="variant__note">Központosított, de a feliratkozást ösztönző bizalmi mikroszöveggel: mit kapsz, milyen gyakran, és hogy bármikor leiratkozhatsz. Ezek a „perkek" jellemzően növelik a feliratkozási arányt.</p>
+      <div class="vD-band">
+        <h2>Ne maradj le egy borrendezvényről se</h2>
+        <p>Iratkozz fel, és időben értesítünk a közelgő eseményekről.</p>
+        <form class="vD-form" onsubmit="return false">
+          <input type="email" placeholder="email@cim.hu" aria-label="E-mail cím">
+          <button type="submit" class="btn btn--gold">Feliratkozom</button>
+        </form>
+        <ul class="vD-perks">
+          <li>📨 Kéthetente egy levél</li>
+          <li>🚫 Spam nélkül</li>
+          <li>✅ Bármikor leiratkozhatsz</li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
