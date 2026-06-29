@@ -168,11 +168,13 @@ require __DIR__ . '/partials/header.php';
 
     <!-- Szervezőknek CTA -->
     <section class="cta-band">
-      <div>
-        <h2>Rendezel borrendezvényt?</h2>
-        <p>Tüntesd fel ingyenesen a holborozzak.hu-n, vagy emeld ki, hogy többen lássák.</p>
+      <p class="cta-band__eyebrow">Szervezőknek</p>
+      <h2>Rendezel borrendezvényt?</h2>
+      <p>Küldd be ingyenesen az eseményed, vagy vedd fel velünk a kapcsolatot, ha ki szeretnéd emelni, hogy még többen lássák.</p>
+      <div class="cta-band__actions">
+        <a class="btn btn--gold" href="mailto:info@holborozzak.hu?subject=Esem%C3%A9ny%20bek%C3%BCld%C3%A9se">Esemény beküldése →</a>
+        <a class="btn btn--ghost-light" href="mailto:info@holborozzak.hu?subject=Esem%C3%A9ny%20kiemel%C3%A9se">Kiemelés iránt érdeklődöm</a>
       </div>
-      <a class="btn btn--gold" href="mailto:info@holborozzak.hu?subject=Esem%C3%A9ny%20bek%C3%BCld%C3%A9se">Esemény beküldése →</a>
     </section>
 
     <!-- Hírlevél -->
