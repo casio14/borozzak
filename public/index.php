@@ -177,20 +177,26 @@ require __DIR__ . '/partials/header.php';
 
     <!-- Hírlevél -->
     <section class="news-band" id="hirlevel">
-      <div>
+      <div class="news-band__inner">
+        <span class="news-band__eyebrow">🍷 Hírlevél</span>
         <h2>Ne maradj le egy borrendezvényről se</h2>
-        <p>Iratkozz fel, és időben értesítünk a közelgő eseményekről.</p>
+        <p class="news-band__lead">Iratkozz fel, és időben értesítünk a közelgő fesztiválokról, kóstolókról és szüreti programokról.</p>
         <?php if ($hirlevel === 'ok'): ?>
           <p class="news-band__msg">Köszönjük a feliratkozást! 🍷</p>
         <?php elseif ($hirlevel === 'hiba'): ?>
           <p class="news-band__msg news-band__msg--err">Hiba történt. Kérlek ellenőrizd az e-mail címet, és próbáld újra.</p>
         <?php endif; ?>
+        <form class="news-form" method="post" action="newsletter.php">
+          <input type="email" name="email" required placeholder="email@cim.hu" aria-label="E-mail cím">
+          <button type="submit" class="btn btn--primary">Feliratkozom</button>
+        </form>
+        <ul class="news-perks">
+          <li>📨 Kéthetente egy levél</li>
+          <li>🚫 Spam nélkül</li>
+          <li>✅ Bármikor leiratkozhatsz</li>
+        </ul>
+        <p class="news-band__note">A feliratkozással elfogadod az <a href="adatvedelem.php">adatkezelési tájékoztatót</a>.</p>
       </div>
-      <form class="news-form" method="post" action="newsletter.php">
-        <input type="email" name="email" required placeholder="email@cim.hu" aria-label="E-mail cím">
-        <button type="submit" class="btn btn--gold">Feliratkozom</button>
-        <span class="news-band__note">A feliratkozással elfogadod az <a href="adatvedelem.php">adatkezelési tájékoztatót</a>.</span>
-      </form>
     </section>
 
   </div>
