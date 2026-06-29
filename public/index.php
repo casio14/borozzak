@@ -25,14 +25,6 @@ try {
 $featured = array_values(array_filter($events, static fn($e) => (int) $e['is_featured'] === 1));
 $preview  = array_slice($events, 0, 6);
 
-// Borvidékek a közelgő események számával (a „Böngéssz borvidék szerint" csempékhez)
-$regions = [];
-try {
-    $regions = fetchRegionsWithCounts(db());
-} catch (Throwable $e) {
-    error_log('index.php borvidék-lekérdezés hiba: ' . $e->getMessage());
-}
-
 $hirlevel = $_GET['hirlevel'] ?? '';
 
 $ld = eventsItemListJsonLd($events, $base, $dir);
@@ -147,32 +139,13 @@ require __DIR__ . '/partials/header.php';
       </div>
     </section>
 
-    <?php if ($regions): ?>
-    <section class="events-section">
-      <div class="events-section__head"><h2>Böngéssz borvidék szerint</h2></div>
-      <div class="region-grid">
-        <?php foreach ($regions as $r): ?>
-          <a class="region-tile" href="<?= h(listUrl('kozelgo', [$r['slug']], [])) ?>">
-            <?php if (!empty($r['image_url'])): ?>
-              <span class="region-tile__bg" style="background-image:url('<?= h($r['image_url']) ?>')" role="img" aria-label="<?= h($r['image_alt'] ?: ($r['name'] . ' borvidék')) ?>"></span>
-            <?php endif; ?>
-            <span class="region-tile__pin" aria-hidden="true">📍</span>
-            <span class="region-tile__name"><?= h($r['name']) ?></span>
-            <span class="region-tile__n"><?= (int) $r['cnt'] ?> esemény</span>
-            <span class="region-tile__grape" aria-hidden="true">🍇</span>
-          </a>
-        <?php endforeach; ?>
-      </div>
-    </section>
-    <?php endif; ?>
-
     <!-- Szervezőknek CTA -->
     <section class="cta-band">
       <p class="cta-band__eyebrow">Szervezőknek</p>
       <h2>Rendezel borrendezvényt?</h2>
       <p>Küldd be ingyenesen az eseményed, vagy vedd fel velünk a kapcsolatot, ha ki szeretnéd emelni, hogy még többen lássák.</p>
       <div class="cta-band__actions">
-        <a class="btn btn--gold" href="mailto:info@holborozzak.hu?subject=Esem%C3%A9ny%20bek%C3%BCld%C3%A9se">Esemény beküldése →</a>
+        <a class="btn btn--gold" href="esemeny-bekuldes.php">Esemény beküldése →</a>
         <a class="btn btn--ghost-light" href="mailto:info@holborozzak.hu?subject=Esem%C3%A9ny%20kiemel%C3%A9se">Kiemelés iránt érdeklődöm</a>
       </div>
     </section>

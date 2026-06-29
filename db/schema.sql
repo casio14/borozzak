@@ -76,6 +76,10 @@ CREATE TABLE IF NOT EXISTS events (
   featured_until     DATE         DEFAULT NULL,             -- eddig kiemelt (utána lekerül)
   status             ENUM('draft','published','cancelled') NOT NULL DEFAULT 'draft',
 
+  -- Beküldő (kapcsolattartó) — a nyilvános beküldő űrlapból; NEM publikus
+  submitter_name     VARCHAR(120) DEFAULT NULL,
+  submitter_email    VARCHAR(255) DEFAULT NULL,
+
   -- Időbélyegek
   created_at         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

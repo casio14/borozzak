@@ -113,24 +113,6 @@ function fetchUpcomingEvents(PDO $pdo): array
     return $rows;
 }
 
-/**
- * Borvidékek a közelgő, közzétett események darabszámával (a nyitóoldali
- * „Böngéssz borvidék szerint" csempékhez). Csak az olyan borvidékek, ahol van
- * legalább egy közelgő/zajló esemény; legtöbb eseménytől a legkevesebbig.
- * Visszaad: [['name','slug','image_url','image_alt','cnt'], ...]
- */
-function fetchRegionsWithCounts(PDO $pdo): array
-{
-    $sql = "SELECT r.name, r.slug, r.image_url, r.image_alt, COUNT(e.id) AS cnt
-            FROM wine_regions r
-            JOIN events e ON e.region_id = r.id
-                         AND e.status = 'published'
-                         AND COALESCE(e.end_datetime, e.start_datetime) >= NOW()
-            GROUP BY r.id
-            ORDER BY cnt DESC, r.name ASC";
-    return $pdo->query($sql)->fetchAll();
-}
-
 /** Egy időszakkal átfedő, közzétett események (naptárhoz; múltbeli is). */
 function fetchEventsBetween(PDO $pdo, string $from, string $to): array
 {
@@ -482,4 +464,42 @@ function shortMonthUpper(string $start): string
 function h(?string $s): string
 {
     return htmlspecialchars((string) $s, ENT_QUOTES, 'UTF-8');
+}
+
+/** Slug képzése szövegből: kisbetű, ékezetek nélkül, kötőjelekkel (beküldéshez). */
+function slugify(string $s): string
+{
+    $s = foldText($s); // kisbetű + magyar ékezetek eltávolítása
+    $s = preg_replace('/[^a-z0-9]+/', '-', $s) ?? '';
+    return trim($s, '-');
+}
+
+/** Ütközésmentes esemény-slug: ha foglalt, -2, -3, … utótaggal. */
+function uniqueEventSlug(PDO $pdo, string $base): string
+{
+    $base = $base !== '' ? $base : 'esemeny';
+    $st = $pdo->prepare('SELECT 1 FROM events WHERE slug = ? LIMIT 1');
+    $slug = $base;
+    $i = 2;
+    while (true) {
+        $st->execute([$slug]);
+        if (!$st->fetchColumn()) {
+            return $slug;
+        }
+        $slug = $base . '-' . $i++;
+    }
+}
+
+/** HTML datetime-local (vagy más felismerhető) → MySQL DATETIME, vagy null. */
+function toMysqlDatetime(?string $v): ?string
+{
+    $v = trim((string) $v);
+    if ($v === '') {
+        return null;
+    }
+    try {
+        return (new DateTimeImmutable($v))->format('Y-m-d H:i:s');
+    } catch (Throwable $e) {
+        return null;
+    }
 }
