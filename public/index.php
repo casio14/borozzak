@@ -25,17 +25,13 @@ try {
 $featured = array_values(array_filter($events, static fn($e) => (int) $e['is_featured'] === 1));
 $preview  = array_slice($events, 0, 6);
 
-// Borvidék-bontás (a „Böngéssz borvidék szerint" szekcióhoz)
-$regionCounts = [];
-foreach ($events as $e) {
-    if (!empty($e['region_slug'])) {
-        if (!isset($regionCounts[$e['region_slug']])) {
-            $regionCounts[$e['region_slug']] = ['name' => $e['region_name'], 'count' => 0];
-        }
-        $regionCounts[$e['region_slug']]['count']++;
-    }
+// Borvidékek a közelgő események számával (a „Böngéssz borvidék szerint" csempékhez)
+$regions = [];
+try {
+    $regions = fetchRegionsWithCounts(db());
+} catch (Throwable $e) {
+    error_log('index.php borvidék-lekérdezés hiba: ' . $e->getMessage());
 }
-uasort($regionCounts, static fn($a, $b) => $b['count'] <=> $a['count']);
 
 $hirlevel = $_GET['hirlevel'] ?? '';
 
@@ -151,13 +147,19 @@ require __DIR__ . '/partials/header.php';
       </div>
     </section>
 
-    <?php if ($regionCounts): ?>
+    <?php if ($regions): ?>
     <section class="events-section">
       <div class="events-section__head"><h2>Böngéssz borvidék szerint</h2></div>
-      <div class="region-chips">
-        <?php foreach ($regionCounts as $slug => $r): ?>
-          <a class="region-chip" href="<?= h(listUrl('kozelgo', [$slug], [])) ?>">
-            <?= h($r['name']) ?> <span class="region-chip__n"><?= $r['count'] ?></span>
+      <div class="region-grid">
+        <?php foreach ($regions as $r): ?>
+          <a class="region-tile" href="<?= h(listUrl('kozelgo', [$r['slug']], [])) ?>">
+            <?php if (!empty($r['image_url'])): ?>
+              <span class="region-tile__bg" style="background-image:url('<?= h($r['image_url']) ?>')" role="img" aria-label="<?= h($r['image_alt'] ?: ($r['name'] . ' borvidék')) ?>"></span>
+            <?php endif; ?>
+            <span class="region-tile__pin" aria-hidden="true">📍</span>
+            <span class="region-tile__name"><?= h($r['name']) ?></span>
+            <span class="region-tile__n"><?= (int) $r['cnt'] ?> esemény</span>
+            <span class="region-tile__grape" aria-hidden="true">🍇</span>
           </a>
         <?php endforeach; ?>
       </div>

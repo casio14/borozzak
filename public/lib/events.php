@@ -113,6 +113,24 @@ function fetchUpcomingEvents(PDO $pdo): array
     return $rows;
 }
 
+/**
+ * Borvidékek a közelgő, közzétett események darabszámával (a nyitóoldali
+ * „Böngéssz borvidék szerint" csempékhez). Csak az olyan borvidékek, ahol van
+ * legalább egy közelgő/zajló esemény; legtöbb eseménytől a legkevesebbig.
+ * Visszaad: [['name','slug','image_url','image_alt','cnt'], ...]
+ */
+function fetchRegionsWithCounts(PDO $pdo): array
+{
+    $sql = "SELECT r.name, r.slug, r.image_url, r.image_alt, COUNT(e.id) AS cnt
+            FROM wine_regions r
+            JOIN events e ON e.region_id = r.id
+                         AND e.status = 'published'
+                         AND COALESCE(e.end_datetime, e.start_datetime) >= NOW()
+            GROUP BY r.id
+            ORDER BY cnt DESC, r.name ASC";
+    return $pdo->query($sql)->fetchAll();
+}
+
 /** Egy időszakkal átfedő, közzétett események (naptárhoz; múltbeli is). */
 function fetchEventsBetween(PDO $pdo, string $from, string $to): array
 {

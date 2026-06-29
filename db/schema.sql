@@ -12,9 +12,11 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- 1. Borvidékek (segédtábla) — Magyarország 22 hivatalos borvidéke
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS wine_regions (
-  id    INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  name  VARCHAR(120) NOT NULL,
-  slug  VARCHAR(120) NOT NULL,
+  id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name       VARCHAR(120) NOT NULL,
+  slug       VARCHAR(120) NOT NULL,
+  image_url  VARCHAR(500) DEFAULT NULL,            -- borvidék háttérképe (csempékhez); NULL → borvörös fallback
+  image_alt  VARCHAR(255) DEFAULT NULL,            -- alt-szöveg (akadálymentesség/SEO)
   PRIMARY KEY (id),
   UNIQUE KEY uq_wine_regions_slug (slug)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

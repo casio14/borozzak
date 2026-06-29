@@ -104,7 +104,9 @@ JSON-LD vázat (alap `WebSite`+`Organization`); `$jsonLd`-vel bővíthető oldal
   - `lib/events.php` — esemény-lekérdezések + megjelenítési segédfüggvények
     (magyar dátumformázás, státusz-pirula, hónap-csoportosítás, `h()` escape).
   - **`index.php` = nyitóoldal (landing):** hero+kereső → intro+statisztika → Kiemelt →
-    Közelgő előnézet → „Böngéssz másképp" csempék → Borvidék-chipek → Szervezőknek CTA
+    Közelgő előnézet → „Böngéssz másképp" csempék → Borvidék-csempék (homályos
+    fotó háttér + bor-overlay + szőlő-motívum; kép a `wine_regions.image_url`-ből,
+    fallback borvörös csempe) → Szervezőknek CTA
     → Hírlevél. Kereső a `lib/events.php` `searchEvents()`-tel (ékezet-érzéketlen).
   - **`newsletter.php`** — hírlevél feliratkozás (POST→PRG); a `subscribers` táblát
     futásidőben is létrehozza. `esemeny beküldés` CTA most mailto (később űrlap).
