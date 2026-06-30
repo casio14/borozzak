@@ -104,6 +104,7 @@ $cssVer = @filemtime(__DIR__ . '/../assets/style.css') ?: time();
                 <?php if (!empty($r['submitter_email'])): ?><br><a href="mailto:<?= h($r['submitter_email']) ?>"><?= h($r['submitter_email']) ?></a><?php endif; ?>
               </td>
               <td class="admin-actions-cell">
+                <a class="admin-link" href="esemeny-preview.php?id=<?= $id ?>" target="_blank" rel="noopener">Előnézet ↗</a>
                 <a class="admin-link" href="edit.php?id=<?= $id ?>">Szerkesztés</a>
                 <?php if ($tab === 'draft'): ?>
                   <?= actBtn('publish', $id, $tab, $csrf, 'Jóváhagyás', 'admin-btn admin-btn--go') ?>
