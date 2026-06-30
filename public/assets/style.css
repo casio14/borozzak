@@ -102,8 +102,24 @@ a { color: var(--wine-700); }
 .site-nav a.is-active { background: #f3e7d0; color: var(--wine-900); }
 .site-nav a.is-active:hover { color: var(--wine-900); }
 
-/* Jobb oldali műveletek (mobil hamburger) */
+/* Jobb oldali műveletek (CTA + mobil hamburger) */
 .site-header__actions { justify-self: end; display: flex; align-items: center; gap: .6rem; }
+
+/* Fejléc CTA — asztali gomb a jobb oldalon */
+.site-cta {
+  display: inline-block;
+  padding: .55rem 1.05rem;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--wine-900);
+  font-weight: 700;
+  font-size: .98rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.site-cta:hover { background: #b8923f; }
+/* CTA a mobil legördülőben — asztalon rejtve (a .site-nav a display-jét felülírjuk) */
+.site-nav a.site-nav__cta { display: none; }
 
 /* Hamburger (mobil) — alapból rejtve, csak ≤760px-en jelenik meg */
 .nav-toggle { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
@@ -142,6 +158,17 @@ a { color: var(--wine-700); }
   }
   #nav-toggle:checked ~ .site-nav { display: flex; }
   .site-nav a { font-size: 1.05rem; justify-content: flex-start; padding: .75rem .9rem; border-radius: 10px; }
+  /* Asztali CTA gomb rejtve mobilon; helyette a menü alján jelenik meg */
+  .site-cta { display: none; }
+  .site-nav a.site-nav__cta {
+    display: block;
+    margin-top: .4rem;
+    text-align: center;
+    background: var(--gold);
+    color: var(--wine-900);
+    font-weight: 700;
+  }
+  .site-nav a.site-nav__cta:hover { background: #b8923f; color: var(--wine-900); }
 }
 
 /* ---------- Fő tartalom ---------- */

@@ -140,9 +140,11 @@ $jsVer  = @filemtime(__DIR__ . '/../assets/app.js') ?: time();
           </svg>
           Térkép
         </a>
+        <a class="site-nav__cta" href="esemeny-bekuldes.php">Esemény beküldése</a>
       </nav>
 
       <div class="site-header__actions">
+        <a class="site-cta" href="esemeny-bekuldes.php">Esemény beküldése</a>
         <label class="nav-burger" for="nav-toggle" aria-label="Menü">
           <svg class="nav-burger__open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
             <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
