@@ -115,7 +115,7 @@ jobs:
             echo '    ],'
             echo "    'anthropic' => ["
             printf "        'api_key' => '%s',\n" "$AKEY"
-            echo "        'model' => 'claude-opus-4-8',"
+            echo "        'model' => 'claude-haiku-4-5',"
             echo '    ],'
             echo '];'
           } > public/config.php

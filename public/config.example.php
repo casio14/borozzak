@@ -28,6 +28,6 @@ return [
     // Anthropic (Claude) API — az esemény-importhoz/gyűjtéshez. Éles: ANTHROPIC_API_KEY secret.
     'anthropic' => [
         'api_key' => '',                 // üres = az import funkció hibát ad
-        'model'   => 'claude-opus-4-8',  // olcsóbb opció: 'claude-haiku-4-5'
+        'model'   => 'claude-haiku-4-5', // olcsó, gyors; igényesebb kinyeréshez: 'claude-opus-4-8'
     ],
 ];

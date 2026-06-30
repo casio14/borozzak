@@ -69,7 +69,7 @@ function aiExtractEvent(string $pageText, string $sourceUrl): array
     $key   = (string) ($cfg['api_key'] ?? '');
     $model = (string) ($cfg['model'] ?? '');
     if ($model === '') {
-        $model = 'claude-opus-4-8';
+        $model = 'claude-haiku-4-5';
     }
     if ($key === '') {
         throw new RuntimeException('Nincs Anthropic API kulcs beállítva (ANTHROPIC_API_KEY secret / config.php).');
