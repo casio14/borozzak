@@ -75,6 +75,7 @@ jobs:
           ADMIN_USER: ${{ secrets.ADMIN_USER }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          COLLECT_TOKEN: ${{ secrets.COLLECT_TOKEN }}
         run: |
           set -euo pipefail
           umask 077
@@ -96,6 +97,7 @@ jobs:
           fi
           AHASH=$(esc "$AHASH")
           AKEY=$(esc "${ANTHROPIC_API_KEY:-}")
+          CTOK=$(esc "${COLLECT_TOKEN:-}")
 
           {
             echo '<?php'
@@ -117,6 +119,7 @@ jobs:
             printf "        'api_key' => '%s',\n" "$AKEY"
             echo "        'model' => 'claude-haiku-4-5',"
             echo '    ],'
+            printf "    'collect_token' => '%s',\n" "$CTOK"
             echo '];'
           } > public/config.php
           # NEM írjuk ki a tartalmat (jelszó!), csak a méretet:

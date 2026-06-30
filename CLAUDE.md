@@ -148,7 +148,10 @@ JSON-LD vázat (alap `WebSite`+`Organization`); `$jsonLd`-vel bővíthető oldal
   napi esemény-gyűjtő — a Claude `web_search` eszközével közelgő magyar borrendezvényeket
   KERES az interneten (nem fix oldalakat néz), dedupál, és `event_candidates`-be ír `new`
   jelöltként. Indítja: `.github/workflows/collect.yml` (napi cron). Env: `DB_PASSWORD`,
-  `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL`. A jóváhagyás kézi (admin → Jelöltek).
+  `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL`, `COLLECT_URL`, `COLLECT_TOKEN`. A CI **nem** éri el
+  közvetlenül a Rackhost MySQL-t ([2002] connection refused), ezért a találatokat HTTPS-en
+  POST-olja a token-védett `public/collect-ingest.php`-ra, és a DB-írás (dedup + insert) ott,
+  a szerveren történik. A jóváhagyás kézi (admin → Jelöltek).
 - `db/` — adatbázis séma (`schema.sql`), `seed.sql` (minta események), migrációk. NEM kerül a webszerverre.
 - `docs/` — tervdokumentumok (pl. `adatmodell.md`). NEM kerül a webszerverre.
 - `.github/workflows/` — CI/CD (deploy).

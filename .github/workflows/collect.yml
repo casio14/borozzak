@@ -27,11 +27,14 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: mbstring, pdo_mysql, curl
+          extensions: mbstring, curl
 
       - name: Gyűjtő futtatása
         env:
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ANTHROPIC_MODEL: claude-haiku-4-5
+          # A weboldal token-védett fogadó végpontja (a DB-írás ott történik).
+          # Költözés után írd át a végleges domainre.
+          COLLECT_URL: https://kissptrk.hu/borozzak/collect-ingest.php
+          COLLECT_TOKEN: ${{ secrets.COLLECT_TOKEN }}
         run: php scripts/collect_events.php

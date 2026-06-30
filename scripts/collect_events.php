@@ -2,18 +2,15 @@
 declare(strict_types=1);
 
 /**
- * Napi esemény-gyűjtő (GitHub Actions).
+ * Esemény-gyűjtő (GitHub Actions, 3 naponta).
  *
  * A Claude `web_search` eszközével KERES az interneten közelgő, magyar borhoz
- * köthető eseményeket (nem előre megadott oldalakat néz), dedupál az adatbázissal,
- * és az újakat 'new' státuszú jelöltként beszúrja az event_candidates táblába.
- * A jóváhagyás az adminban kézzel történik.
+ * köthető eseményeket, majd az eredményt HTTPS-en POST-olja a weboldal token-védett
+ * `collect-ingest.php` végpontjára — a DB-írás ott, a szerveren történik (a CI nem
+ * éri el közvetlenül a Rackhost MySQL-t). A jóváhagyás az adminban kézi.
  *
- * Env (GitHub secret/var): DB_PASSWORD, ANTHROPIC_API_KEY, ANTHROPIC_MODEL (opcionális).
- * NEM kerül a webszerverre — csak a CI futtatja.
+ * Env: ANTHROPIC_API_KEY, ANTHROPIC_MODEL (opc.), COLLECT_URL, COLLECT_TOKEN.
  */
-
-require __DIR__ . '/../public/lib/candidates.php'; // ez behúzza az events.php-t is
 
 function envv(string $k, string $def = ''): string
 {
@@ -98,23 +95,17 @@ function searchEventsViaClaude(string $apiKey, string $model, string $system, st
 
 // ---------------------------------------------------------------------------
 
-$apiKey = envv('ANTHROPIC_API_KEY');
-$model  = envv('ANTHROPIC_MODEL', 'claude-haiku-4-5');
-$dbPass = envv('DB_PASSWORD');
+$apiKey       = envv('ANTHROPIC_API_KEY');
+$model        = envv('ANTHROPIC_MODEL', 'claude-haiku-4-5');
+$collectUrl   = envv('COLLECT_URL');
+$collectToken = envv('COLLECT_TOKEN');
+
 if ($apiKey === '') {
     fwrite(STDERR, "Hiányzik az ANTHROPIC_API_KEY.\n");
     exit(1);
 }
-
-try {
-    $pdo = new PDO(
-        'mysql:host=mysql.rackhost.hu;port=3306;dbname=c105746holborozzak;charset=utf8mb4',
-        'c105746ptrk',
-        $dbPass,
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]
-    );
-} catch (Throwable $e) {
-    fwrite(STDERR, 'DB kapcsolat hiba: ' . $e->getMessage() . "\n");
+if ($collectUrl === '' || $collectToken === '') {
+    fwrite(STDERR, "Hiányzik a COLLECT_URL vagy a COLLECT_TOKEN.\n");
     exit(1);
 }
 
@@ -147,53 +138,25 @@ if (!is_array($items)) {
     fwrite(STDERR, "Nem sikerült értelmezni a választ JSON-ként.\n");
     exit(1);
 }
+echo "[" . date('c') . "] Talált elemek: " . count($items) . " — beküldés a weboldalra…\n";
 
-$insSql = "INSERT INTO event_candidates
-    (source_url, title, short_description, start_datetime, end_datetime,
-     venue_name, city, region_name, website_url, image_url, dedup_key, status)
-   VALUES
-    (:src, :title, :short, :start, :end,
-     :venue, :city, :region, :web, :img, :dedup, 'new')";
-$ins = $pdo->prepare($insSql);
-
-$found = 0;
-$added = 0;
-$skipped = 0;
-foreach ($items as $d) {
-    if (!is_array($d)) {
-        continue;
-    }
-    $title = trim((string) ($d['title'] ?? ''));
-    if ($title === '') {
-        continue;
-    }
-    $found++;
-
-    $start = toMysqlDatetime((string) ($d['start_datetime'] ?? ''));
-    $city  = trim((string) ($d['city'] ?? ''));
-    $dedup = candidateDedupKey($title, $start, $city);
-
-    if (candidateDuplicate($pdo, $dedup) || eventDuplicate($pdo, $title, $start, $city)) {
-        $skipped++;
-        continue;
-    }
-
-    $ins->execute([
-        ':src'    => ($d['source_url'] ?? '') ?: ($d['website_url'] ?? '') ?: null,
-        ':title'  => $title,
-        ':short'  => ($d['short_description'] ?? '') ?: null,
-        ':start'  => $start,
-        ':end'    => toMysqlDatetime((string) ($d['end_datetime'] ?? '')),
-        ':venue'  => ($d['venue_name'] ?? '') ?: null,
-        ':city'   => $city !== '' ? $city : null,
-        ':region' => ($d['region_name'] ?? '') ?: null,
-        ':web'    => ($d['website_url'] ?? '') ?: null,
-        ':img'    => ($d['image_url'] ?? '') ?: null,
-        ':dedup'  => $dedup,
+try {
+    $payload = json_encode(['events' => $items], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    [$code, $resp] = httpPost($collectUrl, $payload, [
+        'content-type: application/json',
+        'x-collect-token: ' . $collectToken,
     ]);
-    $added++;
-    echo "  + {$title}\n";
+    if ($code >= 400) {
+        fwrite(STDERR, "Ingest hiba (HTTP {$code}): {$resp}\n");
+        exit(1);
+    }
+    $r = json_decode($resp, true);
+    $added   = (int) ($r['added'] ?? 0);
+    $skipped = (int) ($r['skipped'] ?? 0);
+    echo "[" . date('c') . "] Kész. Új jelölt: {$added}, kihagyott (duplikált): {$skipped}.\n";
+} catch (Throwable $e) {
+    fwrite(STDERR, 'Beküldés hiba: ' . $e->getMessage() . "\n");
+    exit(1);
 }
 
-echo "[" . date('c') . "] Kész. Talált: {$found}, új jelölt: {$added}, kihagyott (duplikált): {$skipped}.\n";
 exit(0);

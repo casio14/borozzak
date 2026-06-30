@@ -30,4 +30,8 @@ return [
         'api_key' => '',                 // üres = az import funkció hibát ad
         'model'   => 'claude-haiku-4-5', // olcsó, gyors; igényesebb kinyeréshez: 'claude-opus-4-8'
     ],
+
+    // A napi gyűjtő (GitHub Actions) ezzel a tokennel POST-ol a collect-ingest.php-ra.
+    // Éles: COLLECT_TOKEN secret (ugyanaz az érték a workflow secretjében).
+    'collect_token' => '',
 ];
