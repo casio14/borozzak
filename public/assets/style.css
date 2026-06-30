@@ -723,6 +723,8 @@ main { flex: 1 0 auto; }
   padding: 0 .9rem;
 }
 .facets__search:focus-within { border-color: var(--wine-700); box-shadow: 0 0 0 3px rgba(114, 47, 55, .12); }
+/* A fejléc kereső-ikonjáról ide ugorva a sticky fejléc ne takarja el */
+#kereso { scroll-margin-top: 5.5rem; }
 .facets__search-icon { width: 18px; height: 18px; color: var(--muted); flex: none; }
 .facets__search input {
   flex: 1;
