@@ -18,13 +18,14 @@ function envv(string $k, string $def = ''): string
     return $v === false ? $def : $v;
 }
 
-function httpPost(string $url, string $body, array $headers): array
+function httpPost(string $url, string $body, array $headers, int $timeout = 120): array
 {
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_POST           => true,
-        CURLOPT_TIMEOUT        => 120,
+        CURLOPT_CONNECTTIMEOUT => 20,
+        CURLOPT_TIMEOUT        => $timeout,
         CURLOPT_HTTPHEADER     => $headers,
         CURLOPT_POSTFIELDS     => $body,
     ]);
@@ -66,7 +67,7 @@ function webSearchToolType(string $model): string
 function searchEventsViaClaude(string $apiKey, string $model, string $system, string $userText): string
 {
     $messages = [['role' => 'user', 'content' => $userText]];
-    $tools = [['type' => webSearchToolType($model), 'name' => 'web_search', 'max_uses' => 8]];
+    $tools = [['type' => webSearchToolType($model), 'name' => 'web_search', 'max_uses' => 5]];
     $headers = [
         'content-type: application/json',
         'x-api-key: ' . $apiKey,
@@ -82,7 +83,7 @@ function searchEventsViaClaude(string $apiKey, string $model, string $system, st
             'tools'      => $tools,
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-        [$code, $resp] = httpPost('https://api.anthropic.com/v1/messages', $payload, $headers);
+        [$code, $resp] = httpPost('https://api.anthropic.com/v1/messages', $payload, $headers, 600);
         $data = json_decode($resp, true);
         if ($code >= 400) {
             throw new RuntimeException('AI hiba: ' . ($data['error']['message'] ?? ('HTTP ' . $code)));
