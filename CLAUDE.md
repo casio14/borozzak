@@ -113,7 +113,13 @@ JSON-LD vázat (alap `WebSite`+`Organization`); `$jsonLd`-vel bővíthető oldal
     validál, `draft` státuszú eseményt szúr be (slug auto, ütközésmentes), a kiválasztott
     kategóriákat az `event_categories`-be köti, a beküldő nevét/e-mailjét eltárolja
     (`events.submitter_name/email`, NEM publikus; migráció `003`). `noindex`. A beküldött
-    esemény jóváhagyásra vár (kézi `published`-re állítás).
+    esemény jóváhagyásra vár.
+  - **`admin/`** — védett admin felület (session-alapú belépés). `auth.php` (session +
+    `require_admin()` + CSRF helperek), `login.php`/`logout.php`, `index.php` (jóváhagyásra
+    váró draftok listája — egyelőre csak olvasható; a jóváhagyás/szerkesztés/elutasítás
+    műveletek később). Hitelesítés: `config.php` `admin` szekció (`user` + bcrypt
+    `pass_hash`); éles: `ADMIN_USER` + `ADMIN_PASSWORD` secret (a CI bcrypt-eli).
+    `noindex` + `robots.txt` `Disallow: /admin/`.
   - **`esemenyek.php` = teljes lista:** tabok + multiselect szűrők (borvidék/kategória) +
     rendezés + hónapokra bontott sor-lista. Az „Események" menü ide mutat. Itt él az
     AJAX-os `#esemenyek-region` (részleges szűrés, `app.js`). `listUrl()` ide mutat.

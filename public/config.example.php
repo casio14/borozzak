@@ -16,4 +16,12 @@ return [
     // Titkos „só" az IP-hasheléshez (kattintás-naplózó). Éles: APP_SALT secret.
     // Lokálisan tetszőleges hosszú véletlen szöveg.
     'app_salt' => 'valami-helyi-fejlesztoi-so',
+
+    // Admin belépés. Éles: a CI tölti az ADMIN_USER + ADMIN_PASSWORD secretből
+    // (a jelszót bcrypt-tel hash-eli). Lokálisan a hash-t így generálhatod:
+    //   php -r "echo password_hash('jelszavad', PASSWORD_DEFAULT);"
+    'admin' => [
+        'user'      => 'admin',
+        'pass_hash' => '', // üres = belépés letiltva (amíg nincs kitöltve)
+    ],
 ];

@@ -68,22 +68,36 @@ jobs:
           echo "--- public/version.php ---"
           cat public/version.php
 
-      - name: config.php generálása (DB hozzáférés a secretből)
+      - name: config.php generálása (DB + admin a secretekből)
         env:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           APP_SALT: ${{ secrets.APP_SALT }}
+          ADMIN_USER: ${{ secrets.ADMIN_USER }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
         run: |
           set -euo pipefail
           umask 077
-          # PHP single-quote escape: \ -> \\ , ' -> \'
-          ESC=${DB_PASSWORD//\\/\\\\}
-          ESC=${ESC//\'/\\\'}
+          # PHP single-quote escape segéd: \ -> \\ , ' -> \'
+          esc() { local s=${1//\\/\\\\}; printf '%s' "${s//\'/\\\'}"; }
+
+          ESC=$(esc "$DB_PASSWORD")
           # APP_SALT: ha nincs beállítva, a DB_PASSWORD-ből származtatunk egy stabil sót
           SALT_SRC=${APP_SALT:-$DB_PASSWORD}
           SALT=$(printf '%s' "holborozzak|$SALT_SRC" | sha256sum | cut -d' ' -f1)
+
+          # Admin: felhasználónév + a jelszó bcrypt hash-e (a runner php-jével)
+          AUSER=$(esc "${ADMIN_USER:-admin}")
+          if [ -n "${ADMIN_PASSWORD:-}" ] && command -v php >/dev/null 2>&1; then
+            AHASH=$(P="$ADMIN_PASSWORD" php -r 'echo password_hash(getenv("P"), PASSWORD_DEFAULT);')
+          else
+            AHASH=""
+            echo "FIGYELEM: ADMIN_PASSWORD nincs beállítva (vagy nincs php) — admin belépés letiltva."
+          fi
+          AHASH=$(esc "$AHASH")
+
           {
             echo '<?php'
-            echo '// Generálva a CI által — NE kerüljön gitbe. Titkok: DB_PASSWORD, APP_SALT secret.'
+            echo '// Generálva a CI által — NE kerüljön gitbe. Titkok: DB_PASSWORD, APP_SALT, ADMIN_*.'
             echo 'return ['
             echo "    'db' => ["
             echo "        'host' => 'mysql.rackhost.hu',"
@@ -93,6 +107,10 @@ jobs:
             printf "        'pass' => '%s',\n" "$ESC"
             echo '    ],'
             printf "    'app_salt' => '%s',\n" "$SALT"
+            echo "    'admin' => ["
+            printf "        'user' => '%s',\n" "$AUSER"
+            printf "        'pass_hash' => '%s',\n" "$AHASH"
+            echo '    ],'
             echo '];'
           } > public/config.php
           # NEM írjuk ki a tartalmat (jelszó!), csak a méretet:
