@@ -99,10 +99,13 @@ JSON-LD vázat (alap `WebSite`+`Organization`); `$jsonLd`-vel bővíthető oldal
     napjukon, hónaplépegetéssel (`?ev=&ho=`). A Naptár menüpont ide mutat.
   - `esemeny.php` — esemény **részletoldal** (`esemeny.php?slug=…`): teljes `Event`
     JSON-LD, canonical, OG-kép; 404 a nem létezőre. A kártyák/sorok/térkép ide linkelnek.
-    (Szép URL `/esemeny/<slug>` később, a végleges domainen, rewrite-tal.) Tartalom:
-    borító, cím, **tény-blokk** (mikor/hol/borvidék/ár, vonalas ikon-badge chipek), címkék,
-    leírás, gombok (Jegyek/Hivatalos oldal a `go.php`-n át; **Facebook**; **Naptárhoz adom**
-    → `ics.php`), és **Leaflet-térkép** ha van `latitude`/`longitude` (+ Google Maps link).
+    (Szép URL `/esemeny/<slug>` később, a végleges domainen, rewrite-tal.) Elrendezés:
+    **hero** (borító + tömör borvörös címsáv: cím, dátum, státusz), alatta reszponzív rács
+    (`.ed-grid`, CSS grid-areas): balra leírás, jobb oldalsávban infó (hol/borvidék/ár) +
+    gombok (Jegyek/Hivatalos oldal a `go.php`-n át; **Facebook**; **Naptárhoz adom** →
+    `ics.php`), és **kis Leaflet-térkép** ha van `latitude`/`longitude` (+ Google Maps link).
+    **Reszponzív térkép-hely:** desktopon az oldalsávban, mobilon a leírás alatt (egyetlen
+    térkép-elem, grid-areas átrendezéssel).
   - `ics.php` — esemény `.ics` (naptárhoz adás) `ics.php?e=<id>`; csak közzétett. `Disallow` robotsban.
   - `assets/app.js` — progresszív fejlesztés (részleges szűrés, no-jump).
   - `lib/events.php` — esemény-lekérdezések + megjelenítési segédfüggvények

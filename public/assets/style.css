@@ -1244,28 +1244,47 @@ main { flex: 1 0 auto; }
 .event-detail__desc { color: #4a3b36; line-height: 1.8; }
 .event-detail__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
 
-/* Tény-blokk (1+2 hibrid): erős borvörös ikon-badge + látható felirat, chip-formában */
-.event-facts { display: flex; flex-wrap: wrap; gap: .7rem; margin: 0 0 1.4rem; }
-.event-facts .fact {
-  display: flex; align-items: center; gap: .65rem;
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: 12px; padding: .55rem .85rem;
+/* ===== Részletoldal — hero (tömör címsáv) + reszponzív rács ===== */
+/* Desktop: térkép az oldalsávban (1. változat). Mobil: térkép a leírás alatt (2. változat). */
+.event-detail--hero { max-width: 1040px; }
+.ed-hero { border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+.ed-hero__img { position: relative; }
+.ed-hero__img img { display: block; width: 100%; height: 320px; object-fit: cover; }
+.ed-hero__badge {
+  position: absolute; top: .8rem; left: .8rem; background: var(--gold); color: var(--wine-900);
+  font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: .25rem .55rem; border-radius: 6px;
 }
-.event-facts .fact__ic {
-  flex: none; width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center;
-  border-radius: 9px; background: var(--wine-700); color: #fff;
-}
-.event-facts .fact__ic svg { width: 18px; height: 18px; }
-.event-facts .fact__k { display: block; font-size: .72rem; font-weight: 700; color: var(--wine-700); text-transform: uppercase; letter-spacing: .03em; }
-.event-facts .fact__v { display: block; font-weight: 700; color: var(--ink); }
+.ed-hero__band { background: linear-gradient(135deg, var(--wine-700), var(--wine-900)); color: #fff; padding: 1.1rem 1.5rem; }
+.ed-hero__band h1 { margin: 0 0 .25rem; color: #fff; font-size: clamp(1.5rem, 3.8vw, 2.2rem); }
+.ed-hero__when { color: var(--gold-200); font-weight: 700; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
 
-/* Részletoldal térkép */
-.event-detail__mapwrap { margin-top: 2rem; }
-.event-detail__maptitle { margin: 0 0 .75rem; color: var(--wine-900); font-size: 1.2rem; }
-.event-detail__map { height: 300px; border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden; }
-.event-detail__maplink { margin: .6rem 0 0; font-size: .9rem; }
-.event-detail__maplink a { color: var(--wine-700); font-weight: 700; text-decoration: none; }
-.event-detail__maplink a:hover { color: var(--gold); }
+.ed-grid {
+  display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: start;
+  grid-template-areas: "main aside" "main map";
+}
+.ed-main { grid-area: main; }
+.ed-aside { grid-area: aside; }
+.ed-map { grid-area: map; }
+.ed-main .event-detail__tags { margin: 0 0 1.1rem; }
+
+.ed-info { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: .35rem 1.1rem; box-shadow: var(--shadow); }
+.ed-info__row { display: flex; align-items: center; gap: .7rem; padding: .7rem 0; border-bottom: 1px solid var(--line); }
+.ed-info__row:last-child { border-bottom: none; }
+.ed-info__ic { flex: none; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: 9px; background: var(--wine-700); color: #fff; }
+.ed-info__ic svg { width: 17px; height: 17px; }
+.ed-info__k { display: block; font-size: .72rem; font-weight: 700; color: var(--wine-700); text-transform: uppercase; letter-spacing: .03em; }
+.ed-info__v { display: block; font-weight: 700; color: var(--ink); }
+.ed-actions { display: flex; flex-direction: column; gap: .6rem; margin-top: 1rem; }
+.ed-actions .btn { width: 100%; }
+.ed-map__canvas { height: 190px; border-radius: 12px; border: 1px solid var(--line); overflow: hidden; }
+.ed-map__link { margin: .5rem 0 0; font-size: .85rem; }
+.ed-map__link a { color: var(--wine-700); font-weight: 700; text-decoration: none; }
+.ed-map__link a:hover { color: var(--gold); }
+
+@media (max-width: 760px) {
+  .ed-grid { grid-template-columns: 1fr; grid-template-areas: "main" "map" "aside"; }
+  .ed-hero__img img { height: 220px; }
+}
 
 .btn { display: inline-block; padding: .7rem 1.4rem; border-radius: 10px; font-weight: 700; text-decoration: none; }
 .btn--primary { background: var(--wine-700); color: var(--cream); }
