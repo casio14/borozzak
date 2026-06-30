@@ -24,7 +24,14 @@ if (is_file($versionFile)) {
           <a href="esemenyek.php">Összes esemény</a>
           <a href="naptar.php">Eseménynaptár</a>
           <a href="terkep.php">Eseménytérkép</a>
-          <a href="mailto:info@holborozzak.hu?subject=Hi%C3%A1nyz%C3%B3%20esem%C3%A9ny">Hiányzik egy esemény?</a>
+          <a href="./#hirlevel">Hírlevél</a>
+        </nav>
+
+        <nav class="site-footer__col" aria-label="Szervezőknek">
+          <h3>Szervezőknek</h3>
+          <a href="esemeny-bekuldes.php">Esemény beküldése</a>
+          <a href="mailto:info@holborozzak.hu?subject=Esem%C3%A9ny%20kiemel%C3%A9se">Kiemelés &amp; hirdetés</a>
+          <a href="mailto:info@holborozzak.hu?subject=Hi%C3%A1nyz%C3%B3%20esem%C3%A9ny">Hiányzó esemény jelzése</a>
         </nav>
 
         <nav class="site-footer__col" aria-label="Kategóriák">
