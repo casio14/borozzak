@@ -21,8 +21,11 @@
       if (k === 'nezet' && v === 'kozelgo') { return; }
       clean.append(k, v);
     });
+    // Az alap mindig az űrlap action-je (esemenyek.php) — üres szűrőnél is az
+    // események oldalon maradunk, nem a könyvtár gyökerén (ami a főoldal lenne).
+    var base = form.getAttribute('action') || 'esemenyek.php';
     var qs = clean.toString();
-    return qs ? ('?' + qs) : './';
+    return qs ? (base + '?' + qs) : base;
   }
 
   function load(url, push) {
