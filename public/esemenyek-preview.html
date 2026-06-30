@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Előnézet — Események lista megjelenítése</title>
+  <style>
+    :root {
+      --wine-900: #4a0e1c; --wine-700: #722f37; --wine-500: #8c3b46;
+      --gold: #c8a14b; --gold-200: #e3cd97; --leaf: #5a6b3b;
+      --cream: #f7f2ea; --paper: #fffdf9; --ink: #2b1d20; --muted: #8a7d77; --line: #e7ddcf;
+      --maxw: 1280px; --radius: 14px; --shadow: 0 6px 24px rgba(74, 14, 28, .08);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--cream); color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 1.5rem 1.25rem 5rem; }
+    .pagebar { background: var(--wine-900); color: var(--cream); padding: 1.25rem; text-align: center; }
+    .pagebar h1 { margin: 0 0 .25rem; font-size: 1.3rem; }
+    .pagebar p { margin: 0; color: var(--gold-200); font-size: .9rem; }
+    .variant { margin: 3rem 0; padding-top: 1.75rem; border-top: 2px dashed var(--line); }
+    .variant:first-of-type { border-top: none; }
+    .variant__label { display: inline-block; background: var(--gold); color: var(--wine-900); font-weight: 800;
+      font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; padding: .25rem .6rem; border-radius: 999px; margin-bottom: .35rem; }
+    .variant__note { margin: .1rem 0 1.5rem; color: var(--muted); font-size: .92rem; max-width: 70ch; }
+    .sec-head h2 { margin: 0 0 1.1rem; color: var(--wine-900); font-size: 1.4rem; }
+
+    /* tag + status (a valódiból) */
+    .tag { font-size: .75rem; font-weight: 600; background: #f0e7d8; color: var(--wine-700); padding: .2rem .55rem; border-radius: 999px; }
+    .tag--free { background: #e6efe0; color: #3f5a2a; }
+    .status { display: inline-flex; align-items: center; line-height: 1; font-size: .68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .03em; padding: .28rem .55rem; border-radius: 999px; margin-left: .4rem; vertical-align: middle; }
+    .status.is-live { background: var(--wine-700); color: #fff; }
+    .status.is-soon { background: var(--gold); color: var(--wine-900); }
+    .status.is-last { background: #b5562a; color: #fff; }
+    .status.is-free { background: #e6efe0; color: #3f5a2a; margin-left: 0; }
+
+    /* ---------- A: KÉP-KÁRTYA RÁCS (a valódi event-card) ---------- */
+    .events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .event-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
+      box-shadow: var(--shadow); display: flex; flex-direction: column; text-decoration: none; color: inherit; transition: transform .15s, box-shadow .15s; }
+    .event-card:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(74, 14, 28, .15); }
+    .event-card__media { position: relative; display: block; aspect-ratio: 16/10; background: var(--wine-900); }
+    .event-card__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .event-card__badge { position: absolute; top: .6rem; left: .6rem; background: var(--gold); color: var(--wine-900);
+      font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: .25rem .55rem; border-radius: 6px; }
+    .event-card__body { display: flex; flex-direction: column; gap: .45rem; flex: 1; padding: 1rem 1.1rem 1.2rem; }
+    .event-card__date { margin: 0; color: var(--wine-700); font-weight: 700; font-size: .9rem; }
+    .event-card__title { margin: 0; font-size: 1.15rem; line-height: 1.25; color: var(--ink); }
+    .event-card__meta { margin: 0; color: var(--muted); font-size: .92rem; }
+    .event-card__tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: auto; padding-top: .5rem; }
+
+    /* ---------- B: GAZDAG SOROK BÉLYEGKÉPPEL ---------- */
+    .ev-rich-list { display: grid; gap: 1rem; }
+    .ev-rich { display: flex; gap: 0; background: var(--paper); border: 1px solid var(--line); border-radius: 14px;
+      overflow: hidden; text-decoration: none; color: inherit; box-shadow: var(--shadow); transition: transform .15s, box-shadow .15s; }
+    .ev-rich:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(74, 14, 28, .12); }
+    .ev-rich__media { flex: none; width: 190px; align-self: stretch; background: var(--wine-900); position: relative; }
+    .ev-rich__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ev-rich__badge { position: absolute; top: .5rem; left: .5rem; background: var(--gold); color: var(--wine-900);
+      font-size: .68rem; font-weight: 700; text-transform: uppercase; padding: .2rem .5rem; border-radius: 6px; }
+    .ev-rich__body { flex: 1; min-width: 0; padding: 1rem 1.2rem; display: flex; flex-direction: column; gap: .35rem; }
+    .ev-rich__date { color: var(--wine-700); font-weight: 700; font-size: .9rem; }
+    .ev-rich__title { margin: 0; font-size: 1.2rem; }
+    .ev-rich__meta { margin: 0; color: var(--muted); font-size: .92rem; }
+    .ev-rich__tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: auto; padding-top: .45rem; }
+    @media (max-width: 560px) { .ev-rich__media { width: 104px; } .ev-rich__title { font-size: 1.05rem; } }
+
+    /* ---------- C: TÖMÖR SOROK (a jelenlegi, dátumkockás) ---------- */
+    .events-list { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    .events-list__month { display: flex; align-items: center; gap: .55rem; padding: .6rem 1.1rem; background: #f3eee4;
+      color: #7a6f66; font-weight: 700; font-size: .85rem; text-transform: uppercase; letter-spacing: .05em; }
+    .events-list__dot { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+    .event-row { display: flex; align-items: center; gap: 1rem; padding: .8rem 1.1rem; border-top: 1px solid var(--line); text-decoration: none; color: inherit; }
+    .event-row:hover { background: #faf6ef; }
+    .date-block { flex: none; width: 54px; text-align: center; background: var(--cream); border: 1px solid var(--line); border-radius: 10px; padding: .35rem 0; line-height: 1.05; }
+    .date-block__day { display: block; font-size: 1.3rem; font-weight: 700; color: var(--wine-700); }
+    .date-block__mon { display: block; font-size: .68rem; font-weight: 700; letter-spacing: .04em; color: var(--muted); }
+    .event-row__main { flex: 1; min-width: 0; }
+    .event-row__title { display: block; font-size: 1.05rem; font-weight: 700; color: var(--ink); }
+    .event-row__sub { display: block; margin-top: .15rem; color: var(--muted); font-size: .9rem; }
+    .event-row__right { display: flex; align-items: center; gap: 1rem; white-space: nowrap; }
+    .event-row__loc { color: var(--muted); font-size: .9rem; }
+    .event-row__chev { color: var(--wine-700); font-size: 1.1rem; }
+  </style>
+</head>
+<body>
+  <div class="pagebar">
+    <h1>Események lista — megjelenítési variációk</h1>
+    <p>Ideiglenes előnézet (noindex). A fülek/szűrők ugyanazok; csak a lista nézete változik. Töröljük a döntés után.</p>
+  </div>
+
+  <div class="wrap">
+
+    <!-- A. KÉP-KÁRTYA RÁCS -->
+    <section class="variant">
+      <span class="variant__label">A · Kép-kártya rács (Eventbrite-szerű)</span>
+      <p class="variant__note">Minden esemény képes kártya, 2–3 oszlopos rácsban. A legvizuálisabb, „felfedezős" élmény — a kép eladja az eseményt. Több helyet foglal, és minden eseményhez kép kell (van fallback).</p>
+      <div class="sec-head"><h2>Közelgő események</h2></div>
+      <div class="events-grid">
+        <a class="event-card" href="#"><span class="event-card__media"><img src="https://picsum.photos/seed/borfeszt1/600/375" alt=""><span class="event-card__badge">Kiemelt</span></span>
+          <span class="event-card__body"><span class="event-card__date">2026. júl. 25–27.</span><span class="event-card__title">Budapesti Bor Napok</span><span class="event-card__meta">📍 Budai Vár, Budapest</span><span class="event-card__tags"><span class="tag">Borfesztivál</span><span class="tag">Kóstoló</span></span></span></a>
+        <a class="event-card" href="#"><span class="event-card__media"><img src="https://picsum.photos/seed/tokaj2/600/375" alt=""></span>
+          <span class="event-card__body"><span class="event-card__date">2026. aug. 8.</span><span class="event-card__title">Tokaji Szüreti Napok</span><span class="event-card__meta">📍 Tokaj</span><span class="event-card__tags"><span class="tag">Szüreti rendezvény</span><span class="tag tag--free">Ingyenes</span></span></span></a>
+        <a class="event-card" href="#"><span class="event-card__media"><img src="https://picsum.photos/seed/eger3/600/375" alt=""></span>
+          <span class="event-card__body"><span class="event-card__date">2026. aug. 15–16.</span><span class="event-card__title">Egri Bikavér Ünnep</span><span class="event-card__meta">📍 Dobó tér, Eger</span><span class="event-card__tags"><span class="tag">Borfesztivál</span></span></span></a>
+        <a class="event-card" href="#"><span class="event-card__media"><img src="https://picsum.photos/seed/villany4/600/375" alt=""></span>
+          <span class="event-card__body"><span class="event-card__date">2026. szept. 5.</span><span class="event-card__title">Villányi Vörösbor Fesztivál</span><span class="event-card__meta">📍 Villány</span><span class="event-card__tags"><span class="tag">Borfesztivál</span><span class="tag">Gasztronómia</span></span></span></a>
+        <a class="event-card" href="#"><span class="event-card__media"><img src="https://picsum.photos/seed/badacsony5/600/375" alt=""></span>
+          <span class="event-card__body"><span class="event-card__date">2026. szept. 12.</span><span class="event-card__title">Badacsonyi Szüret</span><span class="event-card__meta">📍 Badacsony</span><span class="event-card__tags"><span class="tag">Szüreti rendezvény</span></span></span></a>
+        <a class="event-card" href="#"><span class="event-card__media"><img src="https://picsum.photos/seed/somlo6/600/375" alt=""></span>
+          <span class="event-card__body"><span class="event-card__date">2026. szept. 20.</span><span class="event-card__title">Somlói Aranyfürt Napok</span><span class="event-card__meta">📍 Somló</span><span class="event-card__tags"><span class="tag">Kóstoló</span><span class="tag tag--free">Ingyenes</span></span></span></a>
+      </div>
+    </section>
+
+    <!-- B. GAZDAG SOROK BÉLYEGKÉPPEL -->
+    <section class="variant">
+      <span class="variant__label">B · Gazdag sorok bélyegképpel</span>
+      <p class="variant__note">Vízszintes sorok bal oldali bélyegképpel, dátummal, címmel, helyszínnel és címkékkel. Vizuális, de tömörebb a kártyarácsnál — több fér ki egy képernyőre, jól olvasható. Jó kompromisszum.</p>
+      <div class="sec-head"><h2>Közelgő események</h2></div>
+      <div class="ev-rich-list">
+        <a class="ev-rich" href="#"><span class="ev-rich__media"><img src="https://picsum.photos/seed/borfeszt1/400/300" alt=""><span class="ev-rich__badge">Kiemelt</span></span>
+          <span class="ev-rich__body"><span class="ev-rich__date">2026. júl. 25–27. <span class="status is-soon">Hamarosan</span></span><span class="ev-rich__title">Budapesti Bor Napok</span><span class="ev-rich__meta">📍 Budai Vár, Budapest · Etyek-Budai</span><span class="ev-rich__tags"><span class="tag">Borfesztivál</span><span class="tag">Kóstoló</span></span></span></a>
+        <a class="ev-rich" href="#"><span class="ev-rich__media"><img src="https://picsum.photos/seed/tokaj2/400/300" alt=""></span>
+          <span class="ev-rich__body"><span class="ev-rich__date">2026. aug. 8.</span><span class="ev-rich__title">Tokaji Szüreti Napok</span><span class="ev-rich__meta">📍 Tokaj · Tokaji</span><span class="ev-rich__tags"><span class="tag">Szüreti rendezvény</span><span class="tag tag--free">Ingyenes</span></span></span></a>
+        <a class="ev-rich" href="#"><span class="ev-rich__media"><img src="https://picsum.photos/seed/eger3/400/300" alt=""></span>
+          <span class="ev-rich__body"><span class="ev-rich__date">2026. aug. 15–16.</span><span class="ev-rich__title">Egri Bikavér Ünnep</span><span class="ev-rich__meta">📍 Dobó tér, Eger · Egri</span><span class="ev-rich__tags"><span class="tag">Borfesztivál</span></span></span></a>
+        <a class="ev-rich" href="#"><span class="ev-rich__media"><img src="https://picsum.photos/seed/villany4/400/300" alt=""></span>
+          <span class="ev-rich__body"><span class="ev-rich__date">2026. szept. 5.</span><span class="ev-rich__title">Villányi Vörösbor Fesztivál</span><span class="ev-rich__meta">📍 Villány · Villányi</span><span class="ev-rich__tags"><span class="tag">Borfesztivál</span><span class="tag">Gasztronómia</span></span></span></a>
+        <a class="ev-rich" href="#"><span class="ev-rich__media"><img src="https://picsum.photos/seed/badacsony5/400/300" alt=""></span>
+          <span class="ev-rich__body"><span class="ev-rich__date">2026. szept. 12.</span><span class="ev-rich__title">Badacsonyi Szüret</span><span class="ev-rich__meta">📍 Badacsony · Badacsonyi</span><span class="ev-rich__tags"><span class="tag">Szüreti rendezvény</span></span></span></a>
+      </div>
+    </section>
+
+    <!-- C. TÖMÖR SOROK (jelenlegi) -->
+    <section class="variant">
+      <span class="variant__label">C · Tömör sorok (jelenlegi)</span>
+      <p class="variant__note">A mostani, dátumkockás sor-lista hónapokra bontva. A legtömörebb, leggyorsabban átfutható — sok eseménynél praktikus, de a legkevésbé látványos (nincs kép).</p>
+      <div class="sec-head"><h2>Közelgő események</h2></div>
+      <div class="events-list">
+        <div class="events-list__month"><span class="events-list__dot" style="background:#c8a14b"></span>Július</div>
+        <a class="event-row" href="#"><span class="date-block"><span class="date-block__day">25</span><span class="date-block__mon">JÚL</span></span>
+          <span class="event-row__main"><span class="event-row__title">Budapesti Bor Napok <span class="status is-soon">Hamarosan</span></span><span class="event-row__sub">2026. júl. 25–27. · Borfesztivál, Kóstoló</span></span>
+          <span class="event-row__right"><span class="event-row__loc">Budapest · Etyek-Budai</span><span class="event-row__chev">→</span></span></a>
+        <div class="events-list__month"><span class="events-list__dot" style="background:#5a6b3b"></span>Augusztus</div>
+        <a class="event-row" href="#"><span class="date-block"><span class="date-block__day">8</span><span class="date-block__mon">AUG</span></span>
+          <span class="event-row__main"><span class="event-row__title">Tokaji Szüreti Napok <span class="status is-free">Ingyenes</span></span><span class="event-row__sub">2026. aug. 8. · Szüreti rendezvény</span></span>
+          <span class="event-row__right"><span class="event-row__loc">Tokaj · Tokaji</span><span class="event-row__chev">→</span></span></a>
+        <a class="event-row" href="#"><span class="date-block"><span class="date-block__day">15</span><span class="date-block__mon">AUG</span></span>
+          <span class="event-row__main"><span class="event-row__title">Egri Bikavér Ünnep</span><span class="event-row__sub">2026. aug. 15–16. · Borfesztivál</span></span>
+          <span class="event-row__right"><span class="event-row__loc">Eger · Egri</span><span class="event-row__chev">→</span></span></a>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
