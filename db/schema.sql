@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS events (
 
   -- Linkek
   website_url        VARCHAR(500) DEFAULT NULL,             -- hivatalos honlap
+  facebook_url       VARCHAR(500) DEFAULT NULL,             -- Facebook-esemény
   ticket_url         VARCHAR(500) DEFAULT NULL,             -- jegyvásárlás
 
   -- Ár / ingyenesség

@@ -61,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'address'           => trim((string) ($_POST['address'] ?? '')),
         'city'              => trim((string) ($_POST['city'] ?? '')),
         'website_url'       => trim((string) ($_POST['website_url'] ?? '')),
+        'facebook_url'      => trim((string) ($_POST['facebook_url'] ?? '')),
         'ticket_url'        => trim((string) ($_POST['ticket_url'] ?? '')),
         'price_info'        => trim((string) ($_POST['price_info'] ?? '')),
         'image_url'         => trim((string) ($_POST['image_url'] ?? '')),
@@ -69,6 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $start    = toMysqlDatetime($_POST['start_datetime'] ?? '');
     $end      = toMysqlDatetime($_POST['end_datetime'] ?? '');
     $regionId = (string) ($_POST['region_id'] ?? '');
+    $lat      = trim((string) ($_POST['latitude'] ?? ''));
+    $lng      = trim((string) ($_POST['longitude'] ?? ''));
     $isFree   = isset($_POST['is_free']) ? 1 : 0;
     $isFeat   = isset($_POST['is_featured']) ? 1 : 0;
     $status   = (string) ($_POST['status'] ?? 'draft');
@@ -79,7 +82,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($end !== null && $start !== null && $end < $start)  { $errors[] = 'A záró időpont nem lehet korábbi a kezdésnél.'; }
     if (!in_array($status, ['draft', 'published', 'cancelled'], true)) { $errors[] = 'Érvénytelen állapot.'; }
     if ($f['website_url'] !== '' && !filter_var($f['website_url'], FILTER_VALIDATE_URL)) { $errors[] = 'A honlap címe nem érvényes URL.'; }
+    if ($f['facebook_url'] !== '' && !filter_var($f['facebook_url'], FILTER_VALIDATE_URL)) { $errors[] = 'A Facebook-link nem érvényes URL.'; }
     if ($f['ticket_url'] !== '' && !filter_var($f['ticket_url'], FILTER_VALIDATE_URL))   { $errors[] = 'A jegy-link nem érvényes URL.'; }
+    if ($lat !== '' && !is_numeric($lat)) { $errors[] = 'A szélesség (latitude) szám legyen.'; }
+    if ($lng !== '' && !is_numeric($lng)) { $errors[] = 'A hosszúság (longitude) szám legyen.'; }
 
     if (!$errors) {
         try {
@@ -88,7 +94,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     title = :title, short_description = :short_desc, description = :desc,
                     start_datetime = :start, end_datetime = :end,
                     venue_name = :venue, address = :address, city = :city, region_id = :region_id,
-                    website_url = :website, ticket_url = :ticket, is_free = :is_free, price_info = :price,
+                    latitude = :lat, longitude = :lng,
+                    website_url = :website, facebook_url = :facebook, ticket_url = :ticket,
+                    is_free = :is_free, price_info = :price,
                     image_url = :image_url, image_alt = :image_alt,
                     is_featured = :is_featured, status = :status
                  WHERE id = :id"
@@ -103,7 +111,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':address'    => $f['address'] !== '' ? $f['address'] : null,
                 ':city'       => $f['city'] !== '' ? $f['city'] : null,
                 ':region_id'  => $regionId !== '' ? (int) $regionId : null,
+                ':lat'        => $lat !== '' ? $lat : null,
+                ':lng'        => $lng !== '' ? $lng : null,
                 ':website'    => $f['website_url'] !== '' ? $f['website_url'] : null,
+                ':facebook'   => $f['facebook_url'] !== '' ? $f['facebook_url'] : null,
                 ':ticket'     => $f['ticket_url'] !== '' ? $f['ticket_url'] : null,
                 ':is_free'    => $isFree,
                 ':price'      => $f['price_info'] !== '' ? $f['price_info'] : null,
@@ -142,6 +153,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'start_datetime' => $start ?? $event['start_datetime'],
         'end_datetime'   => $end,
         'region_id'      => $regionId !== '' ? (int) $regionId : null,
+        'latitude'       => $lat,
+        'longitude'      => $lng,
         'is_free'        => $isFree,
         'is_featured'    => $isFeat,
         'status'         => $status,
@@ -260,6 +273,15 @@ $catSel = (array) ($event['cat_slugs'] ?? []);
             <?php endforeach; ?>
           </select>
         </div>
+        <div class="field">
+          <label for="latitude">Szélesség (latitude)</label>
+          <input type="text" id="latitude" name="latitude" value="<?= h((string) ($event['latitude'] ?? '')) ?>" placeholder="pl. 47.4979">
+          <span class="field__hint">A térképhez. Google Mapsen: jobb klikk → a koordináták.</span>
+        </div>
+        <div class="field">
+          <label for="longitude">Hosszúság (longitude)</label>
+          <input type="text" id="longitude" name="longitude" value="<?= h((string) ($event['longitude'] ?? '')) ?>" placeholder="pl. 19.0402">
+        </div>
       </div>
 
       <h2 class="form-section-title">Jegy, ár, kép</h2>
@@ -267,6 +289,10 @@ $catSel = (array) ($event['cat_slugs'] ?? []);
         <div class="field">
           <label for="website_url">Hivatalos honlap</label>
           <input type="url" id="website_url" name="website_url" placeholder="https://" value="<?= h($event['website_url'] ?? '') ?>">
+        </div>
+        <div class="field">
+          <label for="facebook_url">Facebook-esemény</label>
+          <input type="url" id="facebook_url" name="facebook_url" placeholder="https://facebook.com/events/…" value="<?= h($event['facebook_url'] ?? '') ?>">
         </div>
         <div class="field">
           <label for="ticket_url">Jegy-link</label>

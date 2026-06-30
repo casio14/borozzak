@@ -48,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $city       = trim((string) ($_POST['city'] ?? ''));
     $regionId   = (string) ($_POST['region_id'] ?? '');
     $website    = trim((string) ($_POST['website_url'] ?? ''));
+    $facebook   = trim((string) ($_POST['facebook_url'] ?? ''));
     $ticket     = trim((string) ($_POST['ticket_url'] ?? ''));
     $isFree     = isset($_POST['is_free']) ? 1 : 0;
     $priceInfo  = trim((string) ($_POST['price_info'] ?? ''));
@@ -65,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($city === '')                                     { $errors[] = 'A település (város) megadása kötelező.'; }
     if (!filter_var($sEmail, FILTER_VALIDATE_EMAIL))      { $errors[] = 'Érvényes kapcsolattartó e-mail cím szükséges.'; }
     if ($website !== '' && !filter_var($website, FILTER_VALIDATE_URL)) { $errors[] = 'A honlap címe nem érvényes URL.'; }
+    if ($facebook !== '' && !filter_var($facebook, FILTER_VALIDATE_URL)) { $errors[] = 'A Facebook-link nem érvényes URL.'; }
     if ($ticket !== '' && !filter_var($ticket, FILTER_VALIDATE_URL))   { $errors[] = 'A jegyvásárlás linkje nem érvényes URL.'; }
 
     if (!$errors) {
@@ -76,11 +78,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $st = $pdo->prepare(
                 "INSERT INTO events
                    (slug, title, short_description, description, start_datetime, end_datetime,
-                    venue_name, address, city, region_id, website_url, ticket_url,
+                    venue_name, address, city, region_id, website_url, facebook_url, ticket_url,
                     is_free, price_info, status, submitter_name, submitter_email)
                  VALUES
                    (:slug, :title, :short_desc, :desc, :start, :end,
-                    :venue, :address, :city, :region_id, :website, :ticket,
+                    :venue, :address, :city, :region_id, :website, :facebook, :ticket,
                     :is_free, :price, 'draft', :sname, :semail)"
             );
             $st->execute([
@@ -95,6 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':city'       => $city,
                 ':region_id'  => $regionId !== '' ? (int) $regionId : null,
                 ':website'    => $website !== '' ? $website : null,
+                ':facebook'   => $facebook !== '' ? $facebook : null,
                 ':ticket'     => $ticket !== '' ? $ticket : null,
                 ':is_free'    => $isFree,
                 ':price'      => $priceInfo !== '' ? $priceInfo : null,
@@ -243,6 +246,10 @@ require __DIR__ . '/partials/header.php';
         <div class="field">
           <label for="website_url">Hivatalos honlap</label>
           <input type="url" id="website_url" name="website_url" placeholder="https://" value="<?= h($old['website_url'] ?? '') ?>">
+        </div>
+        <div class="field">
+          <label for="facebook_url">Facebook-esemény</label>
+          <input type="url" id="facebook_url" name="facebook_url" placeholder="https://facebook.com/events/…" value="<?= h($old['facebook_url'] ?? '') ?>">
         </div>
         <div class="field">
           <label for="ticket_url">Jegyvásárlás linkje</label>

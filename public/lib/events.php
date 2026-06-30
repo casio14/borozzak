@@ -277,6 +277,7 @@ function eventJsonLd(array $e, string $base, string $dir, ?string $url = null): 
                             'availability' => 'https://schema.org/InStock'];
     }
     if ($url) { $event['url'] = $url; }
+    if (!empty($e['facebook_url'])) { $event['sameAs'] = [$e['facebook_url']]; }
     return $event;
 }
 

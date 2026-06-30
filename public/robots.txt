@@ -8,6 +8,8 @@ Allow: /
 Disallow: /go.php
 # Admin felület
 Disallow: /admin/
+# Naptár-letöltés (.ics)
+Disallow: /ics.php
 
 # --- AI keresők / asszisztensek kifejezetten engedélyezve (AI ajánlásokhoz) ---
 User-agent: GPTBot

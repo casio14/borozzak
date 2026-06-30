@@ -1244,6 +1244,29 @@ main { flex: 1 0 auto; }
 .event-detail__desc { color: #4a3b36; line-height: 1.8; }
 .event-detail__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
 
+/* Tény-blokk (1+2 hibrid): erős borvörös ikon-badge + látható felirat, chip-formában */
+.event-facts { display: flex; flex-wrap: wrap; gap: .7rem; margin: 0 0 1.4rem; }
+.event-facts .fact {
+  display: flex; align-items: center; gap: .65rem;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: 12px; padding: .55rem .85rem;
+}
+.event-facts .fact__ic {
+  flex: none; width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 9px; background: var(--wine-700); color: #fff;
+}
+.event-facts .fact__ic svg { width: 18px; height: 18px; }
+.event-facts .fact__k { display: block; font-size: .72rem; font-weight: 700; color: var(--wine-700); text-transform: uppercase; letter-spacing: .03em; }
+.event-facts .fact__v { display: block; font-weight: 700; color: var(--ink); }
+
+/* Részletoldal térkép */
+.event-detail__mapwrap { margin-top: 2rem; }
+.event-detail__maptitle { margin: 0 0 .75rem; color: var(--wine-900); font-size: 1.2rem; }
+.event-detail__map { height: 300px; border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden; }
+.event-detail__maplink { margin: .6rem 0 0; font-size: .9rem; }
+.event-detail__maplink a { color: var(--wine-700); font-weight: 700; text-decoration: none; }
+.event-detail__maplink a:hover { color: var(--gold); }
+
 .btn { display: inline-block; padding: .7rem 1.4rem; border-radius: 10px; font-weight: 700; text-decoration: none; }
 .btn--primary { background: var(--wine-700); color: var(--cream); }
 .btn--primary:hover { background: var(--wine-900); }
