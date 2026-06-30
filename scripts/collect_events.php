@@ -50,11 +50,23 @@ function extractJsonArray(string $s): string
     return substr($s, $start, $end - $start + 1);
 }
 
+/** A modellhez illő web search eszköz-verzió (újabbakon dinamikus szűrés = token-takarékos). */
+function webSearchToolType(string $model): string
+{
+    $m = strtolower($model);
+    foreach (['opus-4-8', 'opus-4-7', 'opus-4-6', 'sonnet-4-6', 'fable'] as $tag) {
+        if (strpos($m, $tag) !== false) {
+            return 'web_search_20260209';
+        }
+    }
+    return 'web_search_20250305';
+}
+
 /** Claude web search hívás (pause_turn-kezeléssel) → záró szöveg. */
 function searchEventsViaClaude(string $apiKey, string $model, string $system, string $userText): string
 {
     $messages = [['role' => 'user', 'content' => $userText]];
-    $tools = [['type' => 'web_search_20250305', 'name' => 'web_search', 'max_uses' => 8]];
+    $tools = [['type' => webSearchToolType($model), 'name' => 'web_search', 'max_uses' => 8]];
     $headers = [
         'content-type: application/json',
         'x-api-key: ' . $apiKey,
@@ -136,7 +148,12 @@ try {
 $items = json_decode(extractJsonArray($text), true);
 if (!is_array($items)) {
     fwrite(STDERR, "Nem sikerült értelmezni a választ JSON-ként.\n");
+    fwrite(STDERR, "Nyers válasz (eleje): " . substr($text, 0, 1500) . "\n");
     exit(1);
+}
+if (count($items) === 0) {
+    // Diagnosztika: lássuk, mit adott vissza a modell.
+    fwrite(STDERR, "0 elem. Nyers válasz (eleje): " . substr($text, 0, 1500) . "\n");
 }
 echo "[" . date('c') . "] Talált elemek: " . count($items) . " — beküldés a weboldalra…\n";
 

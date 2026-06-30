@@ -32,7 +32,8 @@ jobs:
       - name: Gyűjtő futtatása
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_MODEL: claude-haiku-4-5
+          # Keresés+szintézis: Sonnet 4.6 dinamikus szűrésű web search-csel (token-takarékos, megbízhatóbb)
+          ANTHROPIC_MODEL: claude-sonnet-4-6
           # A weboldal token-védett fogadó végpontja (a DB-írás ott történik).
           # Költözés után írd át a végleges domainre.
           COLLECT_URL: https://kissptrk.hu/borozzak/collect-ingest.php
