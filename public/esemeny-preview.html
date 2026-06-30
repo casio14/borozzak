@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>Előnézet — Esemény részletoldal (6 elrendezés)</title>
+  <title>Előnézet — Hero részletoldal (tömör szöveg + kis térkép)</title>
   <style>
     :root {
       --wine-900: #4a0e1c; --wine-700: #722f37; --wine-500: #8c3b46;
@@ -15,33 +15,40 @@
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--cream); color: var(--ink);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; }
-    .pagebar { background: var(--wine-900); color: var(--cream); padding: 1.25rem; text-align: center; position: sticky; top: 0; z-index: 50; }
-    .pagebar h1 { margin: 0 0 .25rem; font-size: 1.2rem; }
-    .pagebar p { margin: 0; color: var(--gold-200); font-size: .88rem; }
+    .pagebar { background: var(--wine-900); color: var(--cream); padding: 1.1rem; text-align: center; position: sticky; top: 0; z-index: 50; }
+    .pagebar h1 { margin: 0 0 .25rem; font-size: 1.15rem; }
+    .pagebar p { margin: 0; color: var(--gold-200); font-size: .86rem; }
     .variant { border-top: 10px solid #e7dccb; padding: 1.5rem 1.25rem 3rem; }
     .variant__label { display: inline-block; background: var(--gold); color: var(--wine-900); font-weight: 800;
       font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; padding: .25rem .6rem; border-radius: 999px; }
-    .variant__note { margin: .5rem 0 1.5rem; color: var(--muted); font-size: .9rem; max-width: 70ch; }
+    .variant__note { margin: .5rem 0 1.5rem; color: var(--muted); font-size: .9rem; max-width: 72ch; }
 
     .btn { display: inline-block; padding: .8rem 1.4rem; border-radius: 10px; font-weight: 700; text-decoration: none; text-align: center; }
     .btn--primary { background: var(--wine-700); color: #fff; }
-    .btn--primary:hover { background: var(--wine-900); }
     .btn--ghost { background: transparent; color: var(--wine-700); border: 1px solid var(--line); }
-    .btn--ghost:hover { border-color: var(--gold); }
     .btn--block { display: block; width: 100%; }
     .tag { font-size: .75rem; font-weight: 600; background: #f0e7d8; color: var(--wine-700); padding: .2rem .55rem; border-radius: 999px; }
-    .status { display: inline-flex; align-items: center; line-height: 1; font-size: .68rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .03em; padding: .28rem .55rem; border-radius: 999px; vertical-align: middle; }
-    .status.is-soon { background: var(--gold); color: var(--wine-900); }
-    .back { display: inline-block; margin-bottom: 1rem; color: var(--wine-700); font-weight: 600; text-decoration: none; }
-    .mapbox { border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
-    .mapbox img { display: block; width: 100%; height: 100%; object-fit: cover; }
     .tags { display: flex; flex-wrap: wrap; gap: .4rem; }
     .lead { font-size: 1.13rem; color: #4a3b36; }
     .desc { color: #4a3b36; line-height: 1.8; }
     .actions { display: flex; flex-wrap: wrap; gap: .7rem; }
+    .back { display: inline-block; margin-bottom: 1rem; color: var(--wine-700); font-weight: 600; text-decoration: none; }
+    .mapbox { border-radius: 12px; overflow: hidden; border: 1px solid var(--line); position: relative; }
+    .mapbox img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .maplink { margin: .5rem 0 0; font-size: .85rem; }
+    .maplink a { color: var(--wine-700); font-weight: 700; text-decoration: none; }
 
-    /* tény-chipek (hibrid) */
+    /* tény-lista (oldalsáv) */
+    .info { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: .35rem 1.1rem; box-shadow: var(--shadow); }
+    .info--flat { border: none; box-shadow: none; padding: 0; }
+    .info__row { display: flex; align-items: center; gap: .7rem; padding: .65rem 0; border-bottom: 1px solid var(--line); }
+    .info__row:last-child { border-bottom: none; }
+    .info__ic { flex: none; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; background: #f6efe1; color: var(--wine-700); border: 1px solid var(--line); }
+    .info__ic svg { width: 16px; height: 16px; }
+    .info__k { font-size: .72rem; font-weight: 700; color: var(--wine-700); text-transform: uppercase; letter-spacing: .03em; display: block; }
+    .info__v { font-weight: 700; color: var(--ink); display: block; }
+
+    /* tény-chipek (egyhasábhoz) */
     .facts { display: flex; flex-wrap: wrap; gap: .7rem; }
     .fact { display: flex; align-items: center; gap: .6rem; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: .55rem .85rem; }
     .fact__ic { flex: none; width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border-radius: 9px; background: var(--wine-700); color: #fff; }
@@ -49,89 +56,32 @@
     .fact__k { display: block; font-size: .72rem; font-weight: 700; color: var(--wine-700); text-transform: uppercase; letter-spacing: .03em; }
     .fact__v { display: block; font-weight: 700; color: var(--ink); }
 
-    /* tény-lista (oldalsávhoz) */
-    .info { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: .35rem 1.1rem; box-shadow: var(--shadow); }
-    .info__row { display: flex; align-items: center; gap: .7rem; padding: .7rem 0; border-bottom: 1px solid var(--line); }
-    .info__row:last-child { border-bottom: none; }
-    .info__ic { flex: none; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; background: #f6efe1; color: var(--wine-700); border: 1px solid var(--line); }
-    .info__ic svg { width: 16px; height: 16px; }
-    .info__k { font-size: .72rem; font-weight: 700; color: var(--wine-700); text-transform: uppercase; letter-spacing: .03em; display: block; }
-    .info__v { font-weight: 700; color: var(--ink); display: block; }
+    /* ===== HERO: tömör sáv (kép felül, alatta tömör burgundi sáv a címmel) ===== */
+    .hero { border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+    .hero__imgwrap { position: relative; }
+    .hero__imgwrap img { display: block; width: 100%; height: 300px; object-fit: cover; }
+    .hero__badge { position: absolute; top: .8rem; left: .8rem; background: var(--gold); color: var(--wine-900); font-size: .7rem; font-weight: 800; text-transform: uppercase; padding: .25rem .55rem; border-radius: 6px; }
+    .hero__band { background: linear-gradient(135deg, var(--wine-700), var(--wine-900)); color: #fff; padding: 1.1rem 1.5rem; }
+    .hero__band h1 { margin: 0 0 .2rem; font-size: clamp(1.5rem, 3.8vw, 2.2rem); }
+    .hero__band .when { color: var(--gold-200); font-weight: 700; }
 
-    /* ===== O1 egyhasáb ===== */
-    .o1 { max-width: 820px; margin: 0 auto; }
-    .o1__img { width: 100%; max-height: 420px; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--line); }
-    .o1 h1 { margin: 1.1rem 0 .4rem; color: var(--wine-900); font-size: clamp(1.6rem, 4vw, 2.3rem); }
-    .o1__meta { color: var(--wine-700); font-weight: 700; margin: 0 0 1.1rem; display: flex; align-items: center; gap: .6rem; }
-    .o1 .facts, .o1 .tags { margin-bottom: 1.3rem; }
-    .o1 .actions { margin: 1.4rem 0; }
-    .o1 .mapbox { height: 280px; }
+    /* ===== HERO-P: tömör panel az képen ===== */
+    .heroP { position: relative; border-radius: 18px; overflow: hidden; min-height: 360px; display: flex; align-items: flex-end; margin-bottom: 1.5rem; box-shadow: var(--shadow); }
+    .heroP img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .heroP__panel { position: relative; margin: 1.4rem; background: var(--wine-900); color: #fff; padding: 1.1rem 1.35rem; border-radius: 14px; max-width: 580px; box-shadow: 0 12px 30px rgba(0,0,0,.4); }
+    .heroP__panel .badge { display: inline-block; background: var(--gold); color: var(--wine-900); font-size: .68rem; font-weight: 800; text-transform: uppercase; padding: .2rem .5rem; border-radius: 6px; margin-bottom: .5rem; }
+    .heroP__panel h1 { margin: 0 0 .2rem; font-size: clamp(1.5rem, 3.8vw, 2.2rem); }
+    .heroP__panel .when { color: var(--gold-200); font-weight: 700; }
 
-    /* ===== O2 kétoszlopos ragadós oldalsáv ===== */
-    .o2 { max-width: 1040px; margin: 0 auto; }
-    .o2 h1 { margin: .2rem 0 .4rem; color: var(--wine-900); font-size: clamp(1.6rem, 4vw, 2.3rem); }
-    .o2__meta { color: var(--wine-700); font-weight: 700; margin: 0 0 1.2rem; display: flex; align-items: center; gap: .6rem; }
-    .o2__grid { display: grid; grid-template-columns: 1fr 330px; gap: 2rem; align-items: start; }
-    .o2__img { width: 100%; max-height: 380px; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--line); margin-bottom: 1.1rem; }
-    .o2 .tags { margin-bottom: 1rem; }
-    .o2__aside { position: sticky; top: 5.5rem; display: flex; flex-direction: column; gap: 1rem; }
-    .o2__aside .actions { flex-direction: column; }
-    .o2__card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 1rem 1.1rem 1.2rem; box-shadow: var(--shadow); }
-    .o2__card .info { border: none; box-shadow: none; padding: 0 0 .5rem; }
-    .o2 .mapbox { height: 180px; }
-    @media (max-width: 760px) { .o2__grid { grid-template-columns: 1fr; } .o2__aside { position: static; } }
-
-    /* ===== O3 hero-borítós ===== */
-    .o3 { max-width: 1040px; margin: 0 auto; }
-    .o3__hero { position: relative; border-radius: 18px; overflow: hidden; min-height: 340px; display: flex; align-items: flex-end; margin-bottom: 1.4rem; }
-    .o3__hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .o3__hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(74,14,28,.05) 30%, rgba(44,7,18,.85)); }
-    .o3__hin { position: relative; color: #fff; padding: 1.6rem; }
-    .o3__hin .badge { display: inline-block; background: var(--gold); color: var(--wine-900); font-size: .7rem; font-weight: 800; text-transform: uppercase; padding: .25rem .55rem; border-radius: 6px; margin-bottom: .55rem; }
-    .o3__hin h1 { margin: 0 0 .3rem; font-size: clamp(1.7rem, 4.5vw, 2.6rem); text-shadow: 0 2px 14px rgba(0,0,0,.5); }
-    .o3__hin .when { color: var(--gold-200); font-weight: 700; }
-    .o3__grid { display: grid; grid-template-columns: 1fr 330px; gap: 2rem; align-items: start; }
-    .o3__aside { position: sticky; top: 5.5rem; display: flex; flex-direction: column; gap: 1rem; }
-    .o3__aside .actions { flex-direction: column; }
-    .o3 .mapbox { height: 180px; }
-    @media (max-width: 760px) { .o3__grid { grid-template-columns: 1fr; } .o3__aside { position: static; } .o3__hero { min-height: 240px; } }
-
-    /* ===== O4 split borító felül ===== */
-    .o4 { max-width: 980px; margin: 0 auto; }
-    .o4__top { display: grid; grid-template-columns: 1.15fr 1fr; gap: 1.75rem; align-items: start; margin-bottom: 1.5rem; }
-    .o4__img { width: 100%; height: 100%; min-height: 260px; max-height: 360px; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--line); }
-    .o4 h1 { margin: 0 0 .4rem; color: var(--wine-900); font-size: clamp(1.5rem, 3.5vw, 2.1rem); }
-    .o4__meta { color: var(--wine-700); font-weight: 700; margin: 0 0 1rem; display: flex; align-items: center; gap: .6rem; }
-    .o4__top .info { margin-bottom: 1rem; }
-    .o4__top .actions { flex-direction: column; }
-    .o4__desc-wrap .tags { margin: 0 0 1rem; }
-    .o4 .mapbox { height: 260px; margin-top: 1.25rem; }
-    @media (max-width: 720px) { .o4__top { grid-template-columns: 1fr; } }
-
-    /* ===== O5 magazinos keskeny ===== */
-    .o5 { max-width: 760px; margin: 0 auto; }
-    .o5__img { width: 100%; max-height: 440px; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--line); }
-    .o5__eyebrow { margin: 1.2rem 0 .3rem; text-transform: uppercase; letter-spacing: .18em; font-size: .74rem; font-weight: 800; color: var(--gold); }
-    .o5 h1 { margin: 0 0 .5rem; color: var(--wine-900); font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.8rem, 4.5vw, 2.6rem); line-height: 1.15; }
-    .o5__inline { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1.1rem; padding: .9rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 1rem 0 1.4rem; }
-    .o5__initem { display: inline-flex; align-items: center; gap: .5rem; font-weight: 700; color: var(--ink); }
-    .o5__initem svg { width: 18px; height: 18px; color: var(--wine-700); }
-    .o5__sep { width: 1px; height: 1.1rem; background: var(--line); }
-    .o5 .lead { font-size: 1.2rem; }
-    .o5 .actions { margin: 1.5rem 0; }
-    .o5 .mapbox { height: 280px; }
-
-    /* ===== O6 keretezett kártya ===== */
-    .o6 { max-width: 900px; margin: 0 auto; }
-    .o6__card { background: var(--paper); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); }
-    .o6__img { width: 100%; height: 300px; object-fit: cover; display: block; }
-    .o6__head { background: linear-gradient(135deg, var(--wine-700), var(--wine-900)); color: #fff; padding: 1.4rem 1.6rem; }
-    .o6__head h1 { margin: 0 0 .25rem; font-size: clamp(1.5rem, 3.5vw, 2.1rem); }
-    .o6__head .when { color: var(--gold-200); font-weight: 700; }
-    .o6__body { padding: 1.5rem 1.6rem; }
-    .o6__body .facts, .o6__body .tags { margin-bottom: 1.2rem; }
-    .o6__body .actions { margin: 1.3rem 0; }
-    .o6 .mapbox { height: 240px; }
+    /* layout */
+    .wrap { max-width: 1040px; margin: 0 auto; }
+    .wrap-narrow { max-width: 820px; margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: start; }
+    .aside { position: sticky; top: 5rem; display: flex; flex-direction: column; gap: 1rem; }
+    .aside .actions { flex-direction: column; }
+    .card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 1rem 1.1rem 1.2rem; box-shadow: var(--shadow); }
+    .card .actions { margin-top: .9rem; }
+    @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } .aside { position: static; } }
   </style>
 </head>
 <body>
@@ -143,165 +93,165 @@
   </svg>
 
   <div class="pagebar">
-    <h1>Esemény részletoldal — 6 elrendezés</h1>
-    <p>Görgess végig, és mondd a számát. Mintaadatok, a térkép placeholder kép.</p>
+    <h1>Hero részletoldal — tömör szöveg + kis térkép (5 változat)</h1>
+    <p>Mind a 3-as hero alapján; a cím tömör háttéren. A „térkép" placeholder kép.</p>
   </div>
 
-  <!-- O1 -->
+  <!-- V1: tömör sáv hero + kis térkép az oldalsávban -->
   <section class="variant">
-    <span class="variant__label">1 · Klasszikus egyhasáb</span>
-    <p class="variant__note">Egyszerű, központi hasáb: borító, cím, tény-chipek, leírás, gombok, térkép. Letisztult, mobilon is jó.</p>
-    <article class="o1">
+    <span class="variant__label">1 · Tömör sáv + kis térkép az oldalsávban</span>
+    <p class="variant__note">A cím egy tömör borvörös sávban a kép alatt (semmi áttetszőség). Jobb oldalt infókártya a gombokkal, alatta egy kis térkép.</p>
+    <div class="wrap">
       <a class="back" href="#">← Vissza az eseményekhez</a>
-      <img class="o1__img" src="https://picsum.photos/seed/bor1/1000/420" alt="">
-      <h1>Budapesti Bor Napok 2026</h1>
-      <p class="o1__meta">2026. július 25–27. <span class="status is-soon">Hamarosan</span></p>
-      <div class="facts">
-        <div class="fact"><span class="fact__ic"><svg><use href="#ic-cal"/></svg></span><span><span class="fact__k">Mikor</span><span class="fact__v">Júl. 25–27.</span></span></div>
-        <div class="fact"><span class="fact__ic"><svg><use href="#ic-pin"/></svg></span><span><span class="fact__k">Hol</span><span class="fact__v">Budai Vár, Budapest</span></span></div>
-        <div class="fact"><span class="fact__ic"><svg><use href="#ic-map"/></svg></span><span><span class="fact__k">Borvidék</span><span class="fact__v">Etyek-Budai</span></span></div>
-        <div class="fact"><span class="fact__ic"><svg><use href="#ic-tag"/></svg></span><span><span class="fact__k">Ár</span><span class="fact__v">3 900 Ft-tól</span></span></div>
+      <div class="hero">
+        <div class="hero__imgwrap"><img src="https://picsum.photos/seed/bor1/1100/500" alt=""><span class="hero__badge">Kiemelt</span></div>
+        <div class="hero__band"><h1>Budapesti Bor Napok 2026</h1><div class="when">2026. július 25–27. · Budai Vár, Budapest</div></div>
       </div>
-      <div class="tags"><span class="tag">Borfesztivál</span><span class="tag">Kóstoló</span></div>
-      <p class="lead">Három napon át a magyar borvidékek legjobbjai a Budai Várban — kóstolók, koncertek, gasztronómia.</p>
-      <div class="desc"><p>Több mint 200 borászat, mesterkurzusok és esti koncertek a panorámás várfalak között. A belépő kóstolópoharat tartalmaz.</p></div>
-      <div class="actions"><a class="btn btn--primary" href="#">Jegyek →</a><a class="btn btn--ghost" href="#">Hivatalos oldal →</a><a class="btn btn--ghost" href="#">Facebook →</a><a class="btn btn--ghost" href="#">＋ Naptárhoz adom</a></div>
-      <div class="mapbox"><img src="https://picsum.photos/seed/map1/1000/300" alt=""></div>
-    </article>
-  </section>
-
-  <!-- O2 -->
-  <section class="variant">
-    <span class="variant__label">2 · Kétoszlopos, ragadós oldalsáv</span>
-    <p class="variant__note">„Termékoldalas": balra kép és leírás, jobbra görgetéskor velünk maradó infókártya a kulcsadatokkal és a gombokkal, alatta mini-térkép. A gomb mindig kéznél van — jó a kattintáshoz.</p>
-    <article class="o2">
-      <a class="back" href="#">← Vissza az eseményekhez</a>
-      <h1>Budapesti Bor Napok 2026</h1>
-      <p class="o2__meta">2026. július 25–27. <span class="status is-soon">Hamarosan</span></p>
-      <div class="o2__grid">
-        <div>
-          <img class="o2__img" src="https://picsum.photos/seed/bor1/900/420" alt="">
-          <div class="tags"><span class="tag">Borfesztivál</span><span class="tag">Kóstoló</span></div>
-          <p class="lead">Három napon át a magyar borvidékek legjobbjai a Budai Várban — kóstolók, koncertek, gasztronómia.</p>
-          <div class="desc"><p>Több mint 200 borászat, mesterkurzusok és esti koncertek a panorámás várfalak között. A belépő kóstolópoharat tartalmaz. A kapunyitás mindennap 14:00.</p></div>
-        </div>
-        <aside class="o2__aside">
-          <div class="o2__card">
-            <div class="info">
-              <div class="info__row"><span class="info__ic"><svg><use href="#ic-cal"/></svg></span><span><span class="info__k">Mikor</span><span class="info__v">2026. júl. 25–27.</span></span></div>
-              <div class="info__row"><span class="info__ic"><svg><use href="#ic-pin"/></svg></span><span><span class="info__k">Hol</span><span class="info__v">Budai Vár, Budapest</span></span></div>
-              <div class="info__row"><span class="info__ic"><svg><use href="#ic-map"/></svg></span><span><span class="info__k">Borvidék</span><span class="info__v">Etyek-Budai</span></span></div>
-              <div class="info__row"><span class="info__ic"><svg><use href="#ic-tag"/></svg></span><span><span class="info__k">Ár</span><span class="info__v">3 900 Ft-tól</span></span></div>
-            </div>
-            <div class="actions"><a class="btn btn--primary btn--block" href="#">Jegyek →</a><a class="btn btn--ghost btn--block" href="#">Hivatalos oldal →</a><a class="btn btn--ghost btn--block" href="#">Facebook →</a><a class="btn btn--ghost btn--block" href="#">＋ Naptárhoz adom</a></div>
-          </div>
-          <div class="mapbox"><img src="https://picsum.photos/seed/map2/600/360" alt=""></div>
-        </aside>
-      </div>
-    </article>
-  </section>
-
-  <!-- O3 -->
-  <section class="variant">
-    <span class="variant__label">3 · Hero-borítós (átfedő cím)</span>
-    <p class="variant__note">Nagy borítókép sötét átmenettel, rajta a cím és dátum; alatta kétoszlopos infókártyával. A leglátványosabb — szép, nagy képeknél a legjobb.</p>
-    <article class="o3">
-      <a class="back" href="#">← Vissza az eseményekhez</a>
-      <div class="o3__hero"><img src="https://picsum.photos/seed/bor1/1100/500" alt="">
-        <div class="o3__hin"><span class="badge">Kiemelt</span><h1>Budapesti Bor Napok 2026</h1><div class="when">2026. július 25–27. · Budai Vár, Budapest</div></div>
-      </div>
-      <div class="o3__grid">
+      <div class="grid">
         <div>
           <div class="tags" style="margin-bottom:1rem"><span class="tag">Borfesztivál</span><span class="tag">Kóstoló</span></div>
           <p class="lead">Három napon át a magyar borvidékek legjobbjai a Budai Várban — kóstolók, koncertek, gasztronómia.</p>
           <div class="desc"><p>Több mint 200 borászat, mesterkurzusok és esti koncertek a panorámás várfalak között. A belépő kóstolópoharat tartalmaz.</p></div>
         </div>
-        <aside class="o3__aside">
-          <div class="info">
-            <div class="info__row"><span class="info__ic"><svg><use href="#ic-pin"/></svg></span><span><span class="info__k">Hol</span><span class="info__v">Budai Vár, Budapest</span></span></div>
-            <div class="info__row"><span class="info__ic"><svg><use href="#ic-map"/></svg></span><span><span class="info__k">Borvidék</span><span class="info__v">Etyek-Budai</span></span></div>
-            <div class="info__row"><span class="info__ic"><svg><use href="#ic-tag"/></svg></span><span><span class="info__k">Ár</span><span class="info__v">3 900 Ft-tól</span></span></div>
+        <aside class="aside">
+          <div class="card">
+            <div class="info info--flat">
+              <div class="info__row"><span class="info__ic"><svg><use href="#ic-pin"/></svg></span><span><span class="info__k">Hol</span><span class="info__v">Budai Vár, Budapest</span></span></div>
+              <div class="info__row"><span class="info__ic"><svg><use href="#ic-map"/></svg></span><span><span class="info__k">Borvidék</span><span class="info__v">Etyek-Budai</span></span></div>
+              <div class="info__row"><span class="info__ic"><svg><use href="#ic-tag"/></svg></span><span><span class="info__k">Ár</span><span class="info__v">3 900 Ft-tól</span></span></div>
+            </div>
+            <div class="actions"><a class="btn btn--primary btn--block" href="#">Jegyek →</a><a class="btn btn--ghost btn--block" href="#">Hivatalos oldal →</a><a class="btn btn--ghost btn--block" href="#">＋ Naptárhoz adom</a></div>
           </div>
-          <div class="actions"><a class="btn btn--primary btn--block" href="#">Jegyek →</a><a class="btn btn--ghost btn--block" href="#">Hivatalos oldal →</a><a class="btn btn--ghost btn--block" href="#">＋ Naptárhoz adom</a></div>
-          <div class="mapbox"><img src="https://picsum.photos/seed/map3/600/360" alt=""></div>
+          <div>
+            <div class="mapbox" style="height:170px"><img src="https://picsum.photos/seed/mapv1/600/340" alt=""></div>
+            <p class="maplink"><a href="#">Megnyitás Google Mapsben →</a></p>
+          </div>
         </aside>
       </div>
-    </article>
+    </div>
   </section>
 
-  <!-- O4 -->
+  <!-- V2: tömör sáv hero + kis térkép a leírás alatt (teljes szélességben, alacsony) -->
   <section class="variant">
-    <span class="variant__label">4 · Split borító felül</span>
-    <p class="variant__note">Felül kép balra, jobbra a cím + kulcsadatok + gombok egymás mellett; alatta a teljes szélességű leírás és térkép. Gyorsan átlátható „fejléc".</p>
-    <article class="o4">
+    <span class="variant__label">2 · Tömör sáv + kis térkép a leírás alatt</span>
+    <p class="variant__note">Ugyanaz a tömör sávos hero, de a kis térkép a fő tartalom alján, teljes szélességben, alacsony sávként. Az oldalsávban csak az adatok és a gombok.</p>
+    <div class="wrap">
       <a class="back" href="#">← Vissza az eseményekhez</a>
-      <div class="o4__top">
-        <img class="o4__img" src="https://picsum.photos/seed/bor1/700/500" alt="">
+      <div class="hero">
+        <div class="hero__imgwrap"><img src="https://picsum.photos/seed/bor1/1100/500" alt=""><span class="hero__badge">Kiemelt</span></div>
+        <div class="hero__band"><h1>Budapesti Bor Napok 2026</h1><div class="when">2026. július 25–27. · Budai Vár, Budapest</div></div>
+      </div>
+      <div class="grid">
         <div>
-          <h1>Budapesti Bor Napok 2026</h1>
-          <p class="o4__meta">2026. július 25–27. <span class="status is-soon">Hamarosan</span></p>
-          <div class="info">
-            <div class="info__row"><span class="info__ic"><svg><use href="#ic-pin"/></svg></span><span><span class="info__k">Hol</span><span class="info__v">Budai Vár, Budapest</span></span></div>
-            <div class="info__row"><span class="info__ic"><svg><use href="#ic-map"/></svg></span><span><span class="info__k">Borvidék</span><span class="info__v">Etyek-Budai</span></span></div>
-            <div class="info__row"><span class="info__ic"><svg><use href="#ic-tag"/></svg></span><span><span class="info__k">Ár</span><span class="info__v">3 900 Ft-tól</span></span></div>
-          </div>
-          <div class="actions" style="margin-top:1rem"><a class="btn btn--primary btn--block" href="#">Jegyek →</a><a class="btn btn--ghost btn--block" href="#">Hivatalos oldal →</a><a class="btn btn--ghost btn--block" href="#">＋ Naptárhoz adom</a></div>
-        </div>
-      </div>
-      <div class="o4__desc-wrap">
-        <div class="tags"><span class="tag">Borfesztivál</span><span class="tag">Kóstoló</span></div>
-        <p class="lead">Három napon át a magyar borvidékek legjobbjai a Budai Várban — kóstolók, koncertek, gasztronómia.</p>
-        <div class="desc"><p>Több mint 200 borászat, mesterkurzusok és esti koncertek a panorámás várfalak között. A belépő kóstolópoharat tartalmaz.</p></div>
-        <div class="mapbox"><img src="https://picsum.photos/seed/map4/1000/300" alt=""></div>
-      </div>
-    </article>
-  </section>
-
-  <!-- O5 -->
-  <section class="variant">
-    <span class="variant__label">5 · Magazinos, keskeny</span>
-    <p class="variant__note">Keskeny, olvasásra optimalizált hasáb nagy szerif címmel, a tény-adatok egy elegáns, elválasztós sorban. Letisztult, „lapszerű" hangulat.</p>
-    <article class="o5">
-      <a class="back" href="#">← Vissza az eseményekhez</a>
-      <img class="o5__img" src="https://picsum.photos/seed/bor1/900/440" alt="">
-      <p class="o5__eyebrow">Borfesztivál · Etyek-Budai</p>
-      <h1>Budapesti Bor Napok 2026</h1>
-      <div class="o5__inline">
-        <span class="o5__initem"><svg><use href="#ic-cal"/></svg>Júl. 25–27.</span><span class="o5__sep"></span>
-        <span class="o5__initem"><svg><use href="#ic-pin"/></svg>Budai Vár, Budapest</span><span class="o5__sep"></span>
-        <span class="o5__initem"><svg><use href="#ic-tag"/></svg>3 900 Ft-tól</span>
-      </div>
-      <p class="lead">Három napon át a magyar borvidékek legjobbjai a Budai Várban — kóstolók, koncertek, gasztronómia.</p>
-      <div class="desc"><p>Több mint 200 borászat, mesterkurzusok és esti koncertek a panorámás várfalak között. A belépő kóstolópoharat tartalmaz. A kapunyitás mindennap 14:00, a helyszín tömegközlekedéssel könnyen elérhető.</p></div>
-      <div class="actions"><a class="btn btn--primary" href="#">Jegyek →</a><a class="btn btn--ghost" href="#">Hivatalos oldal →</a><a class="btn btn--ghost" href="#">＋ Naptárhoz adom</a></div>
-      <div class="mapbox"><img src="https://picsum.photos/seed/map5/900/280" alt=""></div>
-    </article>
-  </section>
-
-  <!-- O6 -->
-  <section class="variant">
-    <span class="variant__label">6 · Keretezett kártya</span>
-    <p class="variant__note">Minden egyetlen, kiemelt fehér kártyában, borvörös fejléc-sávval (cím + dátum). Egységes, „dobozolt" megjelenés, jól elválik a háttértől.</p>
-    <article class="o6">
-      <a class="back" href="#">← Vissza az eseményekhez</a>
-      <div class="o6__card">
-        <img class="o6__img" src="https://picsum.photos/seed/bor1/1000/300" alt="">
-        <div class="o6__head"><h1>Budapesti Bor Napok 2026</h1><div class="when">2026. július 25–27. · Budai Vár, Budapest</div></div>
-        <div class="o6__body">
-          <div class="facts">
-            <div class="fact"><span class="fact__ic"><svg><use href="#ic-cal"/></svg></span><span><span class="fact__k">Mikor</span><span class="fact__v">Júl. 25–27.</span></span></div>
-            <div class="fact"><span class="fact__ic"><svg><use href="#ic-pin"/></svg></span><span><span class="fact__k">Hol</span><span class="fact__v">Budai Vár, Budapest</span></span></div>
-            <div class="fact"><span class="fact__ic"><svg><use href="#ic-map"/></svg></span><span><span class="fact__k">Borvidék</span><span class="fact__v">Etyek-Budai</span></span></div>
-            <div class="fact"><span class="fact__ic"><svg><use href="#ic-tag"/></svg></span><span><span class="fact__k">Ár</span><span class="fact__v">3 900 Ft-tól</span></span></div>
-          </div>
-          <div class="tags"><span class="tag">Borfesztivál</span><span class="tag">Kóstoló</span></div>
+          <div class="tags" style="margin-bottom:1rem"><span class="tag">Borfesztivál</span><span class="tag">Kóstoló</span></div>
           <p class="lead">Három napon át a magyar borvidékek legjobbjai a Budai Várban — kóstolók, koncertek, gasztronómia.</p>
           <div class="desc"><p>Több mint 200 borászat, mesterkurzusok és esti koncertek a panorámás várfalak között. A belépő kóstolópoharat tartalmaz.</p></div>
-          <div class="actions"><a class="btn btn--primary" href="#">Jegyek →</a><a class="btn btn--ghost" href="#">Hivatalos oldal →</a><a class="btn btn--ghost" href="#">Facebook →</a><a class="btn btn--ghost" href="#">＋ Naptárhoz adom</a></div>
-          <div class="mapbox"><img src="https://picsum.photos/seed/map6/1000/260" alt=""></div>
+          <div style="margin-top:1.3rem">
+            <div class="mapbox" style="height:200px"><img src="https://picsum.photos/seed/mapv2/1000/300" alt=""></div>
+            <p class="maplink"><a href="#">Megnyitás Google Mapsben / útvonalterv →</a></p>
+          </div>
         </div>
+        <aside class="aside">
+          <div class="card">
+            <div class="info info--flat">
+              <div class="info__row"><span class="info__ic"><svg><use href="#ic-cal"/></svg></span><span><span class="info__k">Mikor</span><span class="info__v">Júl. 25–27.</span></span></div>
+              <div class="info__row"><span class="info__ic"><svg><use href="#ic-pin"/></svg></span><span><span class="info__k">Hol</span><span class="info__v">Budai Vár, Budapest</span></span></div>
+              <div class="info__row"><span class="info__ic"><svg><use href="#ic-tag"/></svg></span><span><span class="info__k">Ár</span><span class="info__v">3 900 Ft-tól</span></span></div>
+            </div>
+            <div class="actions"><a class="btn btn--primary btn--block" href="#">Jegyek →</a><a class="btn btn--ghost btn--block" href="#">Hivatalos oldal →</a><a class="btn btn--ghost btn--block" href="#">＋ Naptárhoz adom</a></div>
+          </div>
+        </aside>
       </div>
-    </article>
+    </div>
+  </section>
+
+  <!-- V3: tömör panel hero + kis térkép az oldalsávban -->
+  <section class="variant">
+    <span class="variant__label">3 · Tömör panel a képen + kis térkép az oldalsávban</span>
+    <p class="variant__note">A cím egy tömör borvörös panelban a képen (a kép látszik körülötte, de a szöveg mögött nem). Oldalsávban gombok + kis térkép.</p>
+    <div class="wrap">
+      <a class="back" href="#">← Vissza az eseményekhez</a>
+      <div class="heroP">
+        <img src="https://picsum.photos/seed/bor1/1100/520" alt="">
+        <div class="heroP__panel"><span class="badge">Kiemelt</span><h1>Budapesti Bor Napok 2026</h1><div class="when">2026. július 25–27. · Budai Vár, Budapest</div></div>
+      </div>
+      <div class="grid">
+        <div>
+          <div class="tags" style="margin-bottom:1rem"><span class="tag">Borfesztivál</span><span class="tag">Kóstoló</span></div>
+          <p class="lead">Három napon át a magyar borvidékek legjobbjai a Budai Várban — kóstolók, koncertek, gasztronómia.</p>
+          <div class="desc"><p>Több mint 200 borászat, mesterkurzusok és esti koncertek a panorámás várfalak között. A belépő kóstolópoharat tartalmaz.</p></div>
+        </div>
+        <aside class="aside">
+          <div class="card">
+            <div class="info info--flat">
+              <div class="info__row"><span class="info__ic"><svg><use href="#ic-pin"/></svg></span><span><span class="info__k">Hol</span><span class="info__v">Budai Vár, Budapest</span></span></div>
+              <div class="info__row"><span class="info__ic"><svg><use href="#ic-map"/></svg></span><span><span class="info__k">Borvidék</span><span class="info__v">Etyek-Budai</span></span></div>
+              <div class="info__row"><span class="info__ic"><svg><use href="#ic-tag"/></svg></span><span><span class="info__k">Ár</span><span class="info__v">3 900 Ft-tól</span></span></div>
+            </div>
+            <div class="actions"><a class="btn btn--primary btn--block" href="#">Jegyek →</a><a class="btn btn--ghost btn--block" href="#">Hivatalos oldal →</a><a class="btn btn--ghost btn--block" href="#">＋ Naptárhoz adom</a></div>
+          </div>
+          <div>
+            <div class="mapbox" style="height:170px"><img src="https://picsum.photos/seed/mapv3/600/340" alt=""></div>
+            <p class="maplink"><a href="#">Megnyitás Google Mapsben →</a></p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- V4: tömör sáv hero + térkép az infókártyán belül -->
+  <section class="variant">
+    <span class="variant__label">4 · Tömör sáv + térkép az infókártyában</span>
+    <p class="variant__note">A kis térkép közvetlenül az adatok alatt, ugyanabban az infókártyában — minden egy helyen jobb oldalt. Kompakt, egységes.</p>
+    <div class="wrap">
+      <a class="back" href="#">← Vissza az eseményekhez</a>
+      <div class="hero">
+        <div class="hero__imgwrap"><img src="https://picsum.photos/seed/bor1/1100/500" alt=""><span class="hero__badge">Kiemelt</span></div>
+        <div class="hero__band"><h1>Budapesti Bor Napok 2026</h1><div class="when">2026. július 25–27. · Budai Vár, Budapest</div></div>
+      </div>
+      <div class="grid">
+        <div>
+          <div class="tags" style="margin-bottom:1rem"><span class="tag">Borfesztivál</span><span class="tag">Kóstoló</span></div>
+          <p class="lead">Három napon át a magyar borvidékek legjobbjai a Budai Várban — kóstolók, koncertek, gasztronómia.</p>
+          <div class="desc"><p>Több mint 200 borászat, mesterkurzusok és esti koncertek a panorámás várfalak között. A belépő kóstolópoharat tartalmaz.</p></div>
+        </div>
+        <aside class="aside">
+          <div class="card">
+            <div class="info info--flat">
+              <div class="info__row"><span class="info__ic"><svg><use href="#ic-pin"/></svg></span><span><span class="info__k">Hol</span><span class="info__v">Budai Vár, Budapest</span></span></div>
+              <div class="info__row"><span class="info__ic"><svg><use href="#ic-tag"/></svg></span><span><span class="info__k">Ár</span><span class="info__v">3 900 Ft-tól</span></span></div>
+            </div>
+            <div class="mapbox" style="height:150px; margin-top:.6rem"><img src="https://picsum.photos/seed/mapv4/600/300" alt=""></div>
+            <div class="actions"><a class="btn btn--primary btn--block" href="#">Jegyek →</a><a class="btn btn--ghost btn--block" href="#">Hivatalos oldal →</a><a class="btn btn--ghost btn--block" href="#">＋ Naptárhoz adom</a></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- V5: tömör sáv hero, EGY hasáb (nincs oldalsáv) + chipek + kis térkép -->
+  <section class="variant">
+    <span class="variant__label">5 · Tömör sáv, egy hasáb + kis térkép</span>
+    <p class="variant__note">Oldalsáv nélkül, egy központi hasáb: tény-chipek, leírás, gombok, és egy kis térkép a végén. Egyszerűbb, mobilon is ugyanígy néz ki.</p>
+    <div class="wrap-narrow">
+      <a class="back" href="#">← Vissza az eseményekhez</a>
+      <div class="hero">
+        <div class="hero__imgwrap"><img src="https://picsum.photos/seed/bor1/1000/440" alt=""><span class="hero__badge">Kiemelt</span></div>
+        <div class="hero__band"><h1>Budapesti Bor Napok 2026</h1><div class="when">2026. július 25–27. · Budai Vár, Budapest</div></div>
+      </div>
+      <div class="facts" style="margin-bottom:1.3rem">
+        <div class="fact"><span class="fact__ic"><svg><use href="#ic-cal"/></svg></span><span><span class="fact__k">Mikor</span><span class="fact__v">Júl. 25–27.</span></span></div>
+        <div class="fact"><span class="fact__ic"><svg><use href="#ic-pin"/></svg></span><span><span class="fact__k">Hol</span><span class="fact__v">Budai Vár, Budapest</span></span></div>
+        <div class="fact"><span class="fact__ic"><svg><use href="#ic-map"/></svg></span><span><span class="fact__k">Borvidék</span><span class="fact__v">Etyek-Budai</span></span></div>
+        <div class="fact"><span class="fact__ic"><svg><use href="#ic-tag"/></svg></span><span><span class="fact__k">Ár</span><span class="fact__v">3 900 Ft-tól</span></span></div>
+      </div>
+      <div class="tags" style="margin-bottom:1rem"><span class="tag">Borfesztivál</span><span class="tag">Kóstoló</span></div>
+      <p class="lead">Három napon át a magyar borvidékek legjobbjai a Budai Várban — kóstolók, koncertek, gasztronómia.</p>
+      <div class="desc"><p>Több mint 200 borászat, mesterkurzusok és esti koncertek a panorámás várfalak között. A belépő kóstolópoharat tartalmaz.</p></div>
+      <div class="actions" style="margin:1.4rem 0"><a class="btn btn--primary" href="#">Jegyek →</a><a class="btn btn--ghost" href="#">Hivatalos oldal →</a><a class="btn btn--ghost" href="#">Facebook →</a><a class="btn btn--ghost" href="#">＋ Naptárhoz adom</a></div>
+      <div class="mapbox" style="height:200px"><img src="https://picsum.photos/seed/mapv5/1000/300" alt=""></div>
+      <p class="maplink"><a href="#">Megnyitás Google Mapsben / útvonalterv →</a></p>
+    </div>
   </section>
 
 </body>
