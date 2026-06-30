@@ -141,7 +141,7 @@ if (!is_array($items)) {
 echo "[" . date('c') . "] Talált elemek: " . count($items) . " — beküldés a weboldalra…\n";
 
 try {
-    $payload = json_encode(['events' => $items], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $payload = json_encode(['token' => $collectToken, 'events' => $items], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     [$code, $resp] = httpPost($collectUrl, $payload, [
         'content-type: application/json',
         'x-collect-token: ' . $collectToken,

@@ -21,17 +21,21 @@ function collectToken(): string
     return '';
 }
 
-$expected = collectToken();
-$given = (string) ($_SERVER['HTTP_X_COLLECT_TOKEN'] ?? '');
-if ($expected === '' || !hash_equals($expected, $given)) {
-    http_response_code(403);
-    echo json_encode(['error' => 'forbidden']);
-    exit;
-}
-
 $raw = file_get_contents('php://input') ?: '';
 $data = json_decode($raw, true);
 $items = is_array($data['events'] ?? null) ? $data['events'] : [];
+
+// Token: fejlécből vagy a kérés törzséből (ha a hoszt szűrné a fejlécet)
+$expected = collectToken();
+$given = (string) ($_SERVER['HTTP_X_COLLECT_TOKEN'] ?? '');
+if ($given === '' && is_array($data)) {
+    $given = (string) ($data['token'] ?? '');
+}
+if ($expected === '' || !hash_equals($expected, $given)) {
+    http_response_code(403);
+    echo json_encode(['error' => 'forbidden', 'hint' => $expected === '' ? 'config collect_token ures (deploy kell)' : 'token nem egyezik']);
+    exit;
+}
 
 $added = 0;
 $skipped = 0;
