@@ -92,6 +92,7 @@ $jsVer  = @filemtime(__DIR__ . '/../assets/app.js') ?: time();
 <body>
   <header class="site-header">
     <div class="site-header__inner">
+      <input type="checkbox" id="nav-toggle" class="nav-toggle">
       <a class="brand" href="./" aria-label="holborozzak.hu — kezdőlap">
         <svg class="brand__icon" width="44" height="44" viewBox="0 0 32 32" aria-hidden="true">
           <path d="M16 7c1.8-2.6 5.2-2.8 6.6-1.8-.6 2.6-3.2 3.8-5.4 3.8" fill="#5a6b3b"/>
@@ -148,6 +149,14 @@ $jsVer  = @filemtime(__DIR__ . '/../assets/app.js') ?: time();
             <line x1="21" y1="21" x2="16.5" y2="16.5"/>
           </svg>
         </a>
+        <label class="nav-burger" for="nav-toggle" aria-label="Menü">
+          <svg class="nav-burger__open" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+          <svg class="nav-burger__close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>
+          </svg>
+        </label>
       </div>
     </div>
   </header>

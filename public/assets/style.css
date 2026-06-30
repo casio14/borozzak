@@ -115,9 +115,43 @@ a { color: var(--wine-700); }
 }
 .site-nav__search:hover { background: #e6d8c1; }
 
+/* Hamburger (mobil) — alapból rejtve, csak ≤760px-en jelenik meg */
+.nav-toggle { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.nav-burger {
+  display: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #efe6d6;
+  color: var(--wine-700);
+  cursor: pointer;
+}
+.nav-burger:hover { background: #e6d8c1; }
+.nav-burger__close { display: none; }
+
 @media (max-width: 760px) {
-  /* Mobil: a középső menü egyelőre rejtve (teljes mobilnav később jön) */
-  .site-nav { display: none; }
+  .nav-burger { display: inline-grid; }
+  /* Nyitott állapot: hamburger → X */
+  #nav-toggle:checked ~ .site-header__actions .nav-burger__open { display: none; }
+  #nav-toggle:checked ~ .site-header__actions .nav-burger__close { display: block; }
+  /* A menü legördülő panelként a fejléc alatt */
+  .site-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: .25rem;
+    background: var(--cream);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 8px 20px rgba(74, 14, 28, .1);
+    padding: .6rem 1rem 1rem;
+  }
+  #nav-toggle:checked ~ .site-nav { display: flex; }
+  .site-nav a { font-size: 1.05rem; justify-content: flex-start; padding: .75rem .9rem; border-radius: 10px; }
 }
 
 /* ---------- Fő tartalom ---------- */
