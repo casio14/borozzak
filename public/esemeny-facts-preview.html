@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Előnézet — Esemény tény-blokk variációk</title>
+  <style>
+    :root {
+      --wine-900: #4a0e1c; --wine-700: #722f37; --wine-500: #8c3b46;
+      --gold: #c8a14b; --gold-200: #e3cd97; --leaf: #5a6b3b;
+      --cream: #f7f2ea; --paper: #fffdf9; --ink: #2b1d20; --muted: #8a7d77; --line: #e7ddcf;
+      --maxw: 860px; --radius: 14px; --shadow: 0 6px 24px rgba(74, 14, 28, .08);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--cream); color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 1.5rem 1.25rem 5rem; }
+    .pagebar { background: var(--wine-900); color: var(--cream); padding: 1.25rem; text-align: center; }
+    .pagebar h1 { margin: 0 0 .25rem; font-size: 1.25rem; }
+    .pagebar p { margin: 0; color: var(--gold-200); font-size: .9rem; }
+    .variant { margin: 2.75rem 0; padding-top: 1.5rem; border-top: 2px dashed var(--line); }
+    .variant:first-of-type { border-top: none; }
+    .variant__label { display: inline-block; background: var(--gold); color: var(--wine-900); font-weight: 800;
+      font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; padding: .25rem .6rem; border-radius: 999px; margin-bottom: .35rem; }
+    .variant__note { margin: .1rem 0 1.25rem; color: var(--muted); font-size: .92rem; max-width: 70ch; }
+
+    /* ===== 1. IKONOS PILL-SOR (chips, felirat nélkül) ===== */
+    .f1 { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .f1__chip { display: inline-flex; align-items: center; gap: .5rem; background: var(--paper); border: 1px solid var(--line);
+      border-radius: 999px; padding: .5rem .9rem; font-weight: 700; color: var(--ink); }
+    .f1__chip svg { width: 18px; height: 18px; color: var(--wine-700); flex: none; }
+
+    /* ===== 2. ERŐS KONTRASZTÚ RÁCS (sötét felirat) ===== */
+    .f2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.1rem 1.4rem;
+      background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 1.2rem 1.35rem; }
+    .f2__item { display: flex; gap: .7rem; align-items: flex-start; }
+    .f2__ic { flex: none; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 10px; background: var(--wine-700); color: #fff; }
+    .f2__ic svg { width: 18px; height: 18px; }
+    .f2__k { display: block; font-size: .78rem; font-weight: 700; color: var(--wine-700); }
+    .f2__v { display: block; font-weight: 700; color: var(--ink); font-size: 1.02rem; }
+
+    /* ===== 3. EGYSOROS, ELVÁLASZTÓKKAL ===== */
+    .f3 { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1.25rem; background: var(--paper);
+      border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.25rem; }
+    .f3__item { display: inline-flex; align-items: center; gap: .55rem; font-weight: 700; color: var(--ink); }
+    .f3__item svg { width: 18px; height: 18px; color: var(--wine-700); flex: none; }
+    .f3__sep { width: 1px; align-self: stretch; background: var(--line); }
+
+    /* ===== 4. LISTÁS (definíció: erős felirat + érték) ===== */
+    .f4 { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: .5rem 1.25rem; }
+    .f4__row { display: flex; align-items: center; gap: .8rem; padding: .7rem 0; border-bottom: 1px solid var(--line); }
+    .f4__row:last-child { border-bottom: none; }
+    .f4__ic { flex: none; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 8px; background: #f6efe1; color: var(--wine-700); border: 1px solid var(--line); }
+    .f4__ic svg { width: 17px; height: 17px; }
+    .f4__k { width: 110px; flex: none; font-weight: 700; color: var(--wine-700); }
+    .f4__v { font-weight: 700; color: var(--ink); }
+
+    /* ===== 5. ARANY-SZEGÉLYES KIEMELT SÁV ===== */
+    .f5 { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem 1.25rem;
+      background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: 12px; padding: 1.15rem 1.3rem; }
+    .f5__item { display: flex; flex-direction: column; gap: .15rem; }
+    .f5__k { display: inline-flex; align-items: center; gap: .4rem; font-size: .8rem; font-weight: 700; color: var(--wine-700); text-transform: uppercase; letter-spacing: .03em; }
+    .f5__k svg { width: 15px; height: 15px; }
+    .f5__v { font-weight: 700; color: var(--ink); font-size: 1.05rem; }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="ic-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4.5" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2.5" x2="8" y2="6"/><line x1="16" y1="2.5" x2="16" y2="6"/>
+    </symbol>
+    <symbol id="ic-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>
+    </symbol>
+    <symbol id="ic-map" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="3 6.5 9 3.5 15 6.5 21 3.5 21 17.5 15 20.5 9 17.5 3 20.5"/><line x1="9" y1="3.5" x2="9" y2="17.5"/><line x1="15" y1="6.5" x2="15" y2="20.5"/>
+    </symbol>
+    <symbol id="ic-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20.6 13.4 13 21l-9-9V4h8z"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor" stroke="none"/>
+    </symbol>
+  </svg>
+
+  <div class="pagebar">
+    <h1>Esemény tény-blokk — variációk</h1>
+    <p>Az „A" részletoldal tény-csíkjának alternatívái (mikor / hol / borvidék / ár).</p>
+  </div>
+
+  <div class="wrap">
+
+    <section class="variant">
+      <span class="variant__label">1 · Ikonos pill-sor</span>
+      <p class="variant__note">Felirat nélküli chipek, ikon + érték. Letisztult, modern, semmi halvány szöveg. A legkönnyedebb megoldás.</p>
+      <div class="f1">
+        <span class="f1__chip"><svg><use href="#ic-cal"/></svg>2026. júl. 25–27.</span>
+        <span class="f1__chip"><svg><use href="#ic-pin"/></svg>Budai Vár, Budapest</span>
+        <span class="f1__chip"><svg><use href="#ic-map"/></svg>Etyek-Budai</span>
+        <span class="f1__chip"><svg><use href="#ic-tag"/></svg>3 900 Ft-tól</span>
+      </div>
+    </section>
+
+    <section class="variant">
+      <span class="variant__label">2 · Erős kontrasztú rács</span>
+      <p class="variant__note">A mostani rács, de tömör borvörös ikon-badge-ekkel és jól látható (nem halvány) feliratokkal. Strukturált, könnyen olvasható.</p>
+      <div class="f2">
+        <div class="f2__item"><span class="f2__ic"><svg><use href="#ic-cal"/></svg></span><span><span class="f2__k">Mikor</span><span class="f2__v">Júl. 25–27.</span></span></div>
+        <div class="f2__item"><span class="f2__ic"><svg><use href="#ic-pin"/></svg></span><span><span class="f2__k">Hol</span><span class="f2__v">Budai Vár, Budapest</span></span></div>
+        <div class="f2__item"><span class="f2__ic"><svg><use href="#ic-map"/></svg></span><span><span class="f2__k">Borvidék</span><span class="f2__v">Etyek-Budai</span></span></div>
+        <div class="f2__item"><span class="f2__ic"><svg><use href="#ic-tag"/></svg></span><span><span class="f2__k">Ár</span><span class="f2__v">3 900 Ft-tól</span></span></div>
+      </div>
+    </section>
+
+    <section class="variant">
+      <span class="variant__label">3 · Egysoros, elválasztókkal</span>
+      <p class="variant__note">Egyetlen sorban, vékony elválasztókkal tagolva (mobilon tördel). Kompakt, elegáns, kevés helyet foglal.</p>
+      <div class="f3">
+        <span class="f3__item"><svg><use href="#ic-cal"/></svg>Júl. 25–27.</span>
+        <span class="f3__sep"></span>
+        <span class="f3__item"><svg><use href="#ic-pin"/></svg>Budai Vár, Budapest</span>
+        <span class="f3__sep"></span>
+        <span class="f3__item"><svg><use href="#ic-map"/></svg>Etyek-Budai</span>
+        <span class="f3__sep"></span>
+        <span class="f3__item"><svg><use href="#ic-tag"/></svg>3 900 Ft-tól</span>
+      </div>
+    </section>
+
+    <section class="variant">
+      <span class="variant__label">4 · Listás (definíció)</span>
+      <p class="variant__note">Áttekinthető lista: ikon + erős felirat + érték, vékony elválasztókkal. A legkönnyebben „beolvasható", ha sok az adat.</p>
+      <div class="f4">
+        <div class="f4__row"><span class="f4__ic"><svg><use href="#ic-cal"/></svg></span><span class="f4__k">Mikor</span><span class="f4__v">2026. július 25–27.</span></div>
+        <div class="f4__row"><span class="f4__ic"><svg><use href="#ic-pin"/></svg></span><span class="f4__k">Hol</span><span class="f4__v">Budai Vár, Budapest</span></div>
+        <div class="f4__row"><span class="f4__ic"><svg><use href="#ic-map"/></svg></span><span class="f4__k">Borvidék</span><span class="f4__v">Etyek-Budai</span></div>
+        <div class="f4__row"><span class="f4__ic"><svg><use href="#ic-tag"/></svg></span><span class="f4__k">Ár</span><span class="f4__v">Belépő 3 900 Ft-tól</span></div>
+      </div>
+    </section>
+
+    <section class="variant">
+      <span class="variant__label">5 · Arany-szegélyes sáv</span>
+      <p class="variant__note">A 2-eshez hasonló rács, de bal oldali arany csíkkal és apró ikonos feliratokkal — kicsit díszesebb, „boros" hangulat.</p>
+      <div class="f5">
+        <div class="f5__item"><span class="f5__k"><svg><use href="#ic-cal"/></svg> Mikor</span><span class="f5__v">Júl. 25–27.</span></div>
+        <div class="f5__item"><span class="f5__k"><svg><use href="#ic-pin"/></svg> Hol</span><span class="f5__v">Budai Vár, Budapest</span></div>
+        <div class="f5__item"><span class="f5__k"><svg><use href="#ic-map"/></svg> Borvidék</span><span class="f5__v">Etyek-Budai</span></div>
+        <div class="f5__item"><span class="f5__k"><svg><use href="#ic-tag"/></svg> Ár</span><span class="f5__v">3 900 Ft-tól</span></div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
