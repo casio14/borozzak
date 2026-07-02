@@ -137,6 +137,9 @@ a { color: var(--wine-700); }
 .nav-burger__close { display: none; }
 
 @media (max-width: 760px) {
+  /* A középső menü mobilon abszolút pozíciós (kikerül a rácsból), ezért a
+     3 oszlopos rács a hamburgert középre húzná — 2 oszloppal teljesen jobbra ül. */
+  .site-header__inner { grid-template-columns: 1fr auto; }
   .nav-burger { display: inline-grid; }
   /* Nyitott állapot: hamburger → X */
   #nav-toggle:checked ~ .site-header__actions .nav-burger__open { display: none; }
@@ -1483,7 +1486,7 @@ main { flex: 1 0 auto; }
 .edh__when .status { box-shadow: 0 0 0 1px rgba(255, 255, 255, .35); }
 
 .edh-layout {
-  max-width: var(--maxw); margin: 0 auto; padding: 0 1.75rem;
+  max-width: var(--maxw); margin: 0 auto; padding: 0 1.75rem 3.5rem;
   display: grid; grid-template-columns: minmax(0, 1fr) 350px; gap: 2.5rem;
   align-items: start;
 }
