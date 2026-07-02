@@ -93,6 +93,8 @@
 .tip__loc { display: block; color: var(--muted); }
 .tip__price { display: none; } /* a kártyán csak cím + dátum + helyszín + címkék */
 .tip__tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .55rem; }
+/* A kártya címkéi kissé sötétebb árnyalatot kapnak a jobb láthatóságért */
+.tip .tag { background: #e3d2b4; color: var(--wine-900); }
 .bar:hover .tip, .bar:focus-visible .tip { display: block; }
 
 /* Jelmagyarázat (a fejléc alatt, a rács fölött) */

@@ -738,6 +738,9 @@ main { flex: 1 0 auto; }
 .cal-tip__date { display: block; color: var(--wine-700); font-weight: 700; margin-bottom: .2rem; }
 .cal-tip__loc { display: block; color: var(--muted); }
 .cal-tip__tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .55rem; }
+/* A kártya címkéi kissé sötétebb árnyalatot kapnak a jobb láthatóságért */
+.cal-tip .tag { background: #e3d2b4; color: var(--wine-900); }
+.cal-tip .tag--free { background: #cfe0c0; color: #2e421c; }
 .cal__bar:hover .cal-tip,
 .cal__bar:focus-visible .cal-tip { display: block; }
 
