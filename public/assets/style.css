@@ -1296,7 +1296,8 @@ main { flex: 1 0 auto; }
 .event-detail__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
 
 /* ===== Részletoldal — hero (tömör címsáv) + reszponzív rács ===== */
-/* Desktop: térkép az oldalsávban (1. változat). Mobil: térkép a leírás alatt (2. változat). */
+/* Már csak az admin előnézetek (admin/esemeny-preview.php, admin/jelolt-preview.php)
+   használják; a publikus esemeny.php az alábbi edh-* (immerzív) elrendezésre váltott. */
 .event-detail--hero { max-width: 1040px; }
 .ed-hero { border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
 .ed-hero__img { position: relative; }
@@ -1335,6 +1336,67 @@ main { flex: 1 0 auto; }
 @media (max-width: 760px) {
   .ed-grid { grid-template-columns: 1fr; grid-template-areas: "main" "map" "aside"; }
   .ed-hero__img img { height: 220px; }
+}
+
+/* ===== Részletoldal V2 — immerzív (magazinos) hero, belelógó sticky infókártyával ===== */
+/* Teljes szélességű hero, a cím a képre írva; a jobb oldali kártya belelóg a heróba
+   és görgetéskor követ. Mobil: egy oszlop, a kártya a leírás alá kerül. */
+.edh { position: relative; height: clamp(420px, 56vh, 560px); }
+.edh__img { position: absolute; inset: 0; }
+.edh__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.edh__img::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(43, 29, 32, .15) 0%, rgba(74, 14, 28, .25) 45%, rgba(43, 20, 24, .88) 100%);
+}
+.edh__inner {
+  position: relative; z-index: 1;
+  max-width: var(--maxw); margin: 0 auto; padding: 0 1.75rem 2rem;
+  height: 100%;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.edh__back {
+  position: absolute; top: 1.2rem;
+  color: #fff; opacity: .85; text-decoration: none; font-weight: 700; font-size: .9rem;
+}
+.edh__back:hover { opacity: 1; color: var(--gold-200); }
+.edh__tags { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .7rem; }
+.edh__tags .tag { background: rgba(255, 253, 249, .18); color: #fff; backdrop-filter: blur(4px); }
+.edh__tags .tag--featured { background: var(--gold); color: var(--wine-900); }
+.edh h1 {
+  margin: 0 0 .5rem; color: #fff;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  max-width: 18em;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .45);
+}
+.edh__when { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; color: var(--gold-200); font-weight: 700; font-size: 1.05rem; }
+.edh__when svg { width: 18px; height: 18px; flex: none; }
+.edh__when .status { box-shadow: 0 0 0 1px rgba(255, 255, 255, .35); }
+
+.edh-layout {
+  max-width: var(--maxw); margin: 0 auto; padding: 0 1.75rem;
+  display: grid; grid-template-columns: minmax(0, 1fr) 350px; gap: 2.5rem;
+  align-items: start;
+}
+.edh-main { padding-top: 2rem; max-width: 68ch; }
+.edh-lead { font-size: 1.2rem; font-weight: 600; color: var(--wine-900); margin: 0 0 1.2rem; }
+
+.edh-aside { position: sticky; top: 88px; margin-top: -110px; z-index: 2; }
+.edh-card {
+  background: var(--paper); border: 1px solid var(--line); border-radius: 16px;
+  padding: 1.1rem 1.2rem; box-shadow: 0 14px 40px rgba(74, 14, 28, .16);
+}
+.ed-info--flat { background: transparent; border: none; border-radius: 0; padding: 0; box-shadow: none; }
+.edh-map { height: 170px; border-radius: 12px; border: 1px solid var(--line); overflow: hidden; margin-top: 1rem; }
+
+@media (min-width: 901px) {
+  /* A cím ne fusson a belelógó kártya alá */
+  .edh__inner { padding-right: calc(350px + 4rem); }
+}
+@media (max-width: 900px) {
+  .edh { height: 380px; }
+  .edh-layout { grid-template-columns: 1fr; gap: 1.2rem; }
+  .edh-aside { position: static; margin-top: 1rem; }
+  .edh-card { box-shadow: var(--shadow); }
 }
 
 .btn { display: inline-block; padding: .7rem 1.4rem; border-radius: 10px; font-weight: 700; text-decoration: none; }

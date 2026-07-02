@@ -76,43 +76,40 @@ $priceText = (int) $event['is_free'] === 1 ? 'Ingyenes' : (!empty($event['price_
 
 require __DIR__ . '/partials/header.php';
 ?>
-  <div class="container">
-    <article class="event-detail event-detail--hero">
-      <a class="event-detail__back" href="./">← Vissza az eseményekhez</a>
-
-      <div class="ed-hero">
-        <div class="ed-hero__img">
-          <img src="<?= h(eventImage($event)) ?>" alt="<?= h($event['image_alt'] ?: $event['title']) ?>">
-          <?php if ((int) $event['is_featured'] === 1): ?><span class="ed-hero__badge">Kiemelt</span><?php endif; ?>
+  <article class="edh-detail">
+    <div class="edh">
+      <div class="edh__img">
+        <img src="<?= h(eventImage($event)) ?>" alt="<?= h($event['image_alt'] ?: $event['title']) ?>">
+      </div>
+      <div class="edh__inner">
+        <a class="edh__back" href="./">← Vissza az eseményekhez</a>
+        <div class="edh__tags">
+          <?php if ((int) $event['is_featured'] === 1): ?><span class="tag tag--featured">★ Kiemelt</span><?php endif; ?>
+          <?php foreach ($event['categories'] ?? [] as $cat): ?><span class="tag"><?= h($cat['name']) ?></span><?php endforeach; ?>
         </div>
-        <div class="ed-hero__band">
-          <h1><?= h($event['title']) ?></h1>
-          <div class="ed-hero__when">
-            <time datetime="<?= h(isoDate($event['start_datetime'])) ?>"><?= h(formatDateRange($event['start_datetime'], $event['end_datetime'])) ?></time>
-            <?php if ($st): ?><span class="status <?= h($st['class']) ?>"><?= h($st['label']) ?></span><?php endif; ?>
-          </div>
+        <h1><?= h($event['title']) ?></h1>
+        <div class="edh__when">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>
+          <time datetime="<?= h(isoDate($event['start_datetime'])) ?>"><?= h(formatDateRange($event['start_datetime'], $event['end_datetime'])) ?></time>
+          <?php if ($st): ?><span class="status <?= h($st['class']) ?>"><?= h($st['label']) ?></span><?php endif; ?>
         </div>
       </div>
+    </div>
 
-      <div class="ed-grid">
-        <div class="ed-main">
-          <?php if (!empty($event['categories'])): ?>
-          <div class="event-detail__tags">
-            <?php foreach ($event['categories'] as $cat): ?><span class="tag"><?= h($cat['name']) ?></span><?php endforeach; ?>
-          </div>
-          <?php endif; ?>
+    <div class="edh-layout">
+      <div class="edh-main">
+        <?php if (!empty($event['short_description'])): ?>
+          <p class="edh-lead"><?= h($event['short_description']) ?></p>
+        <?php endif; ?>
 
-          <?php if (!empty($event['short_description'])): ?>
-            <p class="event-detail__lead"><?= h($event['short_description']) ?></p>
-          <?php endif; ?>
+        <?php if (!empty($event['description'])): ?>
+          <div class="event-detail__desc"><?= nl2br(h($event['description'])) ?></div>
+        <?php endif; ?>
+      </div>
 
-          <?php if (!empty($event['description'])): ?>
-            <div class="event-detail__desc"><?= nl2br(h($event['description'])) ?></div>
-          <?php endif; ?>
-        </div>
-
-        <aside class="ed-aside">
-          <div class="ed-info">
+      <aside class="edh-aside">
+        <div class="edh-card">
+          <div class="ed-info ed-info--flat">
             <?php if ($locText !== ''): ?>
             <div class="ed-info__row">
               <span class="ed-info__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
@@ -145,17 +142,15 @@ require __DIR__ . '/partials/header.php';
             <?php endif; ?>
             <a class="btn btn--ghost" href="ics.php?e=<?= (int) $event['id'] ?>">＋ Naptárhoz adom</a>
           </div>
-        </aside>
 
-        <?php if ($hasGeo): ?>
-        <div class="ed-map">
-          <div id="event-map" class="ed-map__canvas" role="region" aria-label="Az esemény helyszíne térképen"></div>
-          <p class="ed-map__link"><a href="<?= h($mapsLink) ?>" target="_blank" rel="noopener nofollow">Megnyitás Google Mapsben / útvonalterv →</a></p>
+          <?php if ($hasGeo): ?>
+            <div id="event-map" class="edh-map" role="region" aria-label="Az esemény helyszíne térképen"></div>
+            <p class="ed-map__link"><a href="<?= h($mapsLink) ?>" target="_blank" rel="noopener nofollow">Megnyitás Google Mapsben / útvonalterv →</a></p>
+          <?php endif; ?>
         </div>
-        <?php endif; ?>
-      </div>
-    </article>
-  </div>
+      </aside>
+    </div>
+  </article>
 <?php if ($hasGeo): ?>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>

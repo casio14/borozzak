@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Esemény-részletoldal — design-variánsok · holborozzak.hu</title>
+<link rel="stylesheet" href="base.css">
+<style>
+.intro { max-width: 820px; margin: 2.5rem auto 0; padding: 0 1.75rem; text-align: center; }
+.intro h1 { color: var(--wine-900); margin: 0 0 .5rem; }
+.intro p { color: var(--muted); margin: 0; }
+
+.grid {
+  max-width: 1020px; margin: 2rem auto 0; padding: 0 1.75rem;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem;
+}
+.opt {
+  display: block; text-decoration: none; color: inherit;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 16px;
+  overflow: hidden; box-shadow: var(--shadow);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.opt:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(74, 14, 28, .16); }
+.opt__thumb { height: 130px; position: relative; }
+.opt__body { padding: 1rem 1.2rem 1.2rem; }
+.opt__body h2 { margin: 0 0 .3rem; color: var(--wine-900); font-size: 1.2rem; }
+.opt__body h2 .n { color: var(--gold); margin-right: .4rem; }
+.opt__body p { margin: 0; font-size: .92rem; color: var(--muted); }
+.opt__go { display: inline-block; margin-top: .6rem; font-weight: 700; color: var(--wine-700); }
+
+/* Mini "skicc" előnézetek CSS-ből */
+.th { position: absolute; border-radius: 3px; }
+.th-img { background: linear-gradient(135deg, #b98a94, #7c4a53); }
+.th-wine { background: linear-gradient(135deg, var(--wine-700), var(--wine-900)); }
+.th-paper { background: #fff; border: 1px solid var(--line); }
+.th-gold { background: var(--gold); }
+.th-text { background: repeating-linear-gradient(0deg, #d9cfc0 0 3px, transparent 3px 8px); }
+
+@media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__name">hol<span class="brand__accent">borozzak</span>.hu</span>
+      <span class="brand__tag">Borrendezvények egy helyen</span>
+    </a>
+  </div>
+</header>
+
+<div class="intro">
+  <h1>Esemény-részletoldal — 4 design-variáns</h1>
+  <p>Mindegyik ugyanazzal a minta-eseménnyel (Budapesti Borfesztivál) készült, a jobb alsó sarokban lévő kapcsolóval variánsok közt ugrálhatsz.</p>
+</div>
+
+<div class="grid">
+  <a class="opt" href="v1-magazin.html">
+    <div class="opt__thumb th-img" style="position:relative;">
+      <span class="th th-text" style="left:8%; bottom:14%; width:45%; height:26%;"></span>
+      <span class="th th-paper" style="right:6%; bottom:-12%; width:24%; height:70%;"></span>
+    </div>
+    <div class="opt__body">
+      <h2><span class="n">1</span>Magazinos / immerzív</h2>
+      <p>Nagy hero, a cím ráírva a képre; a jobb oldali infókártya belelóg a heróba és görgetéskor követ. Modern magazin-hangulat.</p>
+      <span class="opt__go">Megnézem élőben →</span>
+    </div>
+  </a>
+
+  <a class="opt" href="v2-split.html">
+    <div class="opt__thumb" style="background:var(--cream);">
+      <span class="th th-img" style="left:5%; top:12%; width:52%; height:56%;"></span>
+      <span class="th th-wine" style="left:57%; top:12%; width:38%; height:56%;"></span>
+      <span class="th th-gold" style="left:61%; top:48%; width:14%; height:9%;"></span>
+      <span class="th th-paper" style="left:5%; bottom:8%; width:90%; height:14%;"></span>
+    </div>
+    <div class="opt__body">
+      <h2><span class="n">2</span>Osztott hero (split)</h2>
+      <p>Kép balra, bordó CTA-panel jobbra — a Jegyek gomb azonnal szem előtt. Alatta infó-csík, széles leírás és nagy térkép. Konverzió-fókusz.</p>
+      <span class="opt__go">Megnézem élőben →</span>
+    </div>
+  </a>
+
+  <a class="opt" href="v3-borcimke.html">
+    <div class="opt__thumb th-img" style="filter:saturate(.6) brightness(.8);">
+      <span class="th th-paper" style="left:22%; top:12%; width:56%; height:76%; border:2px double var(--gold);"></span>
+      <span class="th th-text" style="left:30%; top:32%; width:40%; height:20%;"></span>
+    </div>
+    <div class="opt__body">
+      <h2><span class="n">3</span>Borcímke / elegáns</h2>
+      <p>Borosüveg-címke ihlette keretes, arany díszes fejléc homályos háttérképpel; szeriff tipográfia, iniciálé. Klasszikus, prémium hangulat.</p>
+      <span class="opt__go">Megnézem élőben →</span>
+    </div>
+  </a>
+
+  <a class="opt" href="v4-jegy.html">
+    <div class="opt__thumb" style="background:var(--cream);">
+      <span class="th th-paper" style="left:6%; top:14%; width:62%; height:64%;"></span>
+      <span class="th th-img" style="left:6%; top:14%; width:62%; height:26%;"></span>
+      <span class="th th-wine" style="left:70%; top:14%; width:24%; height:64%; border-left:2px dashed #fff;"></span>
+      <span class="th th-gold" style="left:76%; top:30%; width:12%; height:10%;"></span>
+    </div>
+    <div class="opt__body">
+      <h2><span class="n">4</span>Jegy / ticket-stílus</h2>
+      <p>Az oldal teteje egy fesztiváljegy: perforált él, letéphető dátum-csonk naptárkockával. Játékos, egyedi, jól megjegyezhető.</p>
+      <span class="opt__go">Megnézem élőben →</span>
+    </div>
+  </a>
+</div>
+
+<p class="mock-note">Ezek statikus mockupok minta-adatokkal — a kiválasztott variánst utána ültetjük át a valódi <code>public/esemeny.php</code>-ba.</p>
+
+</body>
+</html>
