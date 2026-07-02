@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Naptár 2. variáns — Idővonal / agenda · mockup</title>
+<link rel="stylesheet" href="../base.css">
+<style>
+/* ===== Naptár 2. variáns: függőleges idővonal (agenda) + sticky oldalsáv ===== */
+
+.wrap {
+  max-width: 1180px; margin: 1.8rem auto 0; padding: 0 1.75rem;
+  display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 2.2rem; align-items: start;
+}
+
+/* Oldalsáv: mini-naptár + szűrők */
+.side { position: sticky; top: 88px; }
+.side__card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 1.1rem 1.2rem; box-shadow: var(--shadow); margin-bottom: 1rem; }
+.mini-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: .6rem; }
+.mini-head b { font-family: Georgia, serif; color: var(--wine-900); font-size: 1.05rem; }
+.mini-head a { text-decoration: none; font-weight: 800; color: var(--wine-700); padding: 0 .4rem; }
+.mini-head a:hover { color: var(--gold); }
+.mini { width: 100%; border-collapse: collapse; font-size: .78rem; text-align: center; }
+.mini th { color: var(--wine-700); font-size: .62rem; padding: .2rem 0; text-transform: uppercase; }
+.mini td { padding: .22rem 0; color: var(--ink); }
+.mini td.mut { color: #cabfb4; }
+.mini td.ev { position: relative; font-weight: 800; color: var(--wine-700); }
+.mini td.ev::after { content: ""; position: absolute; left: 50%; bottom: -1px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--gold); }
+.mini td.today span { display: inline-flex; width: 22px; height: 22px; align-items: center; justify-content: center; border-radius: 50%; background: var(--gold); color: var(--wine-900); font-weight: 800; }
+.side h3 { margin: 0 0 .5rem; font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; color: var(--wine-700); }
+.side label { display: flex; align-items: center; gap: .5rem; padding: .28rem 0; font-size: .92rem; cursor: pointer; }
+.side .cnt { margin-left: auto; font-size: .75rem; color: var(--muted); }
+.side .btn { width: 100%; margin-top: .6rem; text-align: center; }
+
+/* Idővonal */
+.tl-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.2rem; }
+.tl-head h1 { margin: 0; color: var(--wine-900); }
+.tl-head .sum { color: var(--muted); }
+.tl { position: relative; padding-left: 84px; }
+.tl::before { content: ""; position: absolute; left: 30px; top: 6px; bottom: 6px; width: 2px; background: linear-gradient(180deg, var(--gold), var(--wine-700)); border-radius: 2px; }
+
+.day { position: relative; margin-bottom: 1.6rem; }
+.day__date {
+  position: absolute; left: -84px; top: 0; width: 60px;
+  text-align: center; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: .4rem 0;
+  box-shadow: var(--shadow);
+}
+.day__date b { display: block; font-family: Georgia, serif; font-size: 1.45rem; color: var(--wine-900); line-height: 1.1; }
+.day__date i { display: block; font-style: normal; font-size: .64rem; font-weight: 800; letter-spacing: .06em; color: var(--wine-700); }
+.day--today .day__date { background: var(--gold); border-color: var(--gold); }
+.day--today .day__date b, .day--today .day__date i { color: var(--wine-900); }
+.day__dot { position: absolute; left: -58px; top: 18px; width: 12px; height: 12px; border-radius: 50%; background: var(--wine-700); border: 2px solid var(--gold); }
+.day__today-lbl { display: inline-block; margin-bottom: .4rem; font-size: .7rem; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+
+.ev-card {
+  display: grid; grid-template-columns: 5px minmax(0,1fr) auto; gap: 0 1rem; align-items: center;
+  background: #fff; border: 1px solid var(--line); border-radius: 14px;
+  padding: .85rem 1.1rem .85rem 0; margin-bottom: .6rem; overflow: hidden;
+  text-decoration: none; color: inherit; box-shadow: var(--shadow);
+}
+.ev-card:hover { border-color: var(--gold); }
+.ev-card__stripe { align-self: stretch; border-radius: 0; }
+.ev-card__t { font-weight: 700; color: var(--wine-900); font-size: 1.05rem; }
+.ev-card__s { color: var(--muted); font-size: .85rem; }
+.ev-card__go { color: var(--gold); font-weight: 800; padding-right: .3rem; }
+.ev-card .status { margin-left: .4rem; }
+
+.tl-more { text-align: center; margin: 1.6rem 0 2rem; }
+
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: 1fr; }
+  .side { position: static; }
+  .side__card--filters { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__name">hol<span class="brand__accent">borozzak</span>.hu</span>
+      <span class="brand__tag">Borrendezvények egy helyen</span>
+    </a>
+    <nav class="site-nav">
+      <a href="#">Események</a>
+      <a href="#" class="is-active">Naptár</a>
+      <a href="#">Térkép</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <aside class="side">
+    <div class="side__card">
+      <div class="mini-head"><a href="#">‹</a><b>2026. július</b><a href="#">›</a></div>
+      <table class="mini">
+        <tr><th>H</th><th>K</th><th>Sz</th><th>Cs</th><th>P</th><th>Sz</th><th>V</th></tr>
+        <tr><td class="mut"></td><td class="mut"></td><td>1</td><td class="today"><span>2</span></td><td>3</td><td>4</td><td class="ev">5</td></tr>
+        <tr><td>6</td><td>7</td><td>8</td><td>9</td><td class="ev">10</td><td class="ev">11</td><td class="ev">12</td></tr>
+        <tr><td class="ev">13</td><td class="ev">14</td><td class="ev">15</td><td class="ev">16</td><td class="ev">17</td><td class="ev">18</td><td class="ev">19</td></tr>
+        <tr><td class="ev">20</td><td class="ev">21</td><td class="ev">22</td><td class="ev">23</td><td class="ev">24</td><td class="ev">25</td><td class="ev">26</td></tr>
+        <tr><td>27</td><td>28</td><td>29</td><td>30</td><td class="ev">31</td><td class="mut"></td><td class="mut"></td></tr>
+      </table>
+    </div>
+    <div class="side__card side__card--filters">
+      <h3>Borvidék</h3>
+      <label><input type="checkbox"> Badacsony <span class="cnt">1</span></label>
+      <label><input type="checkbox"> Balaton-felvidék <span class="cnt">1</span></label>
+      <label><input type="checkbox"> Eger <span class="cnt">1</span></label>
+      <label><input type="checkbox"> Tokaj <span class="cnt">1</span></label>
+      <label><input type="checkbox"> Villány <span class="cnt">1</span></label>
+      <h3 style="margin-top:.9rem;">Kategória</h3>
+      <label><input type="checkbox"> Borfesztivál <span class="cnt">2</span></label>
+      <label><input type="checkbox"> Kóstoló <span class="cnt">2</span></label>
+      <label><input type="checkbox"> Gasztronómia <span class="cnt">1</span></label>
+      <a class="btn btn--primary" href="#">Szűrés</a>
+    </div>
+  </aside>
+
+  <main>
+    <div class="tl-head">
+      <h1>Eseménynaptár</h1>
+      <span class="sum">2026. július · 6 esemény</span>
+    </div>
+
+    <div class="tl">
+      <div class="day">
+        <span class="day__date"><b>5</b><i>VASÁRNAP</i></span><span class="day__dot"></span>
+        <a class="ev-card" href="#">
+          <span class="ev-card__stripe" style="background:#c8a14b;"></span>
+          <span><span class="ev-card__t">Szekszárdi Pinceséta</span><br><span class="ev-card__s">Szekszárd · Kóstoló · Belépő 3 500 Ft</span></span>
+          <span class="ev-card__go">→</span>
+        </a>
+      </div>
+
+      <div class="day">
+        <span class="day__date"><b>10</b><i>PÉNTEK</i></span><span class="day__dot"></span>
+        <a class="ev-card" href="#">
+          <span class="ev-card__stripe" style="background:#722f37;"></span>
+          <span><span class="ev-card__t">Balatonfüredi Borhetek<span class="status is-soon">17 napos</span></span><br><span class="ev-card__s">júl. 10–26. · Balatonfüred · Borfesztivál</span></span>
+          <span class="ev-card__go">→</span>
+        </a>
+      </div>
+
+      <div class="day">
+        <span class="day__date"><b>11</b><i>SZOMBAT</i></span><span class="day__dot"></span>
+        <a class="ev-card" href="#">
+          <span class="ev-card__stripe" style="background:#c8a14b;"></span>
+          <span><span class="ev-card__t">Tokaji Nyáresti Kóstoló</span><br><span class="ev-card__s">Tokaj · Kóstoló · 18:00</span></span>
+          <span class="ev-card__go">→</span>
+        </a>
+      </div>
+
+      <div class="day">
+        <span class="day__date"><b>18</b><i>SZOMBAT</i></span><span class="day__dot"></span>
+        <a class="ev-card" href="#">
+          <span class="ev-card__stripe" style="background:#7a8450;"></span>
+          <span><span class="ev-card__t">Szent György-hegy Hajnalig<span class="status is-free">Ingyenes</span></span><br><span class="ev-card__s">júl. 18–20. · Tapolca · Borvidéki program</span></span>
+          <span class="ev-card__go">→</span>
+        </a>
+      </div>
+
+      <div class="day">
+        <span class="day__date"><b>24</b><i>PÉNTEK</i></span><span class="day__dot"></span>
+        <a class="ev-card" href="#">
+          <span class="ev-card__stripe" style="background:#b5562a;"></span>
+          <span><span class="ev-card__t">Egri Bikavér Ünnep</span><br><span class="ev-card__s">júl. 24–26. · Eger · Gasztronómia</span></span>
+          <span class="ev-card__go">→</span>
+        </a>
+      </div>
+
+      <div class="day">
+        <span class="day__date"><b>31</b><i>PÉNTEK</i></span><span class="day__dot"></span>
+        <a class="ev-card" href="#">
+          <span class="ev-card__stripe" style="background:#722f37;"></span>
+          <span><span class="ev-card__t">Villányi Rozénapok</span><br><span class="ev-card__s">júl. 31. – aug. 2. · Villány · Borfesztivál</span></span>
+          <span class="ev-card__go">→</span>
+        </a>
+      </div>
+    </div>
+
+    <p class="tl-more"><a class="btn btn--ghost" href="#">Következő hónap: augusztus (9 esemény) →</a></p>
+  </main>
+</div>
+
+<p class="mock-note">Design-mockup minta-adatokkal — Naptár 2. variáns: idővonal / agenda. Extra javaslatok benne: mini-naptár pöttyökkel (kattintható napok), szűrők darabszámmal, „MA” kiemelés, hónap-léptető gomb a köv. havi eseményszámmal. Mobilon a lista természetesen görgethető — rács-gyötrelem nélkül.</p>
+
+<nav class="variant-switch" aria-label="Variánsok">
+  <span>Naptár:</span>
+  <a href="n1-racs.html" title="Rács+">1</a>
+  <a href="n2-idovonal.html" class="is-current" title="Idővonal">2</a>
+  <a href="n3-nappanel.html" title="Rács + nap-panel">3</a>
+  <a href="n4-heatmap.html" title="Év-áttekintő">4</a>
+</nav>
+
+</body>
+</html>
