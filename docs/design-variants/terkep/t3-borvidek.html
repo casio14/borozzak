@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Térkép 3. variáns — Borvidék-fókusz · mockup</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="../base.css">
+<link rel="stylesheet" href="terkep-base.css">
+<style>
+/* ===== Térkép 3. variáns: borvidék-választó csempék + zoom + oldalsó infópanel ===== */
+
+.wrap { max-width: 1280px; margin: 1.4rem auto 0; padding: 0 1.75rem; }
+.wrap h1 { margin: 0 0 .2rem; color: var(--wine-900); }
+.wrap .sub { margin: 0 0 1rem; color: var(--muted); }
+
+/* Borvidék-csempesor (vízszintesen görgethető) */
+.regions { display: flex; gap: .6rem; overflow-x: auto; padding-bottom: .6rem; margin-bottom: 1rem; }
+.rtile {
+  flex: none; display: flex; flex-direction: column; align-items: flex-start;
+  background: #fff; border: 1px solid var(--line); border-radius: 12px;
+  padding: .6rem 1rem; cursor: pointer; font: inherit; text-align: left;
+  min-width: 130px;
+}
+.rtile:hover { border-color: var(--gold); }
+.rtile.is-on { background: var(--wine-700); border-color: var(--wine-700); }
+.rtile.is-on b, .rtile.is-on span { color: #fff; }
+.rtile b { font-family: Georgia, serif; color: var(--wine-900); }
+.rtile span { font-size: .76rem; color: var(--muted); }
+.rtile .n { display: inline-block; background: #f3e7d0; color: var(--wine-700); border-radius: 999px; padding: 0 .5rem; font-weight: 800; font-size: .74rem; margin-left: .3rem; }
+.rtile.is-on .n { background: var(--gold); color: var(--wine-900); }
+
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 1.2rem; align-items: stretch; }
+#map { height: 520px; border-radius: 16px; border: 1px solid var(--line); }
+
+/* Oldalsó infópanel */
+.side { background: #fff; border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; }
+.side__head { background: linear-gradient(135deg, var(--wine-700), var(--wine-900)); color: #fff; padding: .9rem 1.1rem; }
+.side__head b { font-family: Georgia, serif; font-size: 1.15rem; }
+.side__head span { display: block; font-size: .8rem; color: var(--gold-200); }
+.side__list { padding: .8rem; display: flex; flex-direction: column; gap: .5rem; overflow-y: auto; }
+.side__empty { color: var(--muted); font-style: italic; padding: 1rem; }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  #map { height: 46vh; }
+  .side__list { max-height: 40vh; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__name">hol<span class="brand__accent">borozzak</span>.hu</span>
+      <span class="brand__tag">Borrendezvények egy helyen</span>
+    </a>
+    <nav class="site-nav">
+      <a href="#">Események</a>
+      <a href="#">Naptár</a>
+      <a href="#" class="is-active">Térkép</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1>Eseménytérkép</h1>
+  <p class="sub">Válassz borvidéket — a térkép odaközelít, és listázzuk a vidék rendezvényeit.</p>
+
+  <div class="regions" id="regions"></div>
+
+  <div class="layout">
+    <div id="map" role="region" aria-label="Borrendezvények térképe"></div>
+    <aside class="side">
+      <div class="side__head"><b id="side-title">Minden borvidék</b><span id="side-sub">10 közelgő esemény</span></div>
+      <div class="side__list" id="side-list"></div>
+    </aside>
+  </div>
+</div>
+
+<p class="mock-note">Design-mockup minta-adatokkal — Térkép 3. variáns: borvidék-fókusz (élő demó: kattints a csempékre!). Élesben mind a 22 borvidék szerepelne, a DB <code>wine_regions</code> táblájából, esemény-számokkal. SEO-bónusz: borvidékenkénti al-oldalak (?borvidek=tokaj) indexelhetők.</p>
+
+<nav class="variant-switch" aria-label="Variánsok">
+  <span>Térkép:</span>
+  <a href="t1-split.html" title="Lista + térkép">1</a>
+  <a href="t2-immerziv.html" title="Immerzív">2</a>
+  <a href="t3-borvidek.html" class="is-current" title="Borvidék-fókusz">3</a>
+  <a href="t4-klasszikus.html" title="Klasszikus+">4</a>
+</nav>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="pontok.js"></script>
+<script>
+var REGIOK = [
+  { id: 'mind',       nev: 'Minden',      db: 10 },
+  { id: 'tokaj',      nev: 'Tokaj',       db: 2 },
+  { id: 'villany',    nev: 'Villány',     db: 1 },
+  { id: 'etyek-buda', nev: 'Etyek–Buda',  db: 2 },
+  { id: 'balaton',    nev: 'Balaton',     db: 2 },
+  { id: 'eger',       nev: 'Eger',        db: 1 },
+  { id: 'szekszard',  nev: 'Szekszárd',   db: 1 },
+  { id: 'sopron',     nev: 'Sopron',      db: 1 }
+];
+
+var map = alapTerkep('map');
+var markers = {};
+PONTOK.forEach(function (p) {
+  markers[p.t] = L.marker([p.lat, p.lng], { icon: grapeDot() }).addTo(map)
+    .bindPopup(popupHtml(p), { maxWidth: 240, minWidth: 240 });
+});
+
+var regionsEl = document.getElementById('regions');
+var sideTitle = document.getElementById('side-title');
+var sideSub = document.getElementById('side-sub');
+var sideList = document.getElementById('side-list');
+
+function valaszt(reg, tile) {
+  document.querySelectorAll('.rtile.is-on').forEach(function (x) { x.classList.remove('is-on'); });
+  tile.classList.add('is-on');
+  var pts = reg.id === 'mind' ? PONTOK : PONTOK.filter(function (p) { return p.reg === reg.id; });
+  sideTitle.textContent = reg.id === 'mind' ? 'Minden borvidék' : reg.nev + ' borvidék';
+  sideSub.textContent = pts.length + ' közelgő esemény';
+  sideList.innerHTML = '';
+  pts.forEach(function (p) {
+    var a = document.createElement('a');
+    a.className = 'ev-item';
+    a.innerHTML = '<img class="ev-item__img" src="' + KEP + '" alt="">'
+      + '<span class="ev-item__main"><span class="ev-item__t">' + p.t + '</span>'
+      + '<span class="ev-item__d">' + p.d + '</span>'
+      + '<span class="ev-item__s">' + p.c + '</span></span>';
+    a.addEventListener('click', function () {
+      map.setView([p.lat, p.lng], 11, { animate: true });
+      markers[p.t].openPopup();
+    });
+    sideList.appendChild(a);
+  });
+  if (!pts.length) { sideList.innerHTML = '<p class="side__empty">Most nincs esemény ezen a borvidéken.</p>'; }
+  if (reg.id === 'mind') {
+    map.setView([47.16, 19.50], 7, { animate: true });
+  } else if (pts.length) {
+    map.fitBounds(pts.map(function (p) { return [p.lat, p.lng]; }), { padding: [60, 60], maxZoom: 10 });
+  }
+}
+
+REGIOK.forEach(function (reg, i) {
+  var b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'rtile' + (i === 0 ? ' is-on' : '');
+  b.innerHTML = '<b>' + reg.nev + '<span class="n">' + reg.db + '</span></b><span>' + (reg.id === 'mind' ? 'összes esemény' : 'borvidék') + '</span>';
+  b.addEventListener('click', function () { valaszt(reg, b); });
+  regionsEl.appendChild(b);
+  if (i === 0) { valaszt(reg, b); }
+});
+</script>
+
+</body>
+</html>
