@@ -57,17 +57,29 @@ $prevUrl  = 'naptar.php?ev=' . $prev->format('Y') . '&ho=' . $prev->format('n') 
 $nextUrl  = 'naptar.php?ev=' . $next->format('Y') . '&ho=' . $next->format('n') . $facetQs;
 $todayUrl = 'naptar.php' . ($facet ? ('?' . http_build_query($facet)) : '');
 
-// Napra bontás (a szűrt eseményekből)
-$daysEvents = array_fill(1, $daysInMonth, []);
+// Hét-sorok (0 = hónapon kívüli üres cella) az átívelő sávos rácshoz
+$leading = (int) $first->format('N') - 1;
+$cells = array_fill(0, $leading, 0);
+for ($d = 1; $d <= $daysInMonth; $d++) { $cells[] = $d; }
+while (count($cells) % 7 !== 0) { $cells[] = 0; }
+$weeks = array_chunk($cells, 7);
+
+// Sáv-adatok: a hónapra vágott kezdő/zárónap + folytatás-jelzők (előző/következő hónapba lóg)
+$bars = [];
 foreach ($shown as $e) {
     $s  = new DateTimeImmutable($e['start_datetime']);
     $en = !empty($e['end_datetime']) ? new DateTimeImmutable($e['end_datetime']) : $s;
-    $startDay = ($s  < $monthStart) ? 1 : (int) $s->format('j');
-    $endDay   = ($en > $monthEnd)   ? $daysInMonth : (int) $en->format('j');
-    for ($d = max(1, $startDay); $d <= min($daysInMonth, $endDay); $d++) {
-        $daysEvents[$d][] = $e;
-    }
+    if ($en < $s) { $en = $s; }
+    $bars[] = [
+        'e'    => $e,
+        'sd'   => ($s < $monthStart) ? 1 : (int) $s->format('j'),
+        'ed'   => ($en > $monthEnd) ? $daysInMonth : (int) $en->format('j'),
+        'pre'  => $s < $monthStart,
+        'post' => $en > $monthEnd,
+    ];
 }
+// Kezdőnap szerint növekvő, azonos kezdésnél a hosszabb esemény előre (szebb rétegződés)
+usort($bars, static fn(array $a, array $b) => [$a['sd'], $b['ed']] <=> [$b['sd'], $a['ed']]);
 
 $pageTitle = "Eseménynaptár — {$monthTitle} | holborozzak.hu";
 $pageDescription = "Borrendezvények naptára ({$monthTitle}): nézd meg, mely napokon vannak "
@@ -131,14 +143,6 @@ require __DIR__ . '/partials/header.php';
       </div>
     </form>
 
-    <?php if ($catOptions): ?>
-    <div class="cal-legend">
-      <?php foreach ($catOptions as $slug => $name): [$bg, ] = categoryColorBySlug($slug); ?>
-        <span class="cal-legend__item"><span class="cal-legend__dot" style="background: <?= h($bg) ?>"></span><?= h($name) ?></span>
-      <?php endforeach; ?>
-    </div>
-    <?php endif; ?>
-
     <div class="cal">
       <div class="cal-toolbar">
         <span class="cal-toolbar__title">
@@ -151,42 +155,86 @@ require __DIR__ . '/partials/header.php';
           <a class="cal-nav__today" href="<?= h($todayUrl) ?>">Ma</a>
         </div>
       </div>
-      <div class="cal__dow"><span>Hét</span><span>Kedd</span><span>Sze</span><span>Csüt</span><span>Pén</span><span>Szo</span><span>Vas</span></div>
-      <div class="cal__grid">
-        <?php
-        $leading = (int) $first->format('N') - 1;
-        for ($i = 0; $i < $leading; $i++) {
-            echo '<div class="cal__cell cal__cell--blank"></div>';
-        }
-        for ($d = 1; $d <= $daysInMonth; $d++):
-            $isToday = ($year === (int) $now->format('Y') && $month === (int) $now->format('n') && $d === (int) $now->format('j'));
-            $col = ($leading + ($d - 1)) % 7;
-            $isWeekend = ($col >= 5);
-            $dayEvents = $daysEvents[$d];
-        ?>
-          <div class="cal__cell<?= $isWeekend ? ' cal__cell--weekend' : '' ?><?= $isToday ? ' cal__cell--today' : '' ?>">
-            <span class="cal__day"><?= $d ?></span>
-            <?php if ($dayEvents): ?>
-            <div class="cal__events">
-              <?php foreach ($dayEvents as $e): [$bg, $fg] = categoryColor($e); ?>
-                <a class="cal__event" style="background: <?= h($bg) ?>; color: <?= h($fg) ?>"
-                   href="<?= h(eventUrl($e)) ?>" title="<?= h($e['title']) ?>"><?= h($e['title']) ?></a>
-              <?php endforeach; ?>
-              <?php if (count($dayEvents) > 3): ?>
-                <span class="cal__more">+<?= count($dayEvents) - 3 ?> további</span>
-              <?php endif; ?>
-            </div>
-            <?php endif; ?>
-          </div>
-        <?php endfor; ?>
-        <?php
-        $trailing = (7 - (($leading + $daysInMonth) % 7)) % 7;
-        for ($i = 0; $i < $trailing; $i++) {
-            echo '<div class="cal__cell cal__cell--blank"></div>';
-        }
-        ?>
+
+      <?php if ($catOptions): ?>
+      <div class="cal-legend">
+        <?php foreach ($catOptions as $slug => $name): [$bg, ] = categoryColorBySlug($slug); ?>
+          <span class="cal-legend__item"><span class="cal-legend__dot" style="background: <?= h($bg) ?>"></span><?= h($name) ?></span>
+        <?php endforeach; ?>
       </div>
+      <?php endif; ?>
+
+      <div class="cal__dow"><span>Hétfő</span><span>Kedd</span><span>Szerda</span><span>Csüt</span><span>Péntek</span><span>Szombat</span><span>Vasárnap</span></div>
+
+      <?php foreach ($weeks as $week): ?>
+        <?php
+        $weekDays  = array_values(array_filter($week));
+        $weekFirst = $weekDays ? min($weekDays) : 0;
+        $weekLast  = $weekDays ? max($weekDays) : 0;
+        ?>
+        <div class="cal__week">
+          <?php foreach ($week as $i => $d):
+              $isToday = $d && $year === (int) $now->format('Y') && $month === (int) $now->format('n') && $d === (int) $now->format('j'); ?>
+            <span class="cal__d<?= $i >= 5 ? ' cal__d--we' : '' ?><?= $isToday ? ' cal__d--today' : '' ?>"><?= $d ? ($isToday ? '<b>' . $d . '</b>' : $d) : '' ?></span>
+          <?php endforeach; ?>
+
+          <?php foreach ($bars as $bar):
+              if (!$weekFirst) { continue; }
+              $segS = max($bar['sd'], $weekFirst);
+              $segE = min($bar['ed'], $weekLast);
+              if ($segS > $segE) { continue; }
+              $e     = $bar['e'];
+              $col   = (($leading + $segS - 1) % 7) + 1;
+              $span  = $segE - $segS + 1;
+              $contL = $bar['pre'] || $segS > $bar['sd'];
+              $contR = $bar['post'] || $segE < $bar['ed'];
+              [$bg, $fg] = categoryColor($e);
+              $tipRight  = ($col + $span - 1) >= 5;
+              $loc       = trim(($e['venue_name'] ? $e['venue_name'] . ', ' : '') . ($e['city'] ?? ''));
+              $price     = (int) $e['is_free'] === 1 ? 'Ingyenes' : (string) ($e['price_info'] ?? '');
+              $cat       = $e['categories'][0]['name'] ?? '';
+          ?>
+            <a class="cal__bar<?= $contL ? ' cal__bar--cont-l' : '' ?><?= $contR ? ' cal__bar--cont-r' : '' ?>"
+               style="grid-column: <?= $col ?> / span <?= $span ?>; background: <?= h($bg) ?>; color: <?= h($fg) ?>"
+               href="<?= h(eventUrl($e)) ?>">
+              <span class="cal__bar-t"><?= h($e['title']) ?></span>
+              <span class="cal-tip<?= $tipRight ? ' cal-tip--r' : '' ?>">
+                <img class="cal-tip__img" src="<?= h(eventImage($e)) ?>" alt="" loading="lazy">
+                <span class="cal-tip__body">
+                  <b><?= h($e['title']) ?></b>
+                  <span class="cal-tip__meta">
+                    📅 <?= h(formatDateRange($e['start_datetime'], $e['end_datetime'])) ?>
+                    <?php if ($loc !== ''): ?><br>📍 <?= h($loc) ?><?php endif; ?>
+                    <?php if ($price !== ''): ?><br>🏷 <?= h($price) ?><?php endif; ?>
+                  </span>
+                  <?php if ($cat !== ''): ?><span class="tag"><?= h($cat) ?></span><?php endif; ?>
+                </span>
+              </span>
+            </a>
+          <?php endforeach; ?>
+        </div>
+      <?php endforeach; ?>
     </div>
+
+    <!-- Mobil: agenda-lista a rács helyett (kis kijelzőn a 7 oszlop olvashatatlan) -->
+    <?php if ($shown): ?>
+    <div class="cal-agenda">
+      <?php foreach ($bars as $bar): $e = $bar['e']; ?>
+        <a class="cal-agenda__row" href="<?= h(eventUrl($e)) ?>">
+          <span class="cal-agenda__date">
+            <b><?= h(dayNumber($e['start_datetime'])) ?></b>
+            <i><?= h(shortMonthUpper($e['start_datetime'])) ?></i>
+          </span>
+          <span class="cal-agenda__main">
+            <span class="cal-agenda__title"><?= h($e['title']) ?></span>
+            <span class="cal-agenda__sub">
+              <?= h(formatDateRange($e['start_datetime'], $e['end_datetime'])) ?><?php if (!empty($e['city'])): ?> · <?= h($e['city']) ?><?php endif; ?><?php if ((int) $e['is_free'] === 1): ?> · Ingyenes<?php endif; ?>
+            </span>
+          </span>
+        </a>
+      <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
 
     <?php if (!$shown): ?>
       <p class="section-intro"><?= $monthEvents ? 'Nincs a szűrőnek megfelelő esemény ebben a hónapban.' : 'Ebben a hónapban nincs rögzített esemény.' ?>
