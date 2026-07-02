@@ -7,37 +7,9 @@
 <link rel="stylesheet" href="../base.css">
 <link rel="stylesheet" href="racs-base.css">
 <style>
-/* 1B: hover-előnézet — a sáv fölé érve részletkártya, kattintás nélkül.
-   (Touch-eszközön az első koppintás mutatja, a második navigál — élesben.) */
-
-.cal { overflow: visible; }
-.cal-head { border-radius: 16px 16px 0 0; position: sticky; top: 78px; z-index: 10; }
-
+/* 1B: sticky hónap-fejléc görgetésnél (a hover-előnézet már közös alap). */
+.cal-head { position: sticky; top: 78px; z-index: 10; }
 .week { grid-auto-rows: minmax(28px, auto); min-height: 122px; }
-.bar { overflow: visible; }
-.bar__t { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-.tip {
-  display: none; position: absolute; top: calc(100% + 8px); left: 0; z-index: 30;
-  min-width: 240px; max-width: 300px;
-  background: #fff; border: 1px solid var(--line); border-radius: 12px;
-  box-shadow: 0 16px 40px rgba(74, 14, 28, .25);
-  padding: .8rem .95rem; color: var(--ink); white-space: normal;
-  font-weight: 400; font-size: .84rem; line-height: 1.45;
-}
-.tip::before {
-  content: ""; position: absolute; top: -6px; left: 18px;
-  width: 10px; height: 10px; background: #fff;
-  border-left: 1px solid var(--line); border-top: 1px solid var(--line);
-  transform: rotate(45deg);
-}
-.tip--r { left: auto; right: 0; }
-.tip--r::before { left: auto; right: 18px; }
-.tip b { display: block; font-size: .98rem; color: var(--wine-900); margin-bottom: .15rem; }
-.tip .meta { color: var(--muted); }
-.tip .tag { margin-top: .4rem; }
-.bar:hover .tip, .bar:focus-visible .tip { display: block; }
-.bar:hover { z-index: 20; }
 </style>
 </head>
 <body>
@@ -77,7 +49,6 @@
         <a class="cal-nav__btn" href="#" aria-label="Előző hónap">‹</a>
         <a class="cal-nav__btn" href="#" aria-label="Következő hónap">›</a>
         <a class="cal-nav__today" href="#">Ma</a>
-        <a class="cal-nav__ics" href="#" title="A hónap összes eseménye egy .ics fájlban — beolvasható Google Naptárba, Outlookba, iPhone-naptárba">Mentés a naptáramba (.ics)</a>
       </div>
     </div>
     <div class="legend">
@@ -93,51 +64,51 @@
       <span class="d">1</span><span class="d d--today"><span>2</span></span><span class="d">3</span><span class="d d--we">4</span><span class="d d--we">5</span>
       <a class="bar" style="grid-column: 7 / span 1; background:#c8a14b; color:#3a230f;" href="#">
         <span class="bar__t">Szekszárdi Pinceséta</span>
-        <span class="tip tip--r"><b>Szekszárdi Pinceséta</b><span class="meta">📅 júl. 5. (vasárnap) · 📍 Szekszárd<br>🏷 Belépő 3 500 Ft</span><span class="tag">Kóstoló</span></span>
+        <span class="tip tip--r"><img class="tip__img" src="../../../public/assets/hero.jpg" alt=""><span class="tip__body"><b>Szekszárdi Pinceséta</b><span class="meta">📅 júl. 5. (vasárnap) · 📍 Szekszárd<br>🏷 Belépő 3 500 Ft</span><span class="tag">Kóstoló</span></span></span>
       </a>
     </div>
     <div class="week">
       <span class="d">6</span><span class="d">7</span><span class="d">8</span><span class="d">9</span><span class="d">10</span><span class="d d--we">11</span><span class="d d--we">12</span>
       <a class="bar bar--cont-r" style="grid-column: 5 / span 3; background:#722f37; color:#fff;" href="#">
         <span class="bar__t">Balatonfüredi Borhetek</span>
-        <span class="tip"><b>Balatonfüredi Borhetek</b><span class="meta">📅 júl. 10–26. (17 nap) · 📍 Balatonfüred, Tagore sétány<br>🏷 A belépés ingyenes, kóstolójegy a helyszínen</span><span class="tag">Borfesztivál</span></span>
+        <span class="tip"><img class="tip__img" src="../../../public/assets/hero.jpg" alt=""><span class="tip__body"><b>Balatonfüredi Borhetek</b><span class="meta">📅 júl. 10–26. (17 nap) · 📍 Balatonfüred, Tagore sétány<br>🏷 A belépés ingyenes, kóstolójegy a helyszínen</span><span class="tag">Borfesztivál</span></span></span>
       </a>
       <a class="bar" style="grid-column: 6 / span 1; background:#c8a14b; color:#3a230f;" href="#">
         <span class="bar__t">Tokaji Nyáresti Kóstoló</span>
-        <span class="tip tip--r"><b>Tokaji Nyáresti Kóstoló</b><span class="meta">📅 júl. 11. (szombat) 18:00 · 📍 Tokaj<br>🏷 5 900 Ft (6 tétel)</span><span class="tag">Kóstoló</span></span>
+        <span class="tip tip--r"><img class="tip__img" src="../../../public/assets/hero.jpg" alt=""><span class="tip__body"><b>Tokaji Nyáresti Kóstoló</b><span class="meta">📅 júl. 11. (szombat) 18:00 · 📍 Tokaj<br>🏷 5 900 Ft (6 tétel)</span><span class="tag">Kóstoló</span></span></span>
       </a>
     </div>
     <div class="week">
       <span class="d">13</span><span class="d">14</span><span class="d">15</span><span class="d">16</span><span class="d">17</span><span class="d d--we">18</span><span class="d d--we">19</span>
       <a class="bar bar--cont-l bar--cont-r" style="grid-column: 1 / span 7; background:#722f37; color:#fff;" href="#">
         <span class="bar__t">Balatonfüredi Borhetek</span>
-        <span class="tip"><b>Balatonfüredi Borhetek</b><span class="meta">📅 júl. 10–26. (17 nap) · 📍 Balatonfüred, Tagore sétány<br>🏷 A belépés ingyenes, kóstolójegy a helyszínen</span><span class="tag">Borfesztivál</span></span>
+        <span class="tip"><img class="tip__img" src="../../../public/assets/hero.jpg" alt=""><span class="tip__body"><b>Balatonfüredi Borhetek</b><span class="meta">📅 júl. 10–26. (17 nap) · 📍 Balatonfüred, Tagore sétány<br>🏷 A belépés ingyenes, kóstolójegy a helyszínen</span><span class="tag">Borfesztivál</span></span></span>
       </a>
       <a class="bar bar--cont-r" style="grid-column: 6 / span 2; background:#7a8450; color:#fff;" href="#">
         <span class="bar__t">Szent György-hegy Hajnalig</span>
-        <span class="tip tip--r"><b>Szent György-hegy Hajnalig</b><span class="meta">📅 júl. 18–20. · 📍 Szent György-hegy, Tapolca<br>🏷 Ingyenes</span><span class="tag">Borvidéki program</span></span>
+        <span class="tip tip--r"><img class="tip__img" src="../../../public/assets/hero.jpg" alt=""><span class="tip__body"><b>Szent György-hegy Hajnalig</b><span class="meta">📅 júl. 18–20. · 📍 Szent György-hegy, Tapolca<br>🏷 Ingyenes</span><span class="tag">Borvidéki program</span></span></span>
       </a>
     </div>
     <div class="week">
       <span class="d">20</span><span class="d">21</span><span class="d">22</span><span class="d">23</span><span class="d">24</span><span class="d d--we">25</span><span class="d d--we">26</span>
       <a class="bar bar--cont-l" style="grid-column: 1 / span 7; background:#722f37; color:#fff;" href="#">
         <span class="bar__t">Balatonfüredi Borhetek</span>
-        <span class="tip"><b>Balatonfüredi Borhetek</b><span class="meta">📅 júl. 10–26. (17 nap) · 📍 Balatonfüred, Tagore sétány<br>🏷 A belépés ingyenes, kóstolójegy a helyszínen</span><span class="tag">Borfesztivál</span></span>
+        <span class="tip"><img class="tip__img" src="../../../public/assets/hero.jpg" alt=""><span class="tip__body"><b>Balatonfüredi Borhetek</b><span class="meta">📅 júl. 10–26. (17 nap) · 📍 Balatonfüred, Tagore sétány<br>🏷 A belépés ingyenes, kóstolójegy a helyszínen</span><span class="tag">Borfesztivál</span></span></span>
       </a>
       <a class="bar bar--cont-l" style="grid-column: 1 / span 1; background:#7a8450; color:#fff;" href="#">
         <span class="bar__t">Szent György-hegy Hajnalig</span>
-        <span class="tip"><b>Szent György-hegy Hajnalig</b><span class="meta">📅 júl. 18–20. · 📍 Szent György-hegy, Tapolca<br>🏷 Ingyenes</span><span class="tag">Borvidéki program</span></span>
+        <span class="tip"><img class="tip__img" src="../../../public/assets/hero.jpg" alt=""><span class="tip__body"><b>Szent György-hegy Hajnalig</b><span class="meta">📅 júl. 18–20. · 📍 Szent György-hegy, Tapolca<br>🏷 Ingyenes</span><span class="tag">Borvidéki program</span></span></span>
       </a>
       <a class="bar" style="grid-column: 5 / span 3; background:#b5562a; color:#fff;" href="#">
         <span class="bar__t">Egri Bikavér Ünnep</span>
-        <span class="tip tip--r"><b>Egri Bikavér Ünnep</b><span class="meta">📅 júl. 24–26. · 📍 Eger, Dobó tér<br>🏷 Napijegy 2 500 Ft</span><span class="tag">Gasztronómia</span></span>
+        <span class="tip tip--r"><img class="tip__img" src="../../../public/assets/hero.jpg" alt=""><span class="tip__body"><b>Egri Bikavér Ünnep</b><span class="meta">📅 júl. 24–26. · 📍 Eger, Dobó tér<br>🏷 Napijegy 2 500 Ft</span><span class="tag">Gasztronómia</span></span></span>
       </a>
     </div>
     <div class="week">
       <span class="d">27</span><span class="d">28</span><span class="d">29</span><span class="d">30</span><span class="d">31</span><span class="d"></span><span class="d"></span>
       <a class="bar bar--cont-r" style="grid-column: 5 / span 3; background:#722f37; color:#fff;" href="#">
         <span class="bar__t">Villányi Rozénapok</span>
-        <span class="tip tip--r"><b>Villányi Rozénapok</b><span class="meta">📅 júl. 31. – aug. 2. · 📍 Villány<br>🏷 Ingyenes belépés</span><span class="tag">Borfesztivál</span></span>
+        <span class="tip tip--r"><img class="tip__img" src="../../../public/assets/hero.jpg" alt=""><span class="tip__body"><b>Villányi Rozénapok</b><span class="meta">📅 júl. 31. – aug. 2. · 📍 Villány<br>🏷 Ingyenes belépés</span><span class="tag">Borfesztivál</span></span></span>
       </a>
     </div>
 
