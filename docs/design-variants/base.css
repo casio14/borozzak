@@ -1,0 +1,147 @@
+/* holborozzak.hu — esemény-részletoldal design-variánsok: közös alap
+   (a public/assets/style.css palettájából és elemeiből átemelve) */
+
+:root {
+  --wine-900: #4a0e1c;
+  --wine-700: #722f37;
+  --wine-500: #8c3b46;
+  --gold:     #c8a14b;
+  --gold-200: #e3cd97;
+  --leaf:     #5a6b3b;
+  --cream:    #f7f2ea;
+  --paper:    #fffdf9;
+  --ink:      #2b1d20;
+  --muted:    #8a7d77;
+  --line:     #e7ddcf;
+
+  --maxw: 1280px;
+  --radius: 14px;
+  --shadow: 0 6px 24px rgba(74, 14, 28, .08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+h1, h2, h3, .brand { font-family: Georgia, "Times New Roman", serif; line-height: 1.2; }
+a { color: var(--wine-700); }
+
+.container { max-width: var(--maxw); margin: 0 auto; padding: 0 1.75rem; }
+
+/* ---------- Egyszerűsített fejléc (a valódi váz mása) ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--cream);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 2px 8px rgba(74, 14, 28, .04);
+}
+.site-header__inner {
+  max-width: var(--maxw); margin: 0 auto;
+  padding: .85rem 1.75rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+}
+.brand { display: inline-flex; flex-direction: column; color: var(--wine-700); text-decoration: none; }
+.brand__name { font-size: 1.45rem; font-weight: 800; }
+.brand__accent { color: var(--wine-900); }
+.brand__tag { font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.site-nav { display: flex; gap: .35rem; }
+.site-nav a {
+  padding: .45rem .9rem; border-radius: 999px;
+  color: var(--wine-700); text-decoration: none; font-weight: 700; font-size: 1.02rem;
+}
+.site-nav a.is-active { background: #f3e7d0; color: var(--wine-900); }
+.site-nav a:hover { color: var(--gold); }
+@media (max-width: 760px) { .site-nav { display: none; } }
+
+/* ---------- Gombok, címkék, státusz-pirulák ---------- */
+.btn { display: inline-block; padding: .7rem 1.4rem; border-radius: 10px; font-weight: 700; text-decoration: none; text-align: center; }
+.btn--primary { background: var(--wine-700); color: var(--cream); }
+.btn--primary:hover { background: var(--wine-900); }
+.btn--ghost { background: transparent; color: var(--wine-700); border: 1px solid var(--line); }
+.btn--ghost:hover { border-color: var(--gold); }
+.btn--gold { background: var(--gold); color: var(--wine-900); }
+.btn--gold:hover { background: #b8923f; }
+.btn--ghost-light { background: transparent; color: #fff; border: 1px solid rgba(255, 255, 255, .5); }
+.btn--ghost-light:hover { border-color: #fff; background: rgba(255, 255, 255, .1); }
+
+.tag {
+  display: inline-block; font-size: .75rem; font-weight: 600;
+  background: #f0e7d8; color: var(--wine-700);
+  padding: .18rem .6rem; border-radius: 999px;
+}
+
+.status {
+  display: inline-flex; align-items: center; justify-content: center; line-height: 1;
+  font-size: .74rem; font-weight: 700; padding: .3rem .6rem; border-radius: 999px;
+}
+.status.is-soon { background: var(--gold); color: var(--wine-900); }
+.status.is-live { background: var(--wine-700); color: #fff; }
+
+/* ---------- Infó-sorok (ikon + kulcs/érték) ---------- */
+.info-row { display: flex; align-items: center; gap: .7rem; padding: .7rem 0; border-bottom: 1px solid var(--line); }
+.info-row:last-child { border-bottom: none; }
+.info-row__ic {
+  flex: none; width: 32px; height: 32px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 9px; background: var(--wine-700); color: #fff;
+}
+.info-row__ic svg { width: 17px; height: 17px; }
+.info-row__k { display: block; font-size: .72rem; font-weight: 700; color: var(--wine-700); text-transform: uppercase; letter-spacing: .03em; }
+.info-row__v { display: block; font-weight: 700; color: var(--ink); }
+
+/* ---------- Térkép-helyettesítő (a mockupban nincs Leaflet) ---------- */
+.map-ph {
+  position: relative; overflow: hidden;
+  border-radius: 12px; border: 1px solid var(--line);
+  background:
+    linear-gradient(115deg, transparent 42%, rgba(200, 161, 75, .18) 42%, rgba(200, 161, 75, .18) 46%, transparent 46%),
+    linear-gradient(25deg, transparent 60%, rgba(114, 47, 55, .10) 60%, rgba(114, 47, 55, .10) 63%, transparent 63%),
+    repeating-linear-gradient(0deg, transparent 0 38px, rgba(43, 29, 32, .05) 38px 39px),
+    repeating-linear-gradient(90deg, transparent 0 38px, rgba(43, 29, 32, .05) 38px 39px),
+    #eef0ec;
+}
+.map-ph::after {
+  content: ""; position: absolute; top: 50%; left: 50%;
+  width: 18px; height: 18px; margin: -9px 0 0 -9px;
+  background: var(--wine-700); border: 2px solid var(--gold); border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .35);
+}
+.map-ph__note {
+  position: absolute; left: .6rem; bottom: .5rem;
+  font-size: .7rem; color: var(--muted);
+  background: rgba(255, 253, 249, .85); padding: .1rem .45rem; border-radius: 6px;
+}
+.map-link { margin: .5rem 0 0; font-size: .85rem; }
+.map-link a { color: var(--wine-700); font-weight: 700; text-decoration: none; }
+.map-link a:hover { color: var(--gold); }
+
+/* ---------- Lebegő variáns-váltó ---------- */
+.variant-switch {
+  position: fixed; right: 1rem; bottom: 1rem; z-index: 500;
+  display: flex; align-items: center; gap: .35rem;
+  background: var(--wine-900); color: #fff;
+  padding: .45rem .6rem; border-radius: 999px;
+  box-shadow: 0 8px 30px rgba(74, 14, 28, .35);
+  font-size: .85rem; font-weight: 700;
+}
+.variant-switch span { margin-right: .2rem; color: var(--gold-200); }
+.variant-switch a {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 50%;
+  color: #fff; text-decoration: none; background: rgba(255, 255, 255, .12);
+}
+.variant-switch a:hover { background: var(--gold); color: var(--wine-900); }
+.variant-switch a.is-current { background: var(--gold); color: var(--wine-900); cursor: default; }
+
+/* ---------- Lábléc-jelzés ---------- */
+.mock-note {
+  max-width: var(--maxw); margin: 2.5rem auto 0; padding: 1rem 1.75rem 2rem;
+  font-size: .8rem; color: var(--muted); border-top: 1px solid var(--line);
+}

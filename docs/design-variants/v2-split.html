@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2. variáns — Osztott hero · esemény-részletoldal mockup</title>
+<link rel="stylesheet" href="base.css">
+<style>
+/* ===== 2. variáns: osztott hero (kép + bordó CTA-panel), infó-csík, széles leírás + nagy térkép ===== */
+
+.wrap { max-width: var(--maxw); margin: 1.5rem auto 0; padding: 0 1.75rem; }
+.back { display: inline-block; margin-bottom: .8rem; font-weight: 700; font-size: .9rem; text-decoration: none; }
+.back:hover { color: var(--gold); }
+
+.split {
+  display: grid; grid-template-columns: minmax(0, 7fr) minmax(340px, 5fr);
+  border-radius: 18px; overflow: hidden; box-shadow: var(--shadow);
+}
+.split__img { position: relative; min-height: 400px; }
+.split__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.split__badge {
+  position: absolute; top: 1rem; left: 1rem;
+  background: var(--gold); color: var(--wine-900);
+  font-weight: 800; font-size: .8rem; padding: .35rem .7rem; border-radius: 999px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .25);
+}
+.split__panel {
+  background: linear-gradient(150deg, var(--wine-700), var(--wine-900) 70%);
+  color: #fff;
+  padding: 2.2rem 2rem;
+  display: flex; flex-direction: column; justify-content: center; gap: .9rem;
+}
+.split__tags { display: flex; gap: .4rem; flex-wrap: wrap; }
+.split__tags .tag { background: rgba(255, 255, 255, .14); color: var(--gold-200); }
+.split__panel h1 { margin: 0; color: #fff; font-size: clamp(1.7rem, 3.4vw, 2.5rem); }
+.split__when { display: flex; align-items: center; gap: .55rem; flex-wrap: wrap; color: var(--gold-200); font-weight: 700; }
+.split__when svg { width: 18px; height: 18px; flex: none; }
+.split__cta { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .4rem; }
+.split__cta .btn--gold { padding: .8rem 1.7rem; font-size: 1.05rem; }
+
+/* Vízszintes infó-csík */
+.strip {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  background: var(--paper); border: 1px solid var(--line); border-radius: 16px;
+  margin-top: 1.1rem; box-shadow: var(--shadow); overflow: hidden;
+}
+.strip__cell {
+  display: flex; align-items: center; gap: .7rem;
+  padding: 1rem 1.2rem; border-right: 1px solid var(--line);
+  color: inherit; text-decoration: none;
+}
+.strip__cell:last-child { border-right: none; }
+a.strip__cell:hover { background: #fbf6ec; }
+.strip__cell .info-row__ic { width: 36px; height: 36px; }
+
+/* Leírás + nagy térkép */
+.body-grid {
+  display: grid; grid-template-columns: minmax(0, 7fr) minmax(320px, 5fr); gap: 2rem;
+  margin-top: 2rem; align-items: start;
+}
+.desc-card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 1.6rem 1.8rem; box-shadow: var(--shadow); }
+.desc-card .lead { font-size: 1.15rem; font-weight: 600; color: var(--wine-900); margin: 0 0 1rem; }
+.desc-card p { margin: 0 0 1rem; }
+.desc-card h2 { color: var(--wine-900); font-size: 1.25rem; margin: 1.4rem 0 .5rem; }
+.map-card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 1rem 1.1rem; box-shadow: var(--shadow); }
+.map-card h2 { margin: .1rem 0 .7rem; font-size: 1.1rem; color: var(--wine-900); }
+.map-card .map-ph { height: 300px; }
+
+@media (max-width: 900px) {
+  .split { grid-template-columns: 1fr; }
+  .split__img { min-height: 240px; }
+  .strip { grid-template-columns: 1fr 1fr; }
+  .strip__cell { border-bottom: 1px solid var(--line); }
+  .body-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__name">hol<span class="brand__accent">borozzak</span>.hu</span>
+      <span class="brand__tag">Borrendezvények egy helyen</span>
+    </a>
+    <nav class="site-nav">
+      <a href="#">Főoldal</a>
+      <a href="#" class="is-active">Események</a>
+      <a href="#">Térkép</a>
+      <a href="#">Naptár</a>
+    </nav>
+  </div>
+</header>
+
+<article class="wrap">
+  <a class="back" href="#">← Vissza az eseményekhez</a>
+
+  <div class="split">
+    <div class="split__img">
+      <img src="../../public/assets/hero.jpg" alt="Budapesti Borfesztivál a Budai Várban">
+      <span class="split__badge">★ Kiemelt</span>
+    </div>
+    <div class="split__panel">
+      <div class="split__tags">
+        <span class="tag">Borfesztivál</span>
+        <span class="tag">Kóstoló</span>
+        <span class="tag">Gasztronómia</span>
+      </div>
+      <h1>Budapesti Borfesztivál</h1>
+      <div class="split__when">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>
+        <time datetime="2026-09-10">2026. szeptember 10–13.</time>
+        <span class="status is-soon">Közelgő</span>
+      </div>
+      <div class="split__cta">
+        <a class="btn btn--gold" href="#">Jegyek →</a>
+        <a class="btn btn--ghost-light" href="#">Hivatalos oldal →</a>
+        <a class="btn btn--ghost-light" href="#">Facebook →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="strip">
+    <div class="strip__cell">
+      <span class="info-row__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
+      <span><span class="info-row__k">Hol</span><span class="info-row__v">Budai Vár, Budapest</span></span>
+    </div>
+    <div class="strip__cell">
+      <span class="info-row__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6.5 9 3.5 15 6.5 21 3.5 21 17.5 15 20.5 9 17.5 3 20.5"/><line x1="9" y1="3.5" x2="9" y2="17.5"/><line x1="15" y1="6.5" x2="15" y2="20.5"/></svg></span>
+      <span><span class="info-row__k">Borvidék</span><span class="info-row__v">Etyek–Buda</span></span>
+    </div>
+    <div class="strip__cell">
+      <span class="info-row__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13 21l-9-9V4h8z"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor" stroke="none"/></svg></span>
+      <span><span class="info-row__k">Ár</span><span class="info-row__v">Napijegy 4 900 Ft</span></span>
+    </div>
+    <a class="strip__cell" href="#">
+      <span class="info-row__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="13" x2="12" y2="18"/><line x1="9.5" y1="15.5" x2="14.5" y2="15.5"/></svg></span>
+      <span><span class="info-row__k">Naptár</span><span class="info-row__v">＋ Naptárhoz adom</span></span>
+    </a>
+  </div>
+
+  <div class="body-grid">
+    <div class="desc-card">
+      <p class="lead">Magyarország legnagyobb borünnepe a Budai Várban, páratlan panorámával a Dunára és a Pesti oldalra.</p>
+      <p>Négy napon át több mint 200 hazai és nemzetközi borászat kínálja tételeit a Budai Vár falai között. A fesztivál idén is a magyar borvidékek sokszínűségét állítja a középpontba: a soproni kékfrankostól a tokaji aszúig minden stílus képviselteti magát.</p>
+      <h2>Mire számíthatsz?</h2>
+      <p>Vezetett kóstolók, borvacsorák, mesterkurzusok és élőzenei programok várnak minden este. A gasztronómiai kínálatról a hazai éttermek legjava gondoskodik, a gyerekeket külön családi zóna várja.</p>
+      <p>A belépőjegy mellé kóstolópohár jár, a kóstolójegyek a helyszínen válthatók. A rendezvény kártyás fizetést fogad el minden ponton.</p>
+    </div>
+    <div class="map-card">
+      <h2>Helyszín</h2>
+      <div class="map-ph" role="img" aria-label="Térkép-előnézet">
+        <span class="map-ph__note">Térkép-előnézet (élesben Leaflet)</span>
+      </div>
+      <p class="map-link"><a href="#">Megnyitás Google Mapsben / útvonalterv →</a></p>
+    </div>
+  </div>
+</article>
+
+<p class="mock-note">Design-mockup minta-adatokkal — 2. variáns: osztott hero. A gombok nem élnek.</p>
+
+<nav class="variant-switch" aria-label="Variánsok">
+  <span>Variáns:</span>
+  <a href="v1-magazin.html" title="Magazinos">1</a>
+  <a href="v2-split.html" class="is-current" title="Osztott hero">2</a>
+  <a href="v3-borcimke.html" title="Borcímke">3</a>
+  <a href="v4-jegy.html" title="Jegy">4</a>
+</nav>
+
+</body>
+</html>

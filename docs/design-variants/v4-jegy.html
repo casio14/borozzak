@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4. variáns — Jegy / ticket · esemény-részletoldal mockup</title>
+<link rel="stylesheet" href="base.css">
+<style>
+/* ===== 4. variáns: fesztiváljegy-stílus — perforált jegy-kártya letéphető dátum-csonkkal ===== */
+
+.stage { max-width: 1020px; margin: 2.2rem auto 0; padding: 0 1.75rem; }
+.back { display: inline-block; margin-bottom: 1rem; font-weight: 700; font-size: .9rem; text-decoration: none; }
+.back:hover { color: var(--gold); }
+
+.ticket {
+  position: relative;
+  display: grid; grid-template-columns: minmax(0, 1fr) 230px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 18px 50px rgba(74, 14, 28, .18);
+}
+
+/* Bal oldal: kép + tartalom */
+.ticket__main { padding: 0 0 1.4rem; min-width: 0; }
+.ticket__img { position: relative; border-radius: 17px 0 0 0; overflow: hidden; }
+.ticket__img img { display: block; width: 100%; height: 260px; object-fit: cover; }
+.ticket__badge {
+  position: absolute; top: .9rem; left: .9rem;
+  background: var(--gold); color: var(--wine-900);
+  font-weight: 800; font-size: .8rem; padding: .3rem .65rem; border-radius: 999px;
+}
+.ticket__body { padding: 1.2rem 1.6rem 0; }
+.ticket__tags { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .6rem; }
+.ticket__body h1 { margin: 0 0 .6rem; color: var(--wine-900); font-size: clamp(1.5rem, 3.4vw, 2.2rem); }
+.ticket__facts { display: flex; gap: 1.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.ticket__fact { display: flex; align-items: center; gap: .55rem; }
+.ticket__fact .info-row__ic { width: 30px; height: 30px; }
+.ticket__cta { display: flex; gap: .6rem; flex-wrap: wrap; }
+
+/* Perforáció a jegy és a csonk között */
+.ticket__perf {
+  position: absolute; top: 0; bottom: 0; right: 230px; width: 0;
+  border-right: 2px dashed var(--line);
+}
+.ticket__perf::before, .ticket__perf::after {
+  content: ""; position: absolute; left: -13px; width: 26px; height: 26px;
+  background: var(--cream); border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.ticket__perf::before { top: -14px; }
+.ticket__perf::after  { bottom: -14px; }
+
+/* Jobb oldal: letéphető csonk */
+.ticket__stub {
+  background: linear-gradient(165deg, var(--wine-700), var(--wine-900));
+  border-radius: 0 17px 17px 0;
+  color: #fff;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .45rem; padding: 1.4rem 1rem; text-align: center;
+}
+.ticket__stub-over { font-size: .68rem; font-weight: 800; letter-spacing: .3em; text-transform: uppercase; color: var(--gold-200); }
+.datecube { background: #fff; border-radius: 12px; overflow: hidden; width: 96px; box-shadow: 0 6px 18px rgba(0, 0, 0, .3); }
+.datecube__m { display: block; background: var(--gold); color: var(--wine-900); font-size: .78rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; padding: .25rem 0; }
+.datecube__d { display: block; color: var(--wine-900); font-family: Georgia, serif; font-size: 2.3rem; font-weight: 700; line-height: 1.15; padding: .2rem 0 .35rem; }
+.ticket__stub-days { font-weight: 700; color: var(--gold-200); font-size: .95rem; }
+.ticket__stub-city { font-size: .8rem; opacity: .85; }
+.ticket__stub .status { margin-top: .3rem; }
+.ticket__stub-no { margin-top: .7rem; font-size: .66rem; letter-spacing: .28em; opacity: .55; }
+
+/* Alsó rész: leírás + infó/térkép */
+.body-grid {
+  display: grid; grid-template-columns: minmax(0, 3fr) minmax(300px, 2fr); gap: 2rem;
+  margin-top: 2.2rem; align-items: start;
+}
+.desc .lead { font-size: 1.18rem; font-weight: 600; color: var(--wine-900); margin: 0 0 1rem; }
+.desc p { margin: 0 0 1rem; }
+.desc h2 { color: var(--wine-900); font-size: 1.25rem; margin: 1.4rem 0 .5rem; }
+.side-card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 1rem 1.2rem; box-shadow: var(--shadow); }
+.side-card .map-ph { height: 210px; margin-top: .8rem; }
+
+@media (max-width: 860px) {
+  .ticket { grid-template-columns: 1fr; }
+  .ticket__perf { top: auto; right: 0; left: 0; bottom: 178px; width: auto; height: 0; border-right: none; border-top: 2px dashed var(--line); }
+  .ticket__perf::before, .ticket__perf::after { top: -13px; left: auto; }
+  .ticket__perf::before { left: -14px; }
+  .ticket__perf::after  { right: -14px; }
+  .ticket__img { border-radius: 17px 17px 0 0; }
+  .ticket__stub { border-radius: 0 0 17px 17px; min-height: 178px; }
+  .body-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__name">hol<span class="brand__accent">borozzak</span>.hu</span>
+      <span class="brand__tag">Borrendezvények egy helyen</span>
+    </a>
+    <nav class="site-nav">
+      <a href="#">Főoldal</a>
+      <a href="#" class="is-active">Események</a>
+      <a href="#">Térkép</a>
+      <a href="#">Naptár</a>
+    </nav>
+  </div>
+</header>
+
+<article class="stage">
+  <a class="back" href="#">← Vissza az eseményekhez</a>
+
+  <div class="ticket">
+    <div class="ticket__main">
+      <div class="ticket__img">
+        <img src="../../public/assets/hero.jpg" alt="Budapesti Borfesztivál a Budai Várban">
+        <span class="ticket__badge">★ Kiemelt</span>
+      </div>
+      <div class="ticket__body">
+        <div class="ticket__tags">
+          <span class="tag">Borfesztivál</span>
+          <span class="tag">Kóstoló</span>
+          <span class="tag">Gasztronómia</span>
+        </div>
+        <h1>Budapesti Borfesztivál</h1>
+        <div class="ticket__facts">
+          <span class="ticket__fact">
+            <span class="info-row__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
+            <span><span class="info-row__k">Hol</span><span class="info-row__v">Budai Vár, Budapest</span></span>
+          </span>
+          <span class="ticket__fact">
+            <span class="info-row__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6.5 9 3.5 15 6.5 21 3.5 21 17.5 15 20.5 9 17.5 3 20.5"/><line x1="9" y1="3.5" x2="9" y2="17.5"/><line x1="15" y1="6.5" x2="15" y2="20.5"/></svg></span>
+            <span><span class="info-row__k">Borvidék</span><span class="info-row__v">Etyek–Buda</span></span>
+          </span>
+          <span class="ticket__fact">
+            <span class="info-row__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13 21l-9-9V4h8z"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor" stroke="none"/></svg></span>
+            <span><span class="info-row__k">Ár</span><span class="info-row__v">Napijegy 4 900 Ft</span></span>
+          </span>
+        </div>
+        <div class="ticket__cta">
+          <a class="btn btn--primary" href="#">Jegyek →</a>
+          <a class="btn btn--ghost" href="#">Hivatalos oldal →</a>
+          <a class="btn btn--ghost" href="#">Facebook →</a>
+          <a class="btn btn--ghost" href="#">＋ Naptárhoz adom</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="ticket__perf" aria-hidden="true"></div>
+
+    <div class="ticket__stub">
+      <span class="ticket__stub-over">Belépő</span>
+      <span class="datecube">
+        <span class="datecube__m">Szeptember</span>
+        <span class="datecube__d">10.</span>
+      </span>
+      <span class="ticket__stub-days">– 13. (Cs–V)</span>
+      <span class="ticket__stub-city">Budapest · Budai Vár</span>
+      <span class="status is-soon">Közelgő</span>
+      <span class="ticket__stub-no">№ 2026-BBF</span>
+    </div>
+  </div>
+
+  <div class="body-grid">
+    <div class="desc">
+      <p class="lead">Magyarország legnagyobb borünnepe a Budai Várban, páratlan panorámával a Dunára és a Pesti oldalra.</p>
+      <p>Négy napon át több mint 200 hazai és nemzetközi borászat kínálja tételeit a Budai Vár falai között. A fesztivál idén is a magyar borvidékek sokszínűségét állítja a középpontba: a soproni kékfrankostól a tokaji aszúig minden stílus képviselteti magát.</p>
+      <h2>Mire számíthatsz?</h2>
+      <p>Vezetett kóstolók, borvacsorák, mesterkurzusok és élőzenei programok várnak minden este. A gasztronómiai kínálatról a hazai éttermek legjava gondoskodik, a gyerekeket külön családi zóna várja.</p>
+      <p>A belépőjegy mellé kóstolópohár jár, a kóstolójegyek a helyszínen válthatók. A rendezvény kártyás fizetést fogad el minden ponton.</p>
+    </div>
+    <div class="side-card">
+      <strong style="color:var(--wine-900);">Helyszín</strong>
+      <div class="map-ph" role="img" aria-label="Térkép-előnézet">
+        <span class="map-ph__note">Térkép-előnézet (élesben Leaflet)</span>
+      </div>
+      <p class="map-link"><a href="#">Megnyitás Google Mapsben / útvonalterv →</a></p>
+    </div>
+  </div>
+</article>
+
+<p class="mock-note">Design-mockup minta-adatokkal — 4. variáns: jegy / ticket. A gombok nem élnek.</p>
+
+<nav class="variant-switch" aria-label="Variánsok">
+  <span>Variáns:</span>
+  <a href="v1-magazin.html" title="Magazinos">1</a>
+  <a href="v2-split.html" title="Osztott hero">2</a>
+  <a href="v3-borcimke.html" title="Borcímke">3</a>
+  <a href="v4-jegy.html" class="is-current" title="Jegy">4</a>
+</nav>
+
+</body>
+</html>
