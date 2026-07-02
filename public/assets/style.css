@@ -840,6 +840,10 @@ main { flex: 1 0 auto; }
 .facets__filters { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
 .facets__sort { margin-left: auto; display: flex; align-items: center; gap: .5rem; }
 .facets__sort-label { color: var(--muted); font-weight: 600; font-size: .9rem; white-space: nowrap; }
+/* Mobil: a rendezés saját sort kap, jobbra zárva (a szűrők alatt) */
+@media (max-width: 760px) {
+  .facets__sort { flex: 1 1 100%; justify-content: flex-end; }
+}
 
 /* Szabadszavas kereső a lista oldalon */
 .facets__search {
