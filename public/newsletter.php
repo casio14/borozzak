@@ -46,6 +46,8 @@ if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     'date'  => formatDateRange($e['start_datetime'], $e['end_datetime']),
                     'city'  => (string) ($e['city'] ?? ''),
                     'free'  => (int) $e['is_free'] === 1,
+                    'day'   => dayNumber($e['start_datetime']),
+                    'mon'   => shortMonthUpper($e['start_datetime']),
                 ];
 
                 $upcoming = fetchUpcomingEvents($pdo);
