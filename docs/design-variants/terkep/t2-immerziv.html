@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Térkép 2. variáns — Immerzív teljes térkép · mockup</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="../base.css">
+<link rel="stylesheet" href="terkep-base.css">
+<style>
+/* ===== Térkép 2. variáns: a térkép betölti a képernyőt, minden UI lebeg fölötte ===== */
+
+.stage { position: relative; height: calc(100vh - 78px); min-height: 520px; }
+#map { position: absolute; inset: 0; }
+
+/* Lebegő kereső + szűrők felül */
+.float-top {
+  position: absolute; top: 1rem; left: 50%; transform: translateX(-50%); z-index: 500;
+  width: min(720px, calc(100% - 2rem));
+  display: flex; flex-direction: column; gap: .5rem; align-items: center;
+}
+.searchbar {
+  width: 100%; display: flex; gap: 6px;
+  background: rgba(255, 253, 249, .92); backdrop-filter: blur(8px);
+  border: 1px solid var(--line); border-radius: 14px; padding: 6px;
+  box-shadow: 0 12px 40px rgba(43, 20, 24, .25);
+}
+.searchbar input { flex: 1; min-width: 0; border: none; background: transparent; padding: .7rem 1rem; font-size: .98rem; }
+.searchbar input:focus { outline: none; }
+.searchbar button { border: none; background: var(--wine-700); color: var(--cream); border-radius: 9px; padding: .7rem 1.3rem; font-weight: 800; cursor: pointer; }
+.searchbar button:hover { background: var(--wine-900); }
+.float-top .chips { justify-content: center; }
+.float-top .chip { box-shadow: 0 4px 16px rgba(43, 20, 24, .15); }
+
+/* Alsó, vízszintesen görgethető kártya-szalag */
+.strip {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 500;
+  display: flex; gap: .7rem; overflow-x: auto; padding: .8rem 1rem 1rem;
+  scroll-snap-type: x mandatory;
+  background: linear-gradient(180deg, transparent, rgba(43, 20, 24, .28));
+}
+.scard {
+  flex: none; width: 240px; scroll-snap-align: start;
+  background: #fff; border-radius: 14px; overflow: hidden;
+  box-shadow: 0 10px 30px rgba(43, 20, 24, .3);
+  text-decoration: none; color: inherit; cursor: pointer;
+  border: 2px solid transparent;
+}
+.scard.is-active { border-color: var(--gold); }
+.scard img { display: block; width: 100%; height: 86px; object-fit: cover; }
+.scard__body { padding: .55rem .75rem .7rem; }
+.scard__t { display: block; font-weight: 700; color: var(--wine-900); font-size: .92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.scard__d { display: block; font-size: .8rem; font-weight: 700; color: var(--wine-700); }
+.scard__s { display: block; font-size: .78rem; color: var(--muted); }
+
+/* Boros Leaflet-zoom */
+.leaflet-bar a { color: var(--wine-700); }
+
+@media (max-width: 640px) {
+  .float-top .chips { display: none; }  /* mobilon csak a kereső lebeg */
+  .scard { width: 200px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__name">hol<span class="brand__accent">borozzak</span>.hu</span>
+      <span class="brand__tag">Borrendezvények egy helyen</span>
+    </a>
+    <nav class="site-nav">
+      <a href="#">Események</a>
+      <a href="#">Naptár</a>
+      <a href="#" class="is-active">Térkép</a>
+    </nav>
+  </div>
+</header>
+
+<div class="stage">
+  <div id="map" role="region" aria-label="Borrendezvények térképe"></div>
+
+  <div class="float-top">
+    <form class="searchbar" role="search">
+      <input type="search" placeholder="Város, borvidék vagy esemény keresése…">
+      <button type="button">Keresés</button>
+    </form>
+    <div class="chips">
+      <a class="chip chip--on" href="#">Minden (10)</a>
+      <a class="chip" href="#">E hétvégén</a>
+      <a class="chip" href="#">Ingyenes</a>
+      <a class="chip" href="#">Borfesztivál</a>
+      <a class="chip" href="#">Kóstoló</a>
+    </div>
+  </div>
+
+  <div class="strip" id="strip"></div>
+</div>
+
+<p class="mock-note">Design-mockup minta-adatokkal — Térkép 2. variáns: immerzív teljes térkép, lebegő keresővel és alul görgethető kártya-szalaggal (élő Leaflet). Kártyára kattintva a térkép odaugrik. Mobil-barát: a Google Maps-ből ismerős minta.</p>
+
+<nav class="variant-switch" aria-label="Variánsok">
+  <span>Térkép:</span>
+  <a href="t1-split.html" title="Lista + térkép">1</a>
+  <a href="t2-immerziv.html" class="is-current" title="Immerzív">2</a>
+  <a href="t3-borvidek.html" title="Borvidék-fókusz">3</a>
+  <a href="t4-klasszikus.html" title="Klasszikus+">4</a>
+</nav>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="pontok.js"></script>
+<script>
+var map = alapTerkep('map', { zoomControl: false });
+L.control.zoom({ position: 'topleft' }).addTo(map);
+var strip = document.getElementById('strip');
+
+PONTOK.forEach(function (p) {
+  var m = L.marker([p.lat, p.lng], { icon: grapeDot() }).addTo(map)
+    .bindPopup(popupHtml(p), { maxWidth: 240, minWidth: 240 });
+
+  var a = document.createElement('a');
+  a.className = 'scard';
+  a.innerHTML = '<img src="' + KEP + '" alt="">'
+    + '<span class="scard__body"><span class="scard__t">' + p.t + '</span>'
+    + '<span class="scard__d">' + p.d + '</span>'
+    + '<span class="scard__s">📍 ' + p.c + '</span></span>';
+  a.addEventListener('click', function () {
+    document.querySelectorAll('.scard.is-active').forEach(function (x) { x.classList.remove('is-active'); });
+    a.classList.add('is-active');
+    map.setView([p.lat, p.lng], 11, { animate: true });
+    m.openPopup();
+  });
+  strip.appendChild(a);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+/* Térkép design-variánsok — közös alap (jelölők, popup-kártya, chipek) */
+
+.grape-dot {
+  background: var(--wine-700);
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .35);
+}
+
+/* Leaflet popup: boros kártya */
+.leaflet-popup-content { margin: 0; width: 240px !important; }
+.leaflet-popup-content-wrapper { border-radius: 14px; overflow: hidden; padding: 0; box-shadow: 0 16px 40px rgba(43, 20, 24, .3); }
+.mp__img { display: block; width: 100%; height: 100px; object-fit: cover; }
+.mp__body { display: block; padding: .7rem .85rem .85rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.mp__body b { display: block; font-family: Georgia, "Times New Roman", serif; font-size: 1rem; color: var(--ink); margin-bottom: .15rem; }
+.mp__date { display: block; color: var(--wine-700); font-weight: 700; font-size: .82rem; }
+.mp__loc { display: block; color: var(--muted); font-size: .8rem; margin-bottom: .3rem; }
+.mp__tags { display: flex; flex-wrap: wrap; gap: .3rem; }
+.mp__tags .tag { background: #e3d2b4; color: var(--wine-900); }
+
+/* Gyors-szűrő chipek */
+.chips { display: flex; gap: .45rem; flex-wrap: wrap; }
+.chip { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: .35rem .9rem; font-size: .85rem; font-weight: 700; color: var(--wine-700); text-decoration: none; white-space: nowrap; }
+.chip:hover { border-color: var(--gold); }
+.chip--on { background: var(--wine-700); color: #fff; border-color: var(--wine-700); }
+
+/* Kompakt eseménysor (listákhoz) */
+.ev-item {
+  display: flex; gap: .8rem; align-items: center;
+  background: #fff; border: 1px solid var(--line); border-radius: 12px;
+  padding: .55rem .7rem; text-decoration: none; color: inherit; cursor: pointer;
+}
+.ev-item:hover, .ev-item.is-active { border-color: var(--gold); box-shadow: var(--shadow); }
+.ev-item__img { flex: none; width: 64px; height: 52px; object-fit: cover; border-radius: 8px; }
+.ev-item__main { flex: 1; min-width: 0; }
+.ev-item__t { display: block; font-weight: 700; color: var(--wine-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ev-item__s { display: block; font-size: .8rem; color: var(--muted); }
+.ev-item__d { display: block; font-size: .8rem; font-weight: 700; color: var(--wine-700); }

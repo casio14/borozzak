@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Térkép 4. variáns — Klasszikus+ · mockup</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="../base.css">
+<link rel="stylesheet" href="terkep-base.css">
+<style>
+/* ===== Térkép 4. variáns: a jelenlegi elrendezés finomítva — bordó fejléc-sáv
+   (naptár-konzisztens), keretezett térkép, alatta SEO-barát kártya-lista ===== */
+
+.wrap { max-width: 1280px; margin: 1.4rem auto 0; padding: 0 1.75rem; }
+
+.panel { background: #fff; border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; margin-bottom: 2rem; }
+.panel-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  background: linear-gradient(135deg, var(--wine-700), var(--wine-900));
+  color: #fff; padding: 1rem 1.3rem;
+}
+.panel-head h1 { margin: 0; color: #fff; font-size: 1.5rem; }
+.panel-head h1 small { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: .85rem; color: var(--gold-200); font-weight: 400; margin-left: .5rem; }
+.panel-head .chips .chip { background: rgba(255,255,255,.14); border-color: transparent; color: #fff; }
+.panel-head .chips .chip:hover { border-color: var(--gold); }
+.panel-head .chips .chip--on { background: var(--gold); color: var(--wine-900); }
+#map { height: 480px; }
+
+.below h2 { color: var(--wine-900); font-size: 1.4rem; margin: 0 0 1rem; }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; margin-bottom: 2.5rem; }
+.card { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); text-decoration: none; color: inherit; transition: transform .12s ease; }
+.card:hover { transform: translateY(-3px); }
+.card img { display: block; width: 100%; height: 130px; object-fit: cover; }
+.card__body { padding: .8rem 1rem 1rem; }
+.card__t { display: block; font-weight: 700; color: var(--wine-900); font-size: 1.05rem; }
+.card__d { display: block; font-size: .85rem; font-weight: 700; color: var(--wine-700); }
+.card__s { display: block; font-size: .84rem; color: var(--muted); margin-bottom: .4rem; }
+.card__go { font-size: .85rem; font-weight: 700; color: var(--wine-700); }
+
+@media (max-width: 900px) { .cards { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .cards { grid-template-columns: 1fr; } #map { height: 46vh; } }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__name">hol<span class="brand__accent">borozzak</span>.hu</span>
+      <span class="brand__tag">Borrendezvények egy helyen</span>
+    </a>
+    <nav class="site-nav">
+      <a href="#">Események</a>
+      <a href="#">Naptár</a>
+      <a href="#" class="is-active">Térkép</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="panel">
+    <div class="panel-head">
+      <h1>Eseménytérkép<small>10 esemény a térképen</small></h1>
+      <div class="chips">
+        <a class="chip chip--on" href="#">Minden</a>
+        <a class="chip" href="#">E hétvégén</a>
+        <a class="chip" href="#">Ingyenes</a>
+        <a class="chip" href="#">📍 Helyzetem</a>
+      </div>
+    </div>
+    <div id="map" role="region" aria-label="Borrendezvények térképe"></div>
+  </div>
+
+  <div class="below">
+    <h2>Események a térképen</h2>
+    <div class="cards" id="cards"></div>
+  </div>
+</div>
+
+<p class="mock-note">Design-mockup minta-adatokkal — Térkép 4. variáns: klasszikus+ (élő Leaflet). A mostani oldal finomítása: bordó fejléc-sáv a naptárral egyező stílusban, keretezett térkép, alatta kattintható kártya-lista (SEO: látható, indexelhető tartalom a JSON-LD mellé). Kártyára kattintva a térkép odaugrik.</p>
+
+<nav class="variant-switch" aria-label="Variánsok">
+  <span>Térkép:</span>
+  <a href="t1-split.html" title="Lista + térkép">1</a>
+  <a href="t2-immerziv.html" title="Immerzív">2</a>
+  <a href="t3-borvidek.html" title="Borvidék-fókusz">3</a>
+  <a href="t4-klasszikus.html" class="is-current" title="Klasszikus+">4</a>
+</nav>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="pontok.js"></script>
+<script>
+var map = alapTerkep('map');
+var markers = {};
+PONTOK.forEach(function (p) {
+  markers[p.t] = L.marker([p.lat, p.lng], { icon: grapeDot() }).addTo(map)
+    .bindPopup(popupHtml(p), { maxWidth: 240, minWidth: 240 });
+});
+
+var cards = document.getElementById('cards');
+PONTOK.forEach(function (p) {
+  var a = document.createElement('a');
+  a.className = 'card';
+  a.innerHTML = '<img src="' + KEP + '" alt="">'
+    + '<span class="card__body"><span class="card__t">' + p.t + '</span>'
+    + '<span class="card__d">' + p.d + '</span>'
+    + '<span class="card__s">📍 ' + p.v + ', ' + p.c + '</span>'
+    + '<span class="card__go">Mutasd a térképen ↑</span></span>';
+  a.addEventListener('click', function () {
+    map.setView([p.lat, p.lng], 11, { animate: true });
+    markers[p.t].openPopup();
+    document.querySelector('.panel').scrollIntoView({ behavior: 'smooth' });
+  });
+  cards.appendChild(a);
+});
+</script>
+
+</body>
+</html>
