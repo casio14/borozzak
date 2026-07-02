@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eseménynaptár — design-variánsok · holborozzak.hu</title>
+<link rel="stylesheet" href="../base.css">
+<style>
+.intro { max-width: 820px; margin: 2.5rem auto 0; padding: 0 1.75rem; text-align: center; }
+.intro h1 { color: var(--wine-900); margin: 0 0 .5rem; }
+.intro p { color: var(--muted); margin: 0; }
+.intro a { font-weight: 700; }
+
+.grid {
+  max-width: 1020px; margin: 2rem auto 0; padding: 0 1.75rem;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem;
+}
+.opt {
+  display: block; text-decoration: none; color: inherit;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 16px;
+  overflow: hidden; box-shadow: var(--shadow);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.opt:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(74, 14, 28, .16); }
+.opt__thumb { height: 130px; position: relative; background: var(--cream); }
+.opt__body { padding: 1rem 1.2rem 1.2rem; }
+.opt__body h2 { margin: 0 0 .3rem; color: var(--wine-900); font-size: 1.2rem; }
+.opt__body h2 .n { color: var(--gold); margin-right: .4rem; }
+.opt__body p { margin: 0; font-size: .92rem; color: var(--muted); }
+.opt__go { display: inline-block; margin-top: .6rem; font-weight: 700; color: var(--wine-700); }
+
+.th { position: absolute; border-radius: 3px; }
+.th-wine { background: var(--wine-700); }
+.th-gold { background: var(--gold); }
+.th-paper { background: #fff; border: 1px solid var(--line); }
+.th-leaf { background: #7a8450; }
+.th-terra { background: #b5562a; }
+
+@media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="../index.html">
+      <span class="brand__name">hol<span class="brand__accent">borozzak</span>.hu</span>
+      <span class="brand__tag">Borrendezvények egy helyen</span>
+    </a>
+  </div>
+</header>
+
+<div class="intro">
+  <h1>Eseménynaptár — a „Rács+” irány alvariánsai</h1>
+  <p>A kiválasztott 1-es (rács + átívelő sávok) irány négy kidolgozása, más-más ergonómiai hangsúllyal.
+     Mindegyikben közös: átívelő többnapos sávok, bordó fejléc, jelmagyarázat a rács fölött,
+     <b>hover-előnézet az esemény képével</b>, gyors-szűrő chipek, mobilon agenda-lista.<br>
+     <a href="../index.html">← Esemény-oldal variánsok</a> · <a href="../fooldal/index.html">Főoldal-variánsok</a></p>
+</div>
+
+<div class="grid">
+  <a class="opt" href="n1a-alap.html">
+    <div class="opt__thumb">
+      <span class="th th-wine" style="left:6%; top:12%; width:88%; height:16%;"></span>
+      <span class="th th-paper" style="left:6%; top:32%; width:88%; height:56%;"></span>
+      <span class="th th-wine" style="left:10%; top:52%; width:60%; height:8%;"></span>
+      <span class="th th-leaf" style="left:52%; top:64%; width:30%; height:8%;"></span>
+    </div>
+    <div class="opt__body">
+      <h2><span class="n">A</span>Finomhangolt alap</h2>
+      <p>A tiszta rács: nagy kattintási felületek, hétvége-tónus, fókusz-gyűrű billentyűzethez. A viszonyítási pont — ha nem kell extra, ez a legkevésbé zsúfolt.</p>
+      <span class="opt__go">Megnézem élőben →</span>
+    </div>
+  </a>
+
+  <a class="opt" href="n1b-hover.html">
+    <div class="opt__thumb">
+      <span class="th th-paper" style="left:6%; top:12%; width:88%; height:76%;"></span>
+      <span class="th th-wine" style="left:10%; top:26%; width:56%; height:9%;"></span>
+      <span class="th th-paper" style="left:30%; top:42%; width:44%; height:40%; border:1px solid var(--gold); box-shadow:0 6px 16px rgba(74,14,28,.2);"></span>
+    </div>
+    <div class="opt__body">
+      <h2><span class="n">B</span>Sticky hónap-fejléc</h2>
+      <p>A bordó fejléc (hónapcím + léptető + Ma gomb) görgetéskor a képernyő tetején marad — hosszú hónapnál sem veszik el a navigáció. A hover-előnézet már mindegyikben alap.</p>
+      <span class="opt__go">Megnézem élőben →</span>
+    </div>
+  </a>
+
+  <a class="opt" href="n1c-napsav.html">
+    <div class="opt__thumb">
+      <span class="th th-paper" style="left:6%; top:10%; width:88%; height:34%;"></span>
+      <span class="th th-gold" style="left:48%; top:16%; width:11%; height:20%;"></span>
+      <span class="th" style="left:6%; top:48%; width:88%; height:40%; background:#f3ecdd; border-top:2px solid var(--gold);"></span>
+      <span class="th th-paper" style="left:10%; top:58%; width:38%; height:22%;"></span>
+      <span class="th th-paper" style="left:52%; top:58%; width:38%; height:22%;"></span>
+    </div>
+    <div class="opt__body">
+      <h2><span class="n">C</span>Kattintható napok <em style="color:var(--gold); font-style:normal;">(élő demó!)</em></h2>
+      <p>A teljes napcella érinthető; a nap eseményei a hét alatt, helyben nyílnak ki. Érintőképernyőn is kiváló, élesben JS nélkül is működik (?nap=…).</p>
+      <span class="opt__go">Megnézem élőben →</span>
+    </div>
+  </a>
+
+  <a class="opt" href="n1d-hetvege.html">
+    <div class="opt__thumb">
+      <span class="th th-paper" style="left:6%; top:12%; width:56%; height:76%;"></span>
+      <span class="th th-gold" style="left:64%; top:12%; width:30%; height:76%; opacity:.35;"></span>
+      <span class="th th-wine" style="left:10%; top:40%; width:70%; height:9%;"></span>
+      <span class="th th-terra" style="left:50%; top:56%; width:44%; height:9%;"></span>
+    </div>
+    <div class="opt__body">
+      <h2><span class="n">D</span>Hétvége-hangsúly</h2>
+      <p>A szombat–vasárnap oszlopok szélesebbek és aranytónusúak (a programok zöme oda esik), plusz „Következő hétvége” gyors-sáv a naptár fölött.</p>
+      <span class="opt__go">Megnézem élőben →</span>
+    </div>
+  </a>
+</div>
+
+<div class="intro" style="margin-top:2.5rem;">
+  <h1 style="font-size:1.3rem;">Korábbi irány-variánsok (referencia)</h1>
+</div>
+
+<div class="grid">
+  <a class="opt" href="n1-racs.html">
+    <div class="opt__thumb">
+      <span class="th th-wine" style="left:6%; top:12%; width:88%; height:16%;"></span>
+      <span class="th th-paper" style="left:6%; top:32%; width:88%; height:56%;"></span>
+      <span class="th th-wine" style="left:10%; top:52%; width:60%; height:8%;"></span>
+      <span class="th th-leaf" style="left:52%; top:64%; width:30%; height:8%;"></span>
+      <span class="th th-terra" style="left:34%; top:76%; width:28%; height:8%;"></span>
+    </div>
+    <div class="opt__body">
+      <h2><span class="n">1</span>Rács+ átívelő sávokkal</h2>
+      <p>A mostani rács továbbfejlesztve: a többnapos események egyetlen átívelő sávként jelennek meg, bordó fejléc, „Hónap a naptáramba” gomb, mobilon agenda-lista. A választott designnyelv párja.</p>
+      <span class="opt__go">Megnézem élőben →</span>
+    </div>
+  </a>
+
+  <a class="opt" href="n2-idovonal.html">
+    <div class="opt__thumb">
+      <span class="th th-paper" style="left:6%; top:12%; width:24%; height:76%;"></span>
+      <span class="th th-gold" style="left:38%; top:14%; width:4%; height:72%; width:3px;"></span>
+      <span class="th th-paper" style="left:44%; top:12%; width:50%; height:20%;"></span>
+      <span class="th th-paper" style="left:44%; top:40%; width:50%; height:20%;"></span>
+      <span class="th th-paper" style="left:44%; top:68%; width:50%; height:20%;"></span>
+    </div>
+    <div class="opt__body">
+      <h2><span class="n">2</span>Idővonal / agenda</h2>
+      <p>Nem rács, hanem görgethető napi idővonal dátum-kockákkal és kategória-csíkos kártyákkal; balra sticky mini-naptár + szűrők darabszámmal. A legjobb mobil-élmény.</p>
+      <span class="opt__go">Megnézem élőben →</span>
+    </div>
+  </a>
+
+  <a class="opt" href="n3-nappanel.html">
+    <div class="opt__thumb">
+      <span class="th th-paper" style="left:6%; top:12%; width:52%; height:76%;"></span>
+      <span class="th th-gold" style="left:26%; top:44%; width:9%; height:14%;"></span>
+      <span class="th th-paper" style="left:62%; top:12%; width:32%; height:76%; border:2px solid var(--gold);"></span>
+      <span class="th th-wine" style="left:66%; top:20%; width:10%; height:16%;"></span>
+    </div>
+    <div class="opt__body">
+      <h2><span class="n">3</span>Rács + nap-panel <em style="color:var(--gold); font-style:normal;">(élő demó!)</em></h2>
+      <p>Kompakt, kattintható rács kategória-pöttyökkel; a kiválasztott nap eseményei jobb oldalt, sticky panelen jelennek meg. A mockupban ténylegesen kattintgatható.</p>
+      <span class="opt__go">Megnézem élőben →</span>
+    </div>
+  </a>
+
+  <a class="opt" href="n4-heatmap.html">
+    <div class="opt__thumb">
+      <span class="th th-paper" style="left:6%; top:14%; width:20%; height:32%;"></span>
+      <span class="th th-paper" style="left:29%; top:14%; width:20%; height:32%;"></span>
+      <span class="th th-paper" style="left:52%; top:14%; width:20%; height:32%;"></span>
+      <span class="th th-paper" style="left:75%; top:14%; width:20%; height:32%;"></span>
+      <span class="th th-paper" style="left:6%; top:52%; width:20%; height:32%; background:#e0b98a;"></span>
+      <span class="th" style="left:29%; top:52%; width:20%; height:32%; background:var(--wine-500);"></span>
+      <span class="th" style="left:52%; top:52%; width:20%; height:32%; background:var(--wine-900);"></span>
+      <span class="th th-paper" style="left:75%; top:52%; width:20%; height:32%; background:#f1e2c8;"></span>
+    </div>
+    <div class="opt__body">
+      <h2><span class="n">4</span>Év-áttekintő heatmap</h2>
+      <p>12 mini-hónap, a napok esemény-sűrűség szerint színezve — a szüreti szezon csúcsa azonnal látszik. Hónapra kattintva jön a részletes nézet. SEO-bónusz: indexelhető éves oldal.</p>
+      <span class="opt__go">Megnézem élőben →</span>
+    </div>
+  </a>
+</div>
+
+<p class="mock-note">Ezek statikus mockupok minta-adatokkal — a kiválasztott variánst utána ültetjük át a valódi <code>public/naptar.php</code>-ba. A variánsok kombinálhatók is (pl. 1-es rács + 3-as nap-panel, vagy 4-es év-nézet külön oldalként).</p>
+
+</body>
+</html>

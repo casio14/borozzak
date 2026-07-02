@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Naptár 3. variáns — Rács + nap-panel · mockup</title>
+<link rel="stylesheet" href="../base.css">
+<style>
+/* ===== Naptár 3. variáns: kompakt pöttyös rács + kattintható nap-panel ===== */
+
+.wrap { max-width: 1180px; margin: 1.8rem auto 0; padding: 0 1.75rem; }
+.page-head h1 { margin: 0 0 .2rem; color: var(--wine-900); }
+.page-head p { margin: 0 0 1.4rem; color: var(--muted); }
+
+.split { display: grid; grid-template-columns: minmax(0, 7fr) minmax(300px, 5fr); gap: 1.6rem; align-items: start; }
+
+.cal { background: #fff; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
+.cal-head { display: flex; align-items: center; justify-content: space-between; padding: .9rem 1.2rem; border-bottom: 1px solid var(--line); }
+.cal-head b { font-family: Georgia, serif; color: var(--wine-900); font-size: 1.25rem; }
+.cal-nav { display: flex; gap: .4rem; }
+.cal-nav a { display: inline-flex; width: 34px; height: 34px; align-items: center; justify-content: center; border-radius: 9px; background: var(--cream); border: 1px solid var(--line); color: var(--wine-700); font-weight: 800; text-decoration: none; }
+.cal-nav a:hover { border-color: var(--gold); }
+.dow { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--cream); }
+.dow span { padding: .45rem; text-align: center; font-size: .7rem; font-weight: 800; text-transform: uppercase; color: var(--wine-700); }
+.grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+.cell {
+  position: relative; aspect-ratio: 1 / .82; border-top: 1px solid var(--line); border-left: 1px solid var(--line);
+  background: none; font: inherit; cursor: pointer; padding: .4rem .5rem; text-align: left; color: var(--ink);
+}
+.cell:nth-child(7n+1) { border-left: none; }
+.cell:disabled { cursor: default; background: #faf7f1; }
+.cell:hover:not(:disabled) { background: #fbf6ec; }
+.cell--sel { background: #f3e7d0 !important; box-shadow: inset 0 0 0 2px var(--gold); }
+.cell__n { font-weight: 700; font-size: .92rem; }
+.cell--today .cell__n { display: inline-flex; width: 24px; height: 24px; align-items: center; justify-content: center; border-radius: 50%; background: var(--gold); color: var(--wine-900); }
+.dots { position: absolute; left: .5rem; bottom: .45rem; display: flex; gap: 3px; }
+.dots i { width: 8px; height: 8px; border-radius: 50%; }
+
+/* Nap-panel */
+.panel { background: #fff; border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 1.2rem 1.3rem; position: sticky; top: 88px; }
+.panel__date { display: flex; align-items: center; gap: .8rem; margin-bottom: .9rem; }
+.panel__cube { flex: none; width: 56px; text-align: center; background: var(--wine-700); color: #fff; border-radius: 12px; padding: .3rem 0 .4rem; }
+.panel__cube b { display: block; font-family: Georgia, serif; font-size: 1.5rem; line-height: 1.1; }
+.panel__cube i { display: block; font-style: normal; font-size: .6rem; font-weight: 800; letter-spacing: .1em; color: var(--gold-200); }
+.panel__date h2 { margin: 0; font-size: 1.15rem; color: var(--wine-900); }
+.panel__date .sub { color: var(--muted); font-size: .85rem; }
+.pev { display: block; border: 1px solid var(--line); border-left: 5px solid var(--wine-700); border-radius: 10px; padding: .7rem .9rem; margin-bottom: .55rem; text-decoration: none; color: inherit; }
+.pev:hover { border-color: var(--gold); border-left-color: var(--gold); }
+.pev b { color: var(--wine-900); }
+.pev span { display: block; color: var(--muted); font-size: .84rem; }
+.panel__empty { color: var(--muted); font-style: italic; }
+.panel__ics { margin-top: .8rem; }
+.panel__ics .btn { width: 100%; text-align: center; }
+
+@media (max-width: 860px) {
+  .split { grid-template-columns: 1fr; }
+  .panel { position: static; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__name">hol<span class="brand__accent">borozzak</span>.hu</span>
+      <span class="brand__tag">Borrendezvények egy helyen</span>
+    </a>
+    <nav class="site-nav">
+      <a href="#">Események</a>
+      <a href="#" class="is-active">Naptár</a>
+      <a href="#">Térkép</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="page-head">
+    <h1>Eseménynaptár</h1>
+    <p>Kattints egy napra, és jobb oldalt látod a nap eseményeit. <b>(Élő demó — próbáld ki: 5., 10–26., 31.)</b></p>
+  </div>
+
+  <div class="split">
+    <div class="cal">
+      <div class="cal-head">
+        <b>2026. július</b>
+        <div class="cal-nav"><a href="#">‹</a><a href="#">›</a><a href="#" style="width:auto; padding:0 .8rem;">Ma</a></div>
+      </div>
+      <div class="dow"><span>H</span><span>K</span><span>Sze</span><span>Cs</span><span>P</span><span>Szo</span><span>V</span></div>
+      <div class="grid" id="grid"></div>
+    </div>
+
+    <aside class="panel">
+      <div class="panel__date">
+        <span class="panel__cube"><b id="p-day">2</b><i id="p-dow">CSÜTÖRTÖK</i></span>
+        <span><h2 id="p-title">2026. július 2.</h2><span class="sub" id="p-sub">Nincs esemény ezen a napon.</span></span>
+      </div>
+      <div id="p-list"></div>
+      <p class="panel__ics"><a class="btn btn--ghost" href="#">＋ Hónap a naptáramba (.ics)</a></p>
+    </aside>
+  </div>
+</div>
+
+<p class="mock-note">Design-mockup minta-adatokkal — Naptár 3. variáns: kompakt rács + nap-panel. Extra javaslatok benne: kattintható napok (élesben ?nap=YYYY-MM-DD, JS nélkül is működne), kategória-pöttyök a napokon, sticky panel, havi .ics. A panel mobilon a rács alá kerül.</p>
+
+<nav class="variant-switch" aria-label="Variánsok">
+  <span>Naptár:</span>
+  <a href="n1-racs.html" title="Rács+">1</a>
+  <a href="n2-idovonal.html" title="Idővonal">2</a>
+  <a href="n3-nappanel.html" class="is-current" title="Rács + nap-panel">3</a>
+  <a href="n4-heatmap.html" title="Év-áttekintő">4</a>
+</nav>
+
+<script>
+// Minta-adatok: nap → események (2026. július)
+var EVENTS = {
+  5:  [{ t: 'Szekszárdi Pinceséta', s: 'Szekszárd · Kóstoló · Belépő 3 500 Ft', c: '#c8a14b' }],
+  11: [{ t: 'Tokaji Nyáresti Kóstoló', s: 'Tokaj · Kóstoló · 18:00', c: '#c8a14b' }],
+  18: [{ t: 'Szent György-hegy Hajnalig', s: 'júl. 18–20. · Tapolca · Ingyenes', c: '#7a8450' }],
+  19: [{ t: 'Szent György-hegy Hajnalig', s: 'júl. 18–20. · Tapolca · Ingyenes', c: '#7a8450' }],
+  20: [{ t: 'Szent György-hegy Hajnalig', s: 'júl. 18–20. · Tapolca · Ingyenes', c: '#7a8450' }],
+  24: [{ t: 'Egri Bikavér Ünnep', s: 'júl. 24–26. · Eger · Gasztronómia', c: '#b5562a' }],
+  25: [{ t: 'Egri Bikavér Ünnep', s: 'júl. 24–26. · Eger · Gasztronómia', c: '#b5562a' }],
+  26: [{ t: 'Egri Bikavér Ünnep', s: 'júl. 24–26. · Eger · Gasztronómia', c: '#b5562a' }],
+  31: [{ t: 'Villányi Rozénapok', s: 'júl. 31. – aug. 2. · Villány · Borfesztivál', c: '#722f37' }]
+};
+// Balatonfüredi Borhetek: júl. 10–26. (hosszú, minden napra)
+for (var d = 10; d <= 26; d++) {
+  (EVENTS[d] = EVENTS[d] || []).unshift({ t: 'Balatonfüredi Borhetek', s: 'júl. 10–26. · Balatonfüred · Borfesztivál', c: '#722f37' });
+}
+var DOWS = ['HÉTFŐ', 'KEDD', 'SZERDA', 'CSÜTÖRTÖK', 'PÉNTEK', 'SZOMBAT', 'VASÁRNAP'];
+var TODAY = 2, LEADING = 2, DAYS = 31; // 2026. júl. 1. = szerda
+
+var grid = document.getElementById('grid');
+for (var i = 0; i < LEADING; i++) {
+  var blank = document.createElement('button');
+  blank.className = 'cell'; blank.disabled = true;
+  grid.appendChild(blank);
+}
+for (var day = 1; day <= DAYS; day++) {
+  (function (day) {
+    var c = document.createElement('button');
+    c.type = 'button';
+    c.className = 'cell' + (day === TODAY ? ' cell--today' : '');
+    c.innerHTML = '<span class="cell__n">' + day + '</span>';
+    var evs = EVENTS[day];
+    if (evs) {
+      var dots = document.createElement('span'); dots.className = 'dots';
+      evs.slice(0, 3).forEach(function (e) {
+        var i = document.createElement('i'); i.style.background = e.c; dots.appendChild(i);
+      });
+      c.appendChild(dots);
+    }
+    c.addEventListener('click', function () { select(day, c); });
+    grid.appendChild(c);
+  })(day);
+}
+var trailing = (7 - ((LEADING + DAYS) % 7)) % 7;
+for (var j = 0; j < trailing; j++) {
+  var b2 = document.createElement('button');
+  b2.className = 'cell'; b2.disabled = true;
+  grid.appendChild(b2);
+}
+
+function select(day, cell) {
+  var prev = grid.querySelector('.cell--sel');
+  if (prev) { prev.classList.remove('cell--sel'); }
+  cell.classList.add('cell--sel');
+  document.getElementById('p-day').textContent = day;
+  document.getElementById('p-dow').textContent = DOWS[(LEADING + day - 1) % 7];
+  document.getElementById('p-title').textContent = '2026. július ' + day + '.';
+  var evs = EVENTS[day] || [];
+  document.getElementById('p-sub').textContent = evs.length ? (evs.length + ' esemény ezen a napon') : 'Nincs esemény ezen a napon.';
+  var list = document.getElementById('p-list');
+  list.innerHTML = '';
+  evs.forEach(function (e) {
+    var a = document.createElement('a');
+    a.className = 'pev'; a.href = '#';
+    a.style.borderLeftColor = e.c;
+    a.innerHTML = '<b>' + e.t + '</b><span>' + e.s + '</span>';
+    list.appendChild(a);
+  });
+}
+// Induláskor a mai nap kiválasztva
+select(TODAY, grid.querySelectorAll('.cell:not(:disabled)')[TODAY - 1]);
+</script>
+
+</body>
+</html>

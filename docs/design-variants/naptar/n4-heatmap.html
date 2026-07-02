@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Naptár 4. variáns — Év-áttekintő heatmap · mockup</title>
+<link rel="stylesheet" href="../base.css">
+<style>
+/* ===== Naptár 4. variáns: év-áttekintő — 12 mini-hónap esemény-sűrűség színezéssel ===== */
+
+.wrap { max-width: 1280px; margin: 1.8rem auto 0; padding: 0 1.75rem; }
+.head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: .8rem; margin-bottom: .4rem; }
+.head h1 { margin: 0; color: var(--wine-900); }
+.year-nav { display: flex; align-items: center; gap: .6rem; }
+.year-nav a { display: inline-flex; width: 36px; height: 36px; align-items: center; justify-content: center; border-radius: 10px; background: #fff; border: 1px solid var(--line); color: var(--wine-700); font-weight: 800; text-decoration: none; }
+.year-nav a:hover { border-color: var(--gold); }
+.year-nav b { font-family: Georgia, serif; font-size: 1.5rem; color: var(--wine-900); }
+.sub { margin: 0 0 1.4rem; color: var(--muted); }
+
+.legend { display: flex; align-items: center; gap: .5rem; margin: 0 0 1.2rem; font-size: .8rem; color: var(--muted); }
+.legend i { width: 14px; height: 14px; border-radius: 4px; }
+
+.months { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.1rem; }
+.m {
+  display: block; background: #fff; border: 1px solid var(--line); border-radius: 14px;
+  padding: .9rem 1rem 1rem; box-shadow: var(--shadow);
+  text-decoration: none; color: inherit; transition: transform .12s ease, border-color .12s ease;
+}
+.m:hover { transform: translateY(-3px); border-color: var(--gold); }
+.m--cur { box-shadow: inset 0 0 0 2px var(--gold), var(--shadow); }
+.m__head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: .5rem; }
+.m__head b { font-family: Georgia, serif; color: var(--wine-900); }
+.m__head span { font-size: .74rem; font-weight: 700; color: var(--wine-700); background: #f3e7d0; border-radius: 999px; padding: .1rem .5rem; }
+.m table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.m th { font-size: .56rem; color: var(--muted); text-transform: uppercase; padding-bottom: 2px; font-weight: 700; }
+.m td { padding: 1px; }
+.m td b {
+  display: block; aspect-ratio: 1; border-radius: 4px;
+  font-size: .62rem; font-weight: 600; color: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+}
+.m td.h0 b { background: transparent; }
+.m td.h1 b { background: #f1e2c8; }
+.m td.h2 b { background: #e0b98a; }
+.m td.h3 b { background: var(--wine-500); color: #fff; }
+.m td.h4 b { background: var(--wine-900); color: #fff; }
+.m td.today b { outline: 2px solid var(--gold); outline-offset: -2px; }
+
+/* Kiválasztott hónap listája alul */
+.month-detail { margin-top: 2rem; background: #fff; border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; }
+.month-detail__head { display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, var(--wine-700), var(--wine-900)); color: #fff; padding: .9rem 1.3rem; }
+.month-detail__head b { font-family: Georgia, serif; font-size: 1.2rem; }
+.month-detail__head a { color: var(--gold-200); font-weight: 700; text-decoration: none; font-size: .9rem; }
+.month-detail__head a:hover { color: #fff; }
+.mrow { display: flex; align-items: center; gap: 1rem; padding: .8rem 1.2rem; border-top: 1px solid var(--line); text-decoration: none; color: inherit; }
+.mrow:hover { background: #fbf6ec; }
+.mrow__stripe { flex: none; width: 5px; height: 34px; border-radius: 3px; }
+.mrow__t { flex: 1; font-weight: 700; color: var(--wine-900); }
+.mrow__t span { display: block; font-weight: 400; font-size: .84rem; color: var(--muted); }
+.mrow__go { color: var(--gold); font-weight: 800; }
+
+@media (max-width: 1000px) { .months { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 760px)  { .months { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px)  { .months { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__name">hol<span class="brand__accent">borozzak</span>.hu</span>
+      <span class="brand__tag">Borrendezvények egy helyen</span>
+    </a>
+    <nav class="site-nav">
+      <a href="#">Események</a>
+      <a href="#" class="is-active">Naptár</a>
+      <a href="#">Térkép</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="head">
+    <h1>Eseménynaptár</h1>
+    <div class="year-nav"><a href="#">‹</a><b>2026</b><a href="#">›</a></div>
+  </div>
+  <p class="sub">Egész éves áttekintés: minél sötétebb egy nap, annál több a borrendezvény. Kattints egy hónapra a részletekért!</p>
+
+  <div class="legend">
+    Kevesebb <i style="background:#f1e2c8;"></i><i style="background:#e0b98a;"></i><i style="background:#8c3b46;"></i><i style="background:#4a0e1c;"></i> több esemény
+  </div>
+
+  <div class="months" id="months"></div>
+
+  <div class="month-detail">
+    <div class="month-detail__head"><b>2026. július — 6 esemény</b><a href="#">Havi rács-nézet →</a></div>
+    <a class="mrow" href="#"><span class="mrow__stripe" style="background:#c8a14b;"></span><span class="mrow__t">Szekszárdi Pinceséta<span>júl. 5. · Szekszárd · Kóstoló</span></span><span class="mrow__go">→</span></a>
+    <a class="mrow" href="#"><span class="mrow__stripe" style="background:#722f37;"></span><span class="mrow__t">Balatonfüredi Borhetek<span>júl. 10–26. · Balatonfüred · Borfesztivál</span></span><span class="mrow__go">→</span></a>
+    <a class="mrow" href="#"><span class="mrow__stripe" style="background:#c8a14b;"></span><span class="mrow__t">Tokaji Nyáresti Kóstoló<span>júl. 11. · Tokaj · Kóstoló</span></span><span class="mrow__go">→</span></a>
+    <a class="mrow" href="#"><span class="mrow__stripe" style="background:#7a8450;"></span><span class="mrow__t">Szent György-hegy Hajnalig<span>júl. 18–20. · Tapolca · Ingyenes</span></span><span class="mrow__go">→</span></a>
+    <a class="mrow" href="#"><span class="mrow__stripe" style="background:#b5562a;"></span><span class="mrow__t">Egri Bikavér Ünnep<span>júl. 24–26. · Eger · Gasztronómia</span></span><span class="mrow__go">→</span></a>
+    <a class="mrow" href="#"><span class="mrow__stripe" style="background:#722f37;"></span><span class="mrow__t">Villányi Rozénapok<span>júl. 31. – aug. 2. · Villány · Borfesztivál</span></span><span class="mrow__go">→</span></a>
+  </div>
+</div>
+
+<p class="mock-note">Design-mockup minta-adatokkal — Naptár 4. variáns: év-áttekintő heatmap. Extra javaslatok benne: szezonális rálátás (szüreti csúcs ősszel azonnal látszik), hónap-kártyán eseményszám, alul a kiválasztott hónap listája. SEO-bónusz: éves áttekintő oldal (?ev=2026) plusz indexelhető tartalom.</p>
+
+<nav class="variant-switch" aria-label="Variánsok">
+  <span>Naptár:</span>
+  <a href="n1-racs.html" title="Rács+">1</a>
+  <a href="n2-idovonal.html" title="Idővonal">2</a>
+  <a href="n3-nappanel.html" title="Rács + nap-panel">3</a>
+  <a href="n4-heatmap.html" class="is-current" title="Év-áttekintő">4</a>
+</nav>
+
+<script>
+// Minta esemény-sűrűség: hónap → { nap: intenzitás(1-4) } + havi darabszám.
+// A nyári-őszi (szüreti) csúcs szándékosan hangsúlyos.
+var MONTHS = ['Január','Február','Március','Április','Május','Június','Július','Augusztus','Szeptember','Október','November','December'];
+var FIRST_DOW = [3,6,6,2,4,0,2,5,1,3,6,1]; // 2026: hónap első napjának oszlopa (0=hétfő)
+var DAYS_IN = [31,28,31,30,31,30,31,31,30,31,30,31];
+var COUNTS = [1,1,2,3,5,6,6,9,12,10,4,3];
+var HEAT = {
+  0:{17:1},1:{14:1},2:{7:1,21:2},3:{11:1,24:2,25:2},4:{1:2,2:2,15:1,22:3,23:3,29:1},
+  5:{5:2,6:2,12:1,19:3,20:3,26:2,27:2},
+  6:{5:1,10:2,11:3,12:2,13:2,14:2,15:2,16:2,17:2,18:3,19:3,20:3,21:2,22:2,23:2,24:3,25:4,26:4,31:2},
+  7:{1:2,2:2,7:2,8:3,14:2,15:3,16:3,20:2,21:2,22:2,28:3,29:4,30:4},
+  8:{4:3,5:4,6:4,10:3,11:3,12:4,13:4,18:2,19:3,20:4,25:2,26:3,27:4},
+  9:{2:3,3:4,4:4,9:3,10:4,11:4,16:2,17:3,23:2,24:3,30:2},
+  10:{6:2,7:2,13:1,14:2,20:1},11:{5:1,12:2,30:1,31:2}
+};
+var TODAY_M = 6, TODAY_D = 2;
+
+var root = document.getElementById('months');
+for (var m = 0; m < 12; m++) {
+  var a = document.createElement('a');
+  a.href = '#'; a.className = 'm' + (m === TODAY_M ? ' m--cur' : '');
+  var html = '<span class="m__head"><b>' + MONTHS[m] + '</b><span>' + COUNTS[m] + '</span></span>';
+  html += '<table><tr><th>H</th><th>K</th><th>Sz</th><th>Cs</th><th>P</th><th>Sz</th><th>V</th></tr><tr>';
+  var col = 0;
+  for (var i = 0; i < FIRST_DOW[m]; i++) { html += '<td></td>'; col++; }
+  for (var d = 1; d <= DAYS_IN[m]; d++) {
+    var h = (HEAT[m] && HEAT[m][d]) || 0;
+    var cls = 'h' + h + ((m === TODAY_M && d === TODAY_D) ? ' today' : '');
+    html += '<td class="' + cls + '"><b>' + d + '</b></td>';
+    col++;
+    if (col % 7 === 0 && d < DAYS_IN[m]) { html += '</tr><tr>'; }
+  }
+  html += '</tr></table>';
+  a.innerHTML = html;
+  root.appendChild(a);
+}
+</script>
+
+</body>
+</html>
