@@ -204,7 +204,7 @@ require __DIR__ . '/partials/header.php';
           <li>🚫 Spam nélkül</li>
           <li>✅ Bármikor leiratkozhatsz</li>
         </ul>
-        <p class="news-band__note">A feliratkozással elfogadod az <a href="adatvedelem.php">adatkezelési tájékoztatót</a>.</p>
+        <p class="news-band__note">A feliratkozással elfogadod az <a href="adatvedelem.php">adatkezelési tájékoztatót</a>. · <a href="leiratkozas.php">Leiratkozás</a></p>
       </div>
     </section>
 
