@@ -44,5 +44,11 @@ function sendMailHtml(string $to, string $subject, string $html, array $extraHea
         $lines[] = $k . ': ' . $v;
     }
 
+    // A 998 karakternél hosszabb sorokat az MTA-k kényszerrel tördelik — akár szó
+    // vagy style-attribútum közepén, ami széttöri a megjelenést. Ezért szóközöknél
+    // magunk tördelünk max 500 karakteres sorokra (HTML-ben ez veszélytelen:
+    // a sortörés szóköznek számít a szövegben és az attribútumokban is).
+    $html = wordwrap($html, 500, "\n", false);
+
     return mail($to, mb_encode_mimeheader($subject, 'UTF-8'), $html, implode("\r\n", $lines));
 }
