@@ -1483,7 +1483,7 @@ main { flex: 1 0 auto; }
 .edh__when .status { box-shadow: 0 0 0 1px rgba(255, 255, 255, .35); }
 
 .edh-layout {
-  max-width: var(--maxw); margin: 0 auto; padding: 0 1.75rem;
+  max-width: var(--maxw); margin: 0 auto; padding: 0 1.75rem 3.5rem;
   display: grid; grid-template-columns: minmax(0, 1fr) 350px; gap: 2.5rem;
   align-items: start;
 }
