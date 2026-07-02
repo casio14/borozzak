@@ -48,10 +48,17 @@ require __DIR__ . '/partials/header.php';
                aria-label="Keresés helyszín, borvidék vagy esemény szerint">
         <button type="submit">Keresés</button>
       </form>
+      <div class="hero__stats">
+        <?php if ($events): ?>
+          <span class="hero__stat"><b><?= count($events) ?></b><span>közelgő esemény</span></span>
+        <?php endif; ?>
+        <span class="hero__stat"><b>22</b><span>borvidék</span></span>
+        <span class="hero__stat"><b>Naponta</b><span>frissítve</span></span>
+      </div>
     </div>
   </section>
 
-  <div class="container">
+  <div class="container landing-panel">
 
     <?php if ($featured): ?>
     <section class="events-section">

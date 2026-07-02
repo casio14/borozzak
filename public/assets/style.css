@@ -182,81 +182,123 @@ main { flex: 1 0 auto; }
 }
 .container--wide { max-width: 1600px; }
 
-/* ---------- Hero (teljes szélességű, brand) ---------- */
+/* ---------- Hero (immerzív panoráma, kompakt) ---------- */
+/* Szőlőskert háttérkép, alul mély burgundiba sötétedő átmenettel; középre zárt
+   cím + üveghatású kereső + statisztika-sor. A tartalom a heróba belelógó
+   panelen (.landing-panel) indul. Kép: assets/hero.jpg (Pexels, ingyenes). */
 .hero {
-  /* Szőlőskert háttérkép naplementés overlay-jel (meleg arany ragyogás felül,
-     meleg vörösből mély burgundiba lent — a szöveg olvashatóságáért is).
-     Kép: assets/hero.jpg (1920x900). Forrás: Pexels (ingyenes licenc). */
+  position: relative;
+  min-height: 46vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   background-color: var(--wine-900);
   background-image:
-    radial-gradient(90% 70% at 50% 6%, rgba(235, 150, 85, .18) 0%, rgba(235, 150, 85, 0) 55%),
-    linear-gradient(180deg, rgba(150, 55, 40, .30) 0%, rgba(74, 14, 28, .82) 100%),
+    linear-gradient(180deg, rgba(43, 29, 32, .35) 0%, rgba(74, 14, 28, .45) 55%, rgba(43, 20, 24, .92) 100%),
     url('hero.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   color: var(--cream);
-  text-align: left;
-  padding: clamp(5.5rem, 15vw, 11rem) 1.25rem;
+  padding: 2.4rem 1.75rem 5.5rem;
 }
 
-.hero__inner { max-width: var(--maxw); margin: 0 auto; }
+.hero__inner { max-width: 760px; margin: 0 auto; }
 .hero__eyebrow {
-  margin: 0 0 .7rem;
+  margin: 0 0 .8rem;
   text-transform: uppercase;
-  letter-spacing: .18em;
-  font-size: .82rem;
+  letter-spacing: .22em;
+  font-size: .8rem;
   font-weight: 700;
   color: var(--gold-200);
 }
 .hero h1 {
   margin: 0 0 1rem;
-  max-width: 14ch;
-  font-size: clamp(2.1rem, 6.5vw, 3.6rem);
-  text-shadow: 0 2px 14px rgba(0, 0, 0, .28);
+  color: #fff;
+  font-size: clamp(1.9rem, 4.6vw, 2.9rem);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, .45);
 }
 .hero__lead {
-  margin: 0 0 1.75rem;
-  max-width: 34rem;
-  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
-  color: #f1e6d6;
+  margin: 0 auto 1.4rem;
+  max-width: 36rem;
+  font-size: clamp(1.05rem, 2.2vw, 1.22rem);
+  color: #f3e8e0;
 }
 
-/* Hero kereső sáv */
+/* Hero kereső sáv (üveghatás) */
 .hero__search {
   display: flex;
-  gap: 6px;
-  max-width: 620px;
-  background: var(--paper);
-  border-radius: 12px;
-  padding: 6px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, .28);
+  gap: 8px;
+  max-width: 640px;
+  margin: 0 auto;
+  background: rgba(255, 253, 249, .16);
+  border: 1px solid rgba(255, 255, 255, .35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, .3);
 }
 .hero__search input {
   flex: 1;
   min-width: 0;
   border: none;
-  background: transparent;
-  padding: .85rem 1rem;
+  background: rgba(255, 255, 255, .92);
+  border-radius: 10px;
+  padding: .95rem 1.1rem;
   font-size: 1rem;
   color: var(--ink);
   outline: none;
 }
 .hero__search button {
   border: none;
-  background: var(--wine-700);
-  color: var(--cream);
-  font-weight: 700;
+  background: var(--gold);
+  color: var(--wine-900);
+  font-weight: 800;
   font-size: 1rem;
-  padding: 0 1.6rem;
-  border-radius: 8px;
+  padding: .95rem 1.6rem;
+  border-radius: 10px;
   cursor: pointer;
 }
-.hero__search button:hover { background: var(--wine-900); }
+.hero__search button:hover { background: #b8923f; }
 
+/* Hero statisztika-sor */
+.hero__stats {
+  margin: 1.4rem auto 0;
+  display: flex;
+  gap: 1.8rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  color: #fff;
+}
+.hero__stat b { display: block; font-family: Georgia, "Times New Roman", serif; font-size: 1.5rem; color: var(--gold-200); }
+.hero__stat span { font-size: .82rem; opacity: .85; }
+
+/* A heróba belelógó tartalompanel (nyitóoldal) */
+.landing-panel {
+  position: relative;
+  z-index: 2;
+  margin-top: -70px;
+  padding-top: 2rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 24px 24px 0 0;
+  box-shadow: 0 -18px 50px rgba(74, 14, 28, .18);
+}
+/* A panelen ülő kártyák fehérrel váljanak el a papír-háttértől */
+.landing-panel .event-card,
+.landing-panel .events-list,
+.landing-panel .browse-tile,
+.landing-panel .news-band { background: #fff; }
+
+@media (max-width: 760px) {
+  .landing-panel { margin-top: -50px; padding-top: 1.4rem; }
+}
 @media (max-width: 560px) {
   .hero__search { flex-direction: column; }
   .hero__search button { padding: .85rem; }
+  .hero__stats { gap: 1.2rem; }
 }
 
 /* ---------- Tartalmi szekció ---------- */
