@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Naptár 1B — Hover-előnézet kártyákkal · mockup</title>
+<link rel="stylesheet" href="../base.css">
+<link rel="stylesheet" href="racs-base.css">
+<style>
+/* 1B: hover-előnézet — a sáv fölé érve részletkártya, kattintás nélkül.
+   (Touch-eszközön az első koppintás mutatja, a második navigál — élesben.) */
+
+.cal { overflow: visible; }
+.cal-head { border-radius: 16px 16px 0 0; position: sticky; top: 78px; z-index: 10; }
+.legend { border-radius: 0 0 16px 16px; }
+
+.week { grid-auto-rows: minmax(28px, auto); min-height: 122px; }
+.bar { overflow: visible; }
+.bar__t { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.tip {
+  display: none; position: absolute; top: calc(100% + 8px); left: 0; z-index: 30;
+  min-width: 240px; max-width: 300px;
+  background: #fff; border: 1px solid var(--line); border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(74, 14, 28, .25);
+  padding: .8rem .95rem; color: var(--ink); white-space: normal;
+  font-weight: 400; font-size: .84rem; line-height: 1.45;
+}
+.tip::before {
+  content: ""; position: absolute; top: -6px; left: 18px;
+  width: 10px; height: 10px; background: #fff;
+  border-left: 1px solid var(--line); border-top: 1px solid var(--line);
+  transform: rotate(45deg);
+}
+.tip--r { left: auto; right: 0; }
+.tip--r::before { left: auto; right: 18px; }
+.tip b { display: block; font-size: .98rem; color: var(--wine-900); margin-bottom: .15rem; }
+.tip .meta { color: var(--muted); }
+.tip .tag { margin-top: .4rem; }
+.bar:hover .tip, .bar:focus-visible .tip { display: block; }
+.bar:hover { z-index: 20; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__name">hol<span class="brand__accent">borozzak</span>.hu</span>
+      <span class="brand__tag">Borrendezvények egy helyen</span>
+    </a>
+    <nav class="site-nav">
+      <a href="#">Események</a>
+      <a href="#" class="is-active">Naptár</a>
+      <a href="#">Térkép</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="page-head">
+    <h1>Eseménynaptár</h1>
+    <p>Vidd az egeret egy esemény-sáv fölé — részletkártya jelenik meg kattintás nélkül.</p>
+  </div>
+
+  <div class="chips">
+    <a class="chip chip--on" href="#">Minden esemény</a>
+    <a class="chip" href="#">E hétvégén</a>
+    <a class="chip" href="#">Ingyenes</a>
+    <a class="chip" href="#">Borvidék ▾</a>
+    <a class="chip" href="#">Kategória ▾</a>
+  </div>
+
+  <div class="cal">
+    <div class="cal-head">
+      <span class="cal-head__title">2026. július<span class="cal-head__count">6 esemény</span></span>
+      <div class="cal-nav">
+        <a class="cal-nav__btn" href="#" aria-label="Előző hónap">‹</a>
+        <a class="cal-nav__btn" href="#" aria-label="Következő hónap">›</a>
+        <a class="cal-nav__today" href="#">Ma</a>
+        <a class="cal-nav__ics" href="#">＋ Hónap a naptáramba</a>
+      </div>
+    </div>
+    <div class="dow"><span>Hétfő</span><span>Kedd</span><span>Szerda</span><span>Csüt</span><span>Péntek</span><span>Szombat</span><span>Vasárnap</span></div>
+
+    <div class="week">
+      <span class="d"></span><span class="d"></span>
+      <span class="d">1</span><span class="d d--today"><span>2</span></span><span class="d">3</span><span class="d d--we">4</span><span class="d d--we">5</span>
+      <a class="bar" style="grid-column: 7 / span 1; background:#c8a14b; color:#3a230f;" href="#">
+        <span class="bar__t">Szekszárdi Pinceséta</span>
+        <span class="tip tip--r"><b>Szekszárdi Pinceséta</b><span class="meta">📅 júl. 5. (vasárnap) · 📍 Szekszárd<br>🏷 Belépő 3 500 Ft</span><span class="tag">Kóstoló</span></span>
+      </a>
+    </div>
+    <div class="week">
+      <span class="d">6</span><span class="d">7</span><span class="d">8</span><span class="d">9</span><span class="d">10</span><span class="d d--we">11</span><span class="d d--we">12</span>
+      <a class="bar bar--cont-r" style="grid-column: 5 / span 3; background:#722f37; color:#fff;" href="#">
+        <span class="bar__t">Balatonfüredi Borhetek</span>
+        <span class="tip"><b>Balatonfüredi Borhetek</b><span class="meta">📅 júl. 10–26. (17 nap) · 📍 Balatonfüred, Tagore sétány<br>🏷 A belépés ingyenes, kóstolójegy a helyszínen</span><span class="tag">Borfesztivál</span></span>
+      </a>
+      <a class="bar" style="grid-column: 6 / span 1; background:#c8a14b; color:#3a230f;" href="#">
+        <span class="bar__t">Tokaji Nyáresti Kóstoló</span>
+        <span class="tip tip--r"><b>Tokaji Nyáresti Kóstoló</b><span class="meta">📅 júl. 11. (szombat) 18:00 · 📍 Tokaj<br>🏷 5 900 Ft (6 tétel)</span><span class="tag">Kóstoló</span></span>
+      </a>
+    </div>
+    <div class="week">
+      <span class="d">13</span><span class="d">14</span><span class="d">15</span><span class="d">16</span><span class="d">17</span><span class="d d--we">18</span><span class="d d--we">19</span>
+      <a class="bar bar--cont-l bar--cont-r" style="grid-column: 1 / span 7; background:#722f37; color:#fff;" href="#">
+        <span class="bar__t">Balatonfüredi Borhetek</span>
+        <span class="tip"><b>Balatonfüredi Borhetek</b><span class="meta">📅 júl. 10–26. (17 nap) · 📍 Balatonfüred, Tagore sétány<br>🏷 A belépés ingyenes, kóstolójegy a helyszínen</span><span class="tag">Borfesztivál</span></span>
+      </a>
+      <a class="bar bar--cont-r" style="grid-column: 6 / span 2; background:#7a8450; color:#fff;" href="#">
+        <span class="bar__t">Szent György-hegy Hajnalig</span>
+        <span class="tip tip--r"><b>Szent György-hegy Hajnalig</b><span class="meta">📅 júl. 18–20. · 📍 Szent György-hegy, Tapolca<br>🏷 Ingyenes</span><span class="tag">Borvidéki program</span></span>
+      </a>
+    </div>
+    <div class="week">
+      <span class="d">20</span><span class="d">21</span><span class="d">22</span><span class="d">23</span><span class="d">24</span><span class="d d--we">25</span><span class="d d--we">26</span>
+      <a class="bar bar--cont-l" style="grid-column: 1 / span 7; background:#722f37; color:#fff;" href="#">
+        <span class="bar__t">Balatonfüredi Borhetek</span>
+        <span class="tip"><b>Balatonfüredi Borhetek</b><span class="meta">📅 júl. 10–26. (17 nap) · 📍 Balatonfüred, Tagore sétány<br>🏷 A belépés ingyenes, kóstolójegy a helyszínen</span><span class="tag">Borfesztivál</span></span>
+      </a>
+      <a class="bar bar--cont-l" style="grid-column: 1 / span 1; background:#7a8450; color:#fff;" href="#">
+        <span class="bar__t">Szent György-hegy Hajnalig</span>
+        <span class="tip"><b>Szent György-hegy Hajnalig</b><span class="meta">📅 júl. 18–20. · 📍 Szent György-hegy, Tapolca<br>🏷 Ingyenes</span><span class="tag">Borvidéki program</span></span>
+      </a>
+      <a class="bar" style="grid-column: 5 / span 3; background:#b5562a; color:#fff;" href="#">
+        <span class="bar__t">Egri Bikavér Ünnep</span>
+        <span class="tip tip--r"><b>Egri Bikavér Ünnep</b><span class="meta">📅 júl. 24–26. · 📍 Eger, Dobó tér<br>🏷 Napijegy 2 500 Ft</span><span class="tag">Gasztronómia</span></span>
+      </a>
+    </div>
+    <div class="week">
+      <span class="d">27</span><span class="d">28</span><span class="d">29</span><span class="d">30</span><span class="d">31</span><span class="d"></span><span class="d"></span>
+      <a class="bar bar--cont-r" style="grid-column: 5 / span 3; background:#722f37; color:#fff;" href="#">
+        <span class="bar__t">Villányi Rozénapok</span>
+        <span class="tip tip--r"><b>Villányi Rozénapok</b><span class="meta">📅 júl. 31. – aug. 2. · 📍 Villány<br>🏷 Ingyenes belépés</span><span class="tag">Borfesztivál</span></span>
+      </a>
+    </div>
+
+    <div class="legend">
+      <span><b style="background:#722f37;"></b>Borfesztivál</span>
+      <span><b style="background:#c8a14b;"></b>Kóstoló</span>
+      <span><b style="background:#7a8450;"></b>Borvidéki program</span>
+      <span><b style="background:#b5562a;"></b>Gasztronómia</span>
+    </div>
+  </div>
+
+  <div class="agenda">
+    <h2>2026. július eseményei</h2>
+    <a class="row" href="#"><span class="dateb"><b>5</b><i>VAS</i></span><span class="t">Szekszárdi Pinceséta<br><span class="s">Szekszárd · Kóstoló</span></span></a>
+    <a class="row" href="#"><span class="dateb"><b>10</b><i>PÉN</i></span><span class="t">Balatonfüredi Borhetek<br><span class="s">júl. 10–26. · Balatonfüred · Borfesztivál</span></span></a>
+    <a class="row" href="#"><span class="dateb"><b>11</b><i>SZO</i></span><span class="t">Tokaji Nyáresti Kóstoló<br><span class="s">Tokaj · Kóstoló</span></span></a>
+    <a class="row" href="#"><span class="dateb"><b>18</b><i>SZO</i></span><span class="t">Szent György-hegy Hajnalig<br><span class="s">júl. 18–20. · Tapolca · Ingyenes</span></span></a>
+    <a class="row" href="#"><span class="dateb"><b>24</b><i>PÉN</i></span><span class="t">Egri Bikavér Ünnep<br><span class="s">júl. 24–26. · Eger · Gasztronómia</span></span></a>
+    <a class="row" href="#"><span class="dateb"><b>31</b><i>PÉN</i></span><span class="t">Villányi Rozénapok<br><span class="s">júl. 31. – aug. 2. · Villány · Borfesztivál</span></span></a>
+  </div>
+</div>
+
+<p class="mock-note">Naptár „Rács+” <b>1B: hover-előnézet</b> — a sáv fölé érve részletkártya (dátum, helyszín, ár, kategória), kattintás nélkül; billentyűzet-fókuszra is megjelenik. A hónap-fejléc görgetéskor sticky marad. Touch-eszközön: első koppintás = előnézet, második = megnyitás (élesben).</p>
+
+<nav class="variant-switch" aria-label="Alvariánsok">
+  <span>Rács+:</span>
+  <a href="n1a-alap.html" title="Finomhangolt alap">A</a>
+  <a href="n1b-hover.html" class="is-current" title="Hover-előnézet">B</a>
+  <a href="n1c-napsav.html" title="Kattintható napok">C</a>
+  <a href="n1d-hetvege.html" title="Hétvége-hangsúly">D</a>
+</nav>
+
+</body>
+</html>

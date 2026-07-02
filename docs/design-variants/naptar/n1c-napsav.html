@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Naptár 1C — Kattintható napok, kinyíló nap-sáv · mockup</title>
+<link rel="stylesheet" href="../base.css">
+<link rel="stylesheet" href="racs-base.css">
+<style>
+/* 1C: kattintható napok — a hét alatt kinyíló nap-sáv (élő demó).
+   Ergonómia: a teljes napcella érinthető, a részletek helyben nyílnak,
+   nem kell elnavigálni + vissza. Élesben JS nélkül is menne (?nap=…). */
+
+.week .d {
+  appearance: none; border: none; background: none; font: inherit; text-align: left;
+  cursor: pointer; color: var(--ink); font-weight: 700; font-size: .92rem;
+  padding: .4rem .55rem; grid-row: 1; border-radius: 8px; margin: 2px;
+}
+.week .d:hover:not(:disabled) { background: #f3e7d0; }
+.week .d:focus-visible { outline: 3px solid var(--gold); outline-offset: -2px; }
+.week .d:disabled { cursor: default; }
+.week .d--sel { background: #f3e7d0; box-shadow: inset 0 0 0 2px var(--gold); }
+
+.dayband {
+  border-top: 2px solid var(--gold);
+  border-bottom: 1px solid var(--line);
+  background: var(--cream);
+  padding: 1rem 1.3rem;
+}
+.dayband__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: .7rem; }
+.dayband__head b { font-family: Georgia, serif; color: var(--wine-900); font-size: 1.1rem; }
+.dayband__close { border: none; background: none; cursor: pointer; font-size: 1.1rem; font-weight: 800; color: var(--wine-700); padding: .2rem .5rem; border-radius: 8px; }
+.dayband__close:hover { background: #f3e7d0; }
+.dayband__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .7rem; }
+.dayband__ev {
+  display: flex; align-items: center; gap: .8rem;
+  background: #fff; border: 1px solid var(--line); border-left: 5px solid var(--wine-700);
+  border-radius: 10px; padding: .7rem .9rem; text-decoration: none; color: inherit;
+}
+.dayband__ev:hover { border-color: var(--gold); border-left-color: var(--gold); }
+.dayband__ev b { color: var(--wine-900); display: block; }
+.dayband__ev span { color: var(--muted); font-size: .84rem; }
+.dayband__empty { color: var(--muted); font-style: italic; margin: 0; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__name">hol<span class="brand__accent">borozzak</span>.hu</span>
+      <span class="brand__tag">Borrendezvények egy helyen</span>
+    </a>
+    <nav class="site-nav">
+      <a href="#">Események</a>
+      <a href="#" class="is-active">Naptár</a>
+      <a href="#">Térkép</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="page-head">
+    <h1>Eseménynaptár</h1>
+    <p><b>Kattints egy napra</b> — a hét alatt kinyílik a nap eseménylistája. (Élő demó: próbáld a 18-at vagy a 24-et!)</p>
+  </div>
+
+  <div class="chips">
+    <a class="chip chip--on" href="#">Minden esemény</a>
+    <a class="chip" href="#">E hétvégén</a>
+    <a class="chip" href="#">Ingyenes</a>
+    <a class="chip" href="#">Borvidék ▾</a>
+    <a class="chip" href="#">Kategória ▾</a>
+  </div>
+
+  <div class="cal">
+    <div class="cal-head">
+      <span class="cal-head__title">2026. július<span class="cal-head__count">6 esemény</span></span>
+      <div class="cal-nav">
+        <a class="cal-nav__btn" href="#" aria-label="Előző hónap">‹</a>
+        <a class="cal-nav__btn" href="#" aria-label="Következő hónap">›</a>
+        <a class="cal-nav__today" href="#">Ma</a>
+        <a class="cal-nav__ics" href="#">＋ Hónap a naptáramba</a>
+      </div>
+    </div>
+    <div class="dow"><span>Hétfő</span><span>Kedd</span><span>Szerda</span><span>Csüt</span><span>Péntek</span><span>Szombat</span><span>Vasárnap</span></div>
+
+    <div class="week">
+      <button class="d" disabled></button><button class="d" disabled></button>
+      <button class="d" data-d="1">1</button><button class="d d--today" data-d="2"><span>2</span></button><button class="d" data-d="3">3</button><button class="d d--we" data-d="4">4</button><button class="d d--we" data-d="5">5</button>
+      <a class="bar" style="grid-column: 7 / span 1; background:#c8a14b; color:#3a230f;" href="#">Szekszárdi Pinceséta</a>
+    </div>
+    <div class="week">
+      <button class="d" data-d="6">6</button><button class="d" data-d="7">7</button><button class="d" data-d="8">8</button><button class="d" data-d="9">9</button><button class="d" data-d="10">10</button><button class="d d--we" data-d="11">11</button><button class="d d--we" data-d="12">12</button>
+      <a class="bar bar--cont-r" style="grid-column: 5 / span 3; background:#722f37; color:#fff;" href="#">Balatonfüredi Borhetek</a>
+      <a class="bar" style="grid-column: 6 / span 1; background:#c8a14b; color:#3a230f;" href="#">Tokaji Nyáresti Kóstoló</a>
+    </div>
+    <div class="week">
+      <button class="d" data-d="13">13</button><button class="d" data-d="14">14</button><button class="d" data-d="15">15</button><button class="d" data-d="16">16</button><button class="d" data-d="17">17</button><button class="d d--we" data-d="18">18</button><button class="d d--we" data-d="19">19</button>
+      <a class="bar bar--cont-l bar--cont-r" style="grid-column: 1 / span 7; background:#722f37; color:#fff;" href="#">Balatonfüredi Borhetek</a>
+      <a class="bar bar--cont-r" style="grid-column: 6 / span 2; background:#7a8450; color:#fff;" href="#">Szent György-hegy Hajnalig</a>
+    </div>
+    <div class="week">
+      <button class="d" data-d="20">20</button><button class="d" data-d="21">21</button><button class="d" data-d="22">22</button><button class="d" data-d="23">23</button><button class="d" data-d="24">24</button><button class="d d--we" data-d="25">25</button><button class="d d--we" data-d="26">26</button>
+      <a class="bar bar--cont-l" style="grid-column: 1 / span 7; background:#722f37; color:#fff;" href="#">Balatonfüredi Borhetek</a>
+      <a class="bar bar--cont-l" style="grid-column: 1 / span 1; background:#7a8450; color:#fff;" href="#">Szent György-hegy Hajnalig</a>
+      <a class="bar" style="grid-column: 5 / span 3; background:#b5562a; color:#fff;" href="#">Egri Bikavér Ünnep</a>
+    </div>
+    <div class="week">
+      <button class="d" data-d="27">27</button><button class="d" data-d="28">28</button><button class="d" data-d="29">29</button><button class="d" data-d="30">30</button><button class="d" data-d="31">31</button><button class="d" disabled></button><button class="d" disabled></button>
+      <a class="bar bar--cont-r" style="grid-column: 5 / span 3; background:#722f37; color:#fff;" href="#">Villányi Rozénapok</a>
+    </div>
+
+    <div class="legend">
+      <span><b style="background:#722f37;"></b>Borfesztivál</span>
+      <span><b style="background:#c8a14b;"></b>Kóstoló</span>
+      <span><b style="background:#7a8450;"></b>Borvidéki program</span>
+      <span><b style="background:#b5562a;"></b>Gasztronómia</span>
+    </div>
+  </div>
+
+  <div class="agenda">
+    <h2>2026. július eseményei</h2>
+    <a class="row" href="#"><span class="dateb"><b>5</b><i>VAS</i></span><span class="t">Szekszárdi Pinceséta<br><span class="s">Szekszárd · Kóstoló</span></span></a>
+    <a class="row" href="#"><span class="dateb"><b>10</b><i>PÉN</i></span><span class="t">Balatonfüredi Borhetek<br><span class="s">júl. 10–26. · Balatonfüred · Borfesztivál</span></span></a>
+    <a class="row" href="#"><span class="dateb"><b>11</b><i>SZO</i></span><span class="t">Tokaji Nyáresti Kóstoló<br><span class="s">Tokaj · Kóstoló</span></span></a>
+    <a class="row" href="#"><span class="dateb"><b>18</b><i>SZO</i></span><span class="t">Szent György-hegy Hajnalig<br><span class="s">júl. 18–20. · Tapolca · Ingyenes</span></span></a>
+    <a class="row" href="#"><span class="dateb"><b>24</b><i>PÉN</i></span><span class="t">Egri Bikavér Ünnep<br><span class="s">júl. 24–26. · Eger · Gasztronómia</span></span></a>
+    <a class="row" href="#"><span class="dateb"><b>31</b><i>PÉN</i></span><span class="t">Villányi Rozénapok<br><span class="s">júl. 31. – aug. 2. · Villány · Borfesztivál</span></span></a>
+  </div>
+</div>
+
+<p class="mock-note">Naptár „Rács+” <b>1C: kattintható napok</b> — a teljes napcella érintőfelület, a részletek a hét alatt, helyben nyílnak (nem kell oda-vissza navigálni). Élesben JS nélkül is működne <code>?nap=2026-07-18</code> paraméterrel — SEO-barát. Az Esc vagy a ✕ bezárja.</p>
+
+<nav class="variant-switch" aria-label="Alvariánsok">
+  <span>Rács+:</span>
+  <a href="n1a-alap.html" title="Finomhangolt alap">A</a>
+  <a href="n1b-hover.html" title="Hover-előnézet">B</a>
+  <a href="n1c-napsav.html" class="is-current" title="Kattintható napok">C</a>
+  <a href="n1d-hetvege.html" title="Hétvége-hangsúly">D</a>
+</nav>
+
+<script>
+var EVENTS = {
+  5:  [{ t: 'Szekszárdi Pinceséta', s: 'Szekszárd · Kóstoló · Belépő 3 500 Ft', c: '#c8a14b' }],
+  11: [{ t: 'Tokaji Nyáresti Kóstoló', s: 'Tokaj · Kóstoló · 18:00', c: '#c8a14b' }],
+  18: [{ t: 'Szent György-hegy Hajnalig', s: 'júl. 18–20. · Tapolca · Ingyenes', c: '#7a8450' }],
+  19: [{ t: 'Szent György-hegy Hajnalig', s: 'júl. 18–20. · Tapolca · Ingyenes', c: '#7a8450' }],
+  20: [{ t: 'Szent György-hegy Hajnalig', s: 'júl. 18–20. · Tapolca · Ingyenes', c: '#7a8450' }],
+  24: [{ t: 'Egri Bikavér Ünnep', s: 'júl. 24–26. · Eger · Gasztronómia', c: '#b5562a' }],
+  25: [{ t: 'Egri Bikavér Ünnep', s: 'júl. 24–26. · Eger · Gasztronómia', c: '#b5562a' }],
+  26: [{ t: 'Egri Bikavér Ünnep', s: 'júl. 24–26. · Eger · Gasztronómia', c: '#b5562a' }],
+  31: [{ t: 'Villányi Rozénapok', s: 'júl. 31. – aug. 2. · Villány · Borfesztivál', c: '#722f37' }]
+};
+for (var d = 10; d <= 26; d++) {
+  (EVENTS[d] = EVENTS[d] || []).unshift({ t: 'Balatonfüredi Borhetek', s: 'júl. 10–26. · Balatonfüred · Borfesztivál', c: '#722f37' });
+}
+var DOWS = ['hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat', 'vasárnap'];
+var LEADING = 2;
+
+var band = document.createElement('div');
+band.className = 'dayband';
+band.style.display = 'none';
+
+function closeBand() {
+  band.style.display = 'none';
+  var sel = document.querySelector('.d--sel');
+  if (sel) { sel.classList.remove('d--sel'); }
+}
+
+document.querySelectorAll('.week .d[data-d]').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var day = parseInt(btn.dataset.d, 10);
+    var week = btn.closest('.week');
+    var wasSel = btn.classList.contains('d--sel');
+    closeBand();
+    if (wasSel) { return; }   // ismételt kattintás = bezárás
+    btn.classList.add('d--sel');
+    var evs = EVENTS[day] || [];
+    var html = '<div class="dayband__head"><b>július ' + day + '., ' + DOWS[(LEADING + day - 1) % 7] + ' — '
+      + (evs.length ? evs.length + ' esemény' : 'nincs esemény') + '</b>'
+      + '<button type="button" class="dayband__close" aria-label="Bezárás">✕</button></div>';
+  if (evs.length) {
+      html += '<div class="dayband__list">' + evs.map(function (e) {
+        return '<a class="dayband__ev" href="#" style="border-left-color:' + e.c + '"><span><b>' + e.t + '</b><span>' + e.s + '</span></span></a>';
+      }).join('') + '</div>';
+    } else {
+      html += '<p class="dayband__empty">Ezen a napon nincs rögzített borrendezvény. <a href="#">Nézd meg a hónap összes eseményét →</a></p>';
+    }
+    band.innerHTML = html;
+    band.style.display = 'block';
+    week.after(band);
+    band.querySelector('.dayband__close').addEventListener('click', closeBand);
+  });
+});
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeBand(); } });
+</script>
+
+</body>
+</html>
