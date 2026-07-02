@@ -13,6 +13,21 @@
   display: flex; align-items: center; justify-content: center; text-align: center;
   padding: 4rem 1.75rem 7rem;
 }
+/* Kompakt hero-mód (kapcsolóval hasonlítható össze) */
+body.hero-compact .hero { min-height: 46vh; padding: 2.4rem 1.75rem 5.5rem; }
+body.hero-compact .hero h1 { font-size: clamp(1.9rem, 4.6vw, 2.9rem); }
+body.hero-compact .hero__lead { margin-bottom: 1.4rem; }
+body.hero-compact .hero__stats { margin-top: 1.1rem; }
+.hero-toggle {
+  position: fixed; left: 1rem; bottom: 1rem; z-index: 500;
+  border: none; cursor: pointer;
+  background: var(--paper); color: var(--wine-900);
+  border: 1px solid var(--line);
+  padding: .55rem .9rem; border-radius: 999px;
+  font-size: .85rem; font-weight: 700;
+  box-shadow: 0 8px 30px rgba(74, 14, 28, .25);
+}
+.hero-toggle:hover { border-color: var(--gold); }
 .hero__bg { position: absolute; inset: 0; overflow: hidden; }
 .hero__bg img { width: 100%; height: 100%; object-fit: cover; }
 .hero__bg::after {
@@ -253,6 +268,8 @@
 </div>
 
 <p class="mock-note">Design-mockup minta-adatokkal — Főoldal 1. variáns: immerzív panoráma. A gombok nem élnek.</p>
+
+<button type="button" class="hero-toggle" onclick="document.body.classList.toggle('hero-compact'); this.textContent = document.body.classList.contains('hero-compact') ? 'Hero: kompakt (46vh) — váltás nagyra' : 'Hero: nagy (74vh) — váltás kompaktra';">Hero: nagy (74vh) — váltás kompaktra</button>
 
 <nav class="variant-switch" aria-label="Variánsok">
   <span>Főoldal:</span>
