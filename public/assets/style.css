@@ -701,7 +701,10 @@ main { flex: 1 0 auto; }
 }
 .cal__bar--cont-l { border-top-left-radius: 0; border-bottom-left-radius: 0; margin-left: 0; }
 .cal__bar--cont-r { border-top-right-radius: 0; border-bottom-right-radius: 0; margin-right: 0; }
-.cal__bar:hover { filter: brightness(1.14); box-shadow: 0 2px 10px rgba(0, 0, 0, .22); z-index: 20; }
+/* Hover: árnyék + aláhúzás — brightness-szűrő NEM, mert a filter a gyerek
+   hover-kártyára is hatna (kifakult, túl világos kártya). */
+.cal__bar:hover { box-shadow: 0 2px 10px rgba(0, 0, 0, .28); z-index: 20; }
+.cal__bar:hover .cal__bar-t { text-decoration: underline; }
 .cal__bar:focus-visible { outline: 3px solid var(--gold); outline-offset: 1px; }
 .cal__bar-t { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 

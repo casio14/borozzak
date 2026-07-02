@@ -68,7 +68,10 @@
 }
 .bar--cont-l { border-top-left-radius: 0; border-bottom-left-radius: 0; margin-left: 0; }
 .bar--cont-r { border-top-right-radius: 0; border-bottom-right-radius: 0; margin-right: 0; }
-.bar:hover { filter: brightness(1.14); box-shadow: 0 2px 10px rgba(0, 0, 0, .22); z-index: 20; }
+/* Hover: árnyék + aláhúzás — brightness-szűrő NEM, mert a filter a gyerek
+   hover-kártyára is hatna (kifakult, túl világos kártya). */
+.bar:hover { box-shadow: 0 2px 10px rgba(0, 0, 0, .28); z-index: 20; }
+.bar:hover .bar__t { text-decoration: underline; }
 .bar:focus-visible { outline: 3px solid var(--gold); outline-offset: 1px; }
 .bar { overflow: visible; }
 .bar__t { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
